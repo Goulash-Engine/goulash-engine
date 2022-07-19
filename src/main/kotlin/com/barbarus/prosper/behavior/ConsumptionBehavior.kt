@@ -2,12 +2,17 @@ package com.barbarus.prosper.behavior
 
 import com.barbarus.prosper.core.domain.Actor
 import org.slf4j.LoggerFactory
-import java.util.logging.Logger
 
 /**
  * This [Behavior] controls the consumption of resources that are consumable.
  */
-class ConsumptionBehavior : Behavior {
+class ConsumptionBehavior(
+    val trigger: String
+) : Behavior {
+    override fun trigger(): String {
+        return trigger
+    }
+
     override fun act(actor: Actor) {
         LOG.info("${actor.id} is consuming")
         val inventory = actor.inventory()

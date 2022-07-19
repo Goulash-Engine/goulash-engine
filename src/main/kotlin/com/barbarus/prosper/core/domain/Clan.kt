@@ -12,6 +12,15 @@ class Clan(
     val stash: MutableList<Resource> = mutableListOf(),
     val behaviors: MutableList<Behavior> = mutableListOf()
 ) : Actor {
+    private val _desires: MutableList<String> = mutableListOf()
+
+    override val desires: MutableList<String>
+        get() = _desires
+
+    fun addDesire(desire: String) {
+        _desires.add(desire)
+    }
+
     override fun inventory(): MutableList<Resource> {
         return this.stash
     }

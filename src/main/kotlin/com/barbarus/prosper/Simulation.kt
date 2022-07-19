@@ -2,8 +2,8 @@ package com.barbarus.prosper
 
 import com.barbarus.prosper.core.domain.Village
 import com.barbarus.prosper.core.domain.WorldDate
+import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
-import java.util.logging.Logger
 
 class Simulation() {
     private val village = Village()
@@ -32,6 +32,6 @@ class Simulation() {
     }
 
     companion object {
-        private val LOG = Logger.getLogger(this::class.java.name)
+        private val LOG = LoggerFactory.getLogger("Simulation")
     }
 }

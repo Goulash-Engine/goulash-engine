@@ -17,7 +17,7 @@ object ClanFactory {
             ResourceFactory.food()
         ),
         behaviors = mutableListOf(
-            ConsumptionBehavior()
+            ConsumptionBehavior("hunger")
         )
     )
 }
