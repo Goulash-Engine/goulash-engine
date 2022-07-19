@@ -9,7 +9,7 @@ internal class BehaviorProcessorTest {
     private val behaviorProcessor = BehaviorProcessor()
 
     @Test
-    fun `should not consume a consumable resource if the actor is sick`() {
+    fun `should not consume a consumable resource if the actor is sick but should still run awake behavior`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.addCondition("sick")
         clan.addCondition("hunger")
@@ -17,6 +17,7 @@ internal class BehaviorProcessorTest {
         behaviorProcessor.process(clan, clan.behaviors)
 
         assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(1.0)
+        assertThat(clan.hunger).isEqualTo(0.1)
     }
 
     @Test

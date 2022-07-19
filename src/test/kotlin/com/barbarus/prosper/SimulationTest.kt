@@ -8,6 +8,6 @@ class SimulationTest {
     @Test
     fun `should run simulation`() {
         val simulation = Simulation()
-        simulation.run()
+        simulation.run(100)
     }
 }

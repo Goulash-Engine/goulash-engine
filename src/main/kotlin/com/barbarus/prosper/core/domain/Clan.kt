@@ -33,8 +33,8 @@ class Clan(
     val hunger: Double
         get() = _state.hunger
 
-    fun addCondition(desire: String) {
-        _conditions.add(desire)
+    fun addCondition(condition: String) {
+        _conditions.add(condition)
     }
 
     override fun inventory(): MutableList<Resource> {
@@ -45,8 +45,9 @@ class Clan(
         val behaviorProcessor = BehaviorProcessor()
         val conditionProcessor = ConditionProcessor()
         conditionProcessor.process(this)
-        LOG.info("Clan $id conditions: $conditions")
         behaviorProcessor.process(this, behaviors)
+        LOG.info("Clan $id conditions: $conditions")
+        LOG.info("Clan $id state: $state")
     }
 
     override fun equals(other: Any?): Boolean {

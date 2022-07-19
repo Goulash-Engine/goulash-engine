@@ -1,5 +1,6 @@
 package com.barbarus.prosper
 
+import com.barbarus.prosper.behavior.AwakeBehavior
 import com.barbarus.prosper.behavior.ConsumptionBehavior
 import com.barbarus.prosper.behavior.WorkBehavior
 import com.barbarus.prosper.core.domain.Clan
@@ -18,8 +19,9 @@ object ClanFactory {
             ResourceFactory.food()
         ),
         behaviors = mutableListOf(
-            ConsumptionBehavior(),
-            WorkBehavior()
+            AwakeBehavior(),
+            WorkBehavior(),
+            ConsumptionBehavior()
         )
     )
 }

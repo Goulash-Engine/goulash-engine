@@ -5,7 +5,7 @@ import com.barbarus.prosper.core.domain.WorldDate
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
-class Simulation() {
+class Simulation {
     private val village = Village()
     private val date = WorldDate()
 

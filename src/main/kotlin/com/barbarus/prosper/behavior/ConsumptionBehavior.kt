@@ -19,8 +19,13 @@ class ConsumptionBehavior : Behavior {
         LOG.info("${actor.id} is consuming")
         val inventory = actor.inventory()
         val consumables = inventory.filter { it.traits.contains("consumable") }
+        if (consumables.isEmpty()) {
+            LOG.info("${actor.id} has no consumables")
+            return
+        }
         val nearestLeftover = consumables.minBy { it.weight }
         nearestLeftover.weight = nearestLeftover.weight.minus(0.1)
+        actor.state.hunger--
     }
 
     companion object {
