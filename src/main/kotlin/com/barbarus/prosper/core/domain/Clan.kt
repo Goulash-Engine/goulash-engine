@@ -2,23 +2,19 @@ package com.barbarus.prosper.core.domain
 
 import java.util.UUID
 
-enum class ResourceType {
-    FOOD,
-    WOODEN_MATERIAL,
-    HERBS,
-    TOOLS,
-}
-
-data class Resource(
+/**
+ * The core element of the village. A village is build upon multiple clans that provide a cycle for self-sufficiency.
+ */
+data class Clan(
     val id: String = UUID.randomUUID().toString(),
-    val type: ResourceType,
-    val quantity: Double = 0.1
+    val primaryProfession: Profession,
+    val stash: MutableList<Resource> = mutableListOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Resource
+        other as Clan
 
         if (id != other.id) return false
 
@@ -30,6 +26,6 @@ data class Resource(
     }
 
     override fun toString(): String {
-        return "Resource(id='$id', type=$type, quantity=$quantity)"
+        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash)"
     }
 }

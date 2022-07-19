@@ -19,7 +19,7 @@ class ResourceProcessorSpec extends Specification {
         profession                                     || resourceType
         new Profession(ProfessionType.GATHERER, 1.0)   || ResourceType.FOOD
         new Profession(ProfessionType.WOODWORKER, 1.0) || ResourceType.WOODEN_MATERIAL
-        new Profession(ProfessionType.HERBALIST, 1.0) || ResourceType.HERBS
-        new Profession(ProfessionType.TOOLMAKER, 1.0) || ResourceType.TOOLS
+        new Profession(ProfessionType.HERBALIST, 1.0)  || ResourceType.HERBS
+        new Profession(ProfessionType.TOOLMAKER, 1.0)  || ResourceType.TOOLS
     }
 }
