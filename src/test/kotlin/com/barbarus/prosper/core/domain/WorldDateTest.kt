@@ -8,6 +8,74 @@ internal class WorldDateTest {
     private val worldDate = WorldDate()
 
     @Test
+    fun `should work with random ticks`() {
+        // year
+        repeat(60 * 60 * 24 * 30 * 12) { worldDate.tick() }
+        // two days
+        repeat(60 * 60 * 24 * 2) { worldDate.tick() }
+        // 30 minutes
+        repeat(60 * 30) { worldDate.tick() }
+
+        assertThat(worldDate.year).isEqualTo(1)
+        assertThat(worldDate.month).isEqualTo(0)
+        assertThat(worldDate.day).isEqualTo(2)
+        assertThat(worldDate.time.hours).isEqualTo(0)
+        assertThat(worldDate.time.minutes).isEqualTo(30)
+        assertThat(worldDate.time.seconds).isEqualTo(0)
+    }
+
+    @Test
+    fun `should add add 12 months to time that results in 1 year 0 month 0 day 0 hour 0 minutes 0 seconds`() {
+        repeat(12) {
+            repeat(30) {
+                repeat(24) {
+                    repeat(60) {
+                        repeat(60) { worldDate.tick() }
+                    }
+                }
+            }
+        }
+
+        assertThat(worldDate.year).isEqualTo(1)
+        assertThat(worldDate.month).isEqualTo(0)
+        assertThat(worldDate.day).isEqualTo(0)
+        assertThat(worldDate.time.hours).isEqualTo(0)
+        assertThat(worldDate.time.minutes).isEqualTo(0)
+        assertThat(worldDate.time.seconds).isEqualTo(0)
+    }
+
+    @Test
+    fun `should add add 30 days to time that results in 1 month 0 day 0 hour 0 minutes 0 seconds`() {
+        repeat(30) {
+            repeat(24) {
+                repeat(60) {
+                    repeat(60) { worldDate.tick() }
+                }
+            }
+        }
+
+        assertThat(worldDate.month).isEqualTo(1)
+        assertThat(worldDate.day).isEqualTo(0)
+        assertThat(worldDate.time.hours).isEqualTo(0)
+        assertThat(worldDate.time.minutes).isEqualTo(0)
+        assertThat(worldDate.time.seconds).isEqualTo(0)
+    }
+
+    @Test
+    fun `should add add 24 hours to time that results in 1 day 0 hour 0 minutes 0 seconds`() {
+        repeat(24) {
+            repeat(60) {
+                repeat(60) { worldDate.tick() }
+            }
+        }
+
+        assertThat(worldDate.day).isEqualTo(1)
+        assertThat(worldDate.time.hours).isEqualTo(0)
+        assertThat(worldDate.time.minutes).isEqualTo(0)
+        assertThat(worldDate.time.seconds).isEqualTo(0)
+    }
+
+    @Test
     fun `should add add 60 minutes to time that results in 1 hour 0 minutes 0 seconds`() {
         repeat(60) {
             repeat(60) { worldDate.tick() }

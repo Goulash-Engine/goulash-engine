@@ -1,9 +1,9 @@
 package com.barbarus.prosper.core.domain
 
 class WorldDate(
-    val day: Int = 0,
-    val month: Int = 0,
-    val year: Int = 0,
+    var day: Int = 0,
+    var month: Int = 0,
+    var year: Int = 0,
     val time: WorldTime = WorldTime()
 ) {
     override fun toString(): String {
@@ -12,5 +12,17 @@ class WorldDate(
 
     fun tick() {
         time.tick()
+        if (time.hours == 24) {
+            time.hours = 0
+            day++
+        }
+        if (day == 30) {
+            day = 0
+            month++
+        }
+        if (month == 12) {
+            month = 0
+            year++
+        }
     }
 }
