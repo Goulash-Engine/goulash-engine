@@ -9,6 +9,6 @@ class SimulationTest {
 
     @Test
     fun `should run simulation`() {
-        assertThat(true).isTrue()
+        simulation.run()
     }
 }
