@@ -16,4 +16,10 @@ class WorldTime(
             hours++
         }
     }
+    override fun toString(): String {
+        val sec = String.format("%02d", seconds)
+        val min = String.format("%02d", minutes)
+        val h = String.format("%02d", hours)
+        return "$h:$min:$sec"
+    }
 }

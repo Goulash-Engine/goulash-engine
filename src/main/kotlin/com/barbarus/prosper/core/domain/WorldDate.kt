@@ -7,7 +7,10 @@ class WorldDate(
     val time: WorldTime = WorldTime()
 ) {
     override fun toString(): String {
-        return "$day-$month-$year, ${time.hours}:${time.minutes}${time.seconds})"
+        val y = String.format("%04d", year)
+        val m = String.format("%02d", month)
+        val d = String.format("%02d", day)
+        return "$d-$m-$y $time"
     }
 
     fun tick() {

@@ -12,7 +12,8 @@ class Simulation {
     fun run() {
         while (true) {
             TimeUnit.MILLISECONDS.sleep(1000)
-            LOG.info("hello")
+            date.tick()
+            LOG.info(date.toString())
         }
     }
 

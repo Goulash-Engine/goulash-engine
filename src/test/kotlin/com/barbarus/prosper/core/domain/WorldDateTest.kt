@@ -8,6 +8,18 @@ internal class WorldDateTest {
     private val worldDate = WorldDate()
 
     @Test
+    fun `should have proper time format`() {
+        // year
+        repeat(60 * 60 * 24 * 30 * 12) { worldDate.tick() }
+        // two days
+        repeat(60 * 60 * 24 * 2) { worldDate.tick() }
+        // 30 minutes
+        repeat(60 * 30) { worldDate.tick() }
+
+        assertThat(worldDate.toString()).isEqualTo("02-00-0001 00:30:00")
+    }
+
+    @Test
     fun `should work with random ticks`() {
         // year
         repeat(60 * 60 * 24 * 30 * 12) { worldDate.tick() }
