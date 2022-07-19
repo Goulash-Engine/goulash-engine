@@ -1,5 +1,7 @@
 package com.barbarus.prosper.core.domain
 
+import java.util.Locale
+
 class WorldDate(
     var day: Int = 0,
     var month: Int = 0,
@@ -7,9 +9,9 @@ class WorldDate(
     val time: WorldTime = WorldTime()
 ) {
     override fun toString(): String {
-        val y = String.format("%04d", year)
-        val m = String.format("%02d", month)
-        val d = String.format("%02d", day)
+        val y = String.format(Locale.US, "%04d", year)
+        val m = String.format(Locale.US, "%02d", month)
+        val d = String.format(Locale.US, "%02d", day)
         return "$d-$m-$y $time"
     }
 

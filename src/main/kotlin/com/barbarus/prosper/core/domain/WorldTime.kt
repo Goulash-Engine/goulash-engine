@@ -1,5 +1,7 @@
 package com.barbarus.prosper.core.domain
 
+import java.util.Locale
+
 class WorldTime(
     var seconds: Int = 0,
     var minutes: Int = 0,
@@ -16,10 +18,11 @@ class WorldTime(
             hours++
         }
     }
+
     override fun toString(): String {
-        val sec = String.format("%02d", seconds)
-        val min = String.format("%02d", minutes)
-        val h = String.format("%02d", hours)
+        val sec = String.format(Locale.US, "%02d", seconds)
+        val min = String.format(Locale.US, "%02d", minutes)
+        val h = String.format(Locale.US, "%02d", hours)
         return "$h:$min:$sec"
     }
 }
