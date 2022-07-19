@@ -2,6 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.0"
+    id("java")
+    id("groovy")
     application
 }
 
@@ -13,6 +15,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.codehaus.groovy:groovy-all:3.0.11")
+    testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
     testImplementation(kotlin("test"))
 }

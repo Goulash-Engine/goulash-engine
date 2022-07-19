@@ -3,7 +3,8 @@ package com.barbarus.prosper.core.domain
 enum class ResourceType {
     FOOD,
     WOODEN_MATERIAL,
-    HERBS
+    HERBS,
+    TOOLS,
 }
 
 data class Resource(
