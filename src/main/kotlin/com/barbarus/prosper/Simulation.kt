@@ -9,9 +9,9 @@ class Simulation {
     private val village = Village()
     private val date = WorldDate()
 
-    fun run() {
+    fun run(tickrate: Long = 1000) {
         while (true) {
-            TimeUnit.MILLISECONDS.sleep(1000)
+            TimeUnit.MILLISECONDS.sleep(tickrate)
             date.tick()
             LOG.info(date.toString())
         }

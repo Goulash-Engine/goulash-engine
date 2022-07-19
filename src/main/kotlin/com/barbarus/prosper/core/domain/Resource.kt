@@ -2,6 +2,7 @@ package com.barbarus.prosper.core.domain
 
 import java.util.UUID
 
+// TODO: change resource types to string
 enum class ResourceType {
     FOOD,
     WOODEN_MATERIAL,
@@ -12,7 +13,8 @@ enum class ResourceType {
 data class Resource(
     val id: String = UUID.randomUUID().toString(),
     val type: ResourceType,
-    val quantity: Double = 0.1
+    var quantity: Double = 0.1,
+    val traits: MutableList<String> = mutableListOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

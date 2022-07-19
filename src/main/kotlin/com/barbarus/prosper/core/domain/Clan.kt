@@ -9,7 +9,11 @@ data class Clan(
     val id: String = UUID.randomUUID().toString(),
     val primaryProfession: Profession,
     val stash: MutableList<Resource> = mutableListOf()
-) {
+) : Actor {
+    override fun inventory(): MutableList<Resource> {
+        return this.stash
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
