@@ -10,7 +10,7 @@ class WorldDate(
         return "$day-$month-$year, ${time.hours}:${time.minutes}${time.seconds})"
     }
 
-    fun tickSecond() {
-        time.seconds++
+    fun tick() {
+        time.tick()
     }
 }
