@@ -18,6 +18,9 @@ repositories {
 
 dependencies {
     implementation("org.codehaus.groovy:groovy-all:3.0.11")
+    implementation("ch.qos.logback:logback-core:1.2.11")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("org.slf4j:slf4j-api:1.7.36")
     testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
     testImplementation(kotlin("test"))

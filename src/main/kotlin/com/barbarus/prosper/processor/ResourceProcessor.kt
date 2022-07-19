@@ -11,18 +11,18 @@ class ResourceProcessor {
         return when (profession.type) {
             ProfessionType.GATHERER -> generateFood(profession.experience)
             ProfessionType.WOODWORKER -> generateWoodenMaterial(profession.experience)
-            ProfessionType.TOOLMAKER -> Resource(type = ResourceType.TOOLS, quantity = 1.0)
-            ProfessionType.HERBALIST -> Resource(type = ResourceType.HERBS, quantity = 1.0)
+            ProfessionType.TOOLMAKER -> Resource(type = ResourceType.TOOLS, weight = 1.0)
+            ProfessionType.HERBALIST -> Resource(type = ResourceType.HERBS, weight = 1.0)
         }
     }
 
     private fun generateWoodenMaterial(experience: Double): Resource {
-        val quantity = Random.nextDouble(0.1 * (experience / 2), 0.5 * experience)
-        return Resource(type = ResourceType.WOODEN_MATERIAL, quantity = quantity)
+        val weight = Random.nextDouble(0.1 * (experience / 2), 0.5 * experience)
+        return Resource(type = ResourceType.WOODEN_MATERIAL, weight = weight)
     }
 
     private fun generateFood(experience: Double): Resource {
-        val quantity = Random.nextDouble(0.1 * experience, 0.5 * experience)
-        return Resource(type = ResourceType.FOOD, quantity = quantity)
+        val weight = Random.nextDouble(0.1 * experience, 0.5 * experience)
+        return Resource(type = ResourceType.FOOD, weight = weight)
     }
 }

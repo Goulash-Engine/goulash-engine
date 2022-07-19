@@ -1,17 +1,23 @@
 package com.barbarus.prosper.core.domain
 
+import com.barbarus.prosper.behavior.Behavior
 import java.util.UUID
 
 /**
  * The core element of the village. A village is build upon multiple clans that provide a cycle for self-sufficiency.
  */
-data class Clan(
-    val id: String = UUID.randomUUID().toString(),
+class Clan(
+    override val id: String = UUID.randomUUID().toString(),
     val primaryProfession: Profession,
-    val stash: MutableList<Resource> = mutableListOf()
+    val stash: MutableList<Resource> = mutableListOf(),
+    val behaviors: MutableList<Behavior> = mutableListOf()
 ) : Actor {
     override fun inventory(): MutableList<Resource> {
         return this.stash
+    }
+
+    override fun act() {
+        behaviors.forEach { it.act(this) }
     }
 
     override fun equals(other: Any?): Boolean {

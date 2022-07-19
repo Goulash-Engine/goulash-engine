@@ -17,13 +17,13 @@ internal class ResourceProcessorTest {
         var resource = resourceProcessor.process(profession)
 
         assertThat(resource.type).isEqualTo(ResourceType.WOODEN_MATERIAL)
-        assertThat(resource.quantity).isBetween(0.1 * (profession.experience / 2), 0.5 * (profession.experience / 2))
+        assertThat(resource.weight).isBetween(0.1 * (profession.experience / 2), 0.5 * (profession.experience / 2))
 
         profession = Profession(ProfessionType.WOODWORKER, 2.0)
         resource = resourceProcessor.process(profession)
 
         assertThat(resource.type).isEqualTo(ResourceType.WOODEN_MATERIAL)
-        assertThat(resource.quantity).isBetween(0.1 * (profession.experience / 2), 0.5 * (profession.experience / 2))
+        assertThat(resource.weight).isBetween(0.1 * (profession.experience / 2), 0.5 * (profession.experience / 2))
     }
 
     @Test
@@ -32,12 +32,12 @@ internal class ResourceProcessorTest {
         var resource = resourceProcessor.process(profession)
 
         assertThat(resource.type).isEqualTo(ResourceType.FOOD)
-        assertThat(resource.quantity).isBetween(0.1 * profession.experience, 0.5 * profession.experience)
+        assertThat(resource.weight).isBetween(0.1 * profession.experience, 0.5 * profession.experience)
 
         profession = Profession(ProfessionType.GATHERER, 2.0)
         resource = resourceProcessor.process(profession)
 
         assertThat(resource.type).isEqualTo(ResourceType.FOOD)
-        assertThat(resource.quantity).isBetween(0.1 * profession.experience, 0.5 * profession.experience)
+        assertThat(resource.weight).isBetween(0.1 * profession.experience, 0.5 * profession.experience)
     }
 }

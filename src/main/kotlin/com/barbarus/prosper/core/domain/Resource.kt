@@ -13,7 +13,7 @@ enum class ResourceType {
 data class Resource(
     val id: String = UUID.randomUUID().toString(),
     val type: ResourceType,
-    var quantity: Double = 0.1,
+    var weight: Double = 0.001,
     val traits: MutableList<String> = mutableListOf()
 ) {
     override fun equals(other: Any?): Boolean {
@@ -32,6 +32,6 @@ data class Resource(
     }
 
     override fun toString(): String {
-        return "Resource(id='$id', type=$type, quantity=$quantity)"
+        return "Resource(id='$id', type=$type, weight=$weight, traits=$traits)"
     }
 }

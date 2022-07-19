@@ -20,13 +20,13 @@ internal class ConsumptionBehaviorTest {
                     "food",
                     ResourceType.FOOD,
                     traits = mutableListOf("consumable"),
-                    quantity = 1.0
+                    weight = 1.0
                 )
             )
         )
 
         consumptionBehavior.act(clan)
 
-        assertThat(clan.stash[0].quantity).isEqualTo(0.9)
+        assertThat(clan.stash[0].weight).isEqualTo(0.9)
     }
 }

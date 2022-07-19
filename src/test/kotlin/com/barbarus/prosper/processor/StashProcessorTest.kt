@@ -15,7 +15,7 @@ internal class StashProcessorTest {
     @Test
     fun `should add a new resource to the stash`() {
         val clan = Clan(primaryProfession = Profession(ProfessionType.WOODWORKER, 1.0))
-        val resource = Resource(type = ResourceType.WOODEN_MATERIAL, quantity = 1.5)
+        val resource = Resource(type = ResourceType.WOODEN_MATERIAL, weight = 1.5)
 
         stashProcessor.process(resource, clan)
 

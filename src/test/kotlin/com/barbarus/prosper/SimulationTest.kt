@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class SimulationTest {
-    private val simulation = Simulation()
 
     @Test
     fun `should run simulation`() {
+        val simulation = Simulation()
         simulation.run()
     }
 }
