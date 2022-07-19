@@ -2,6 +2,8 @@ package com.barbarus.prosper.core.domain
 
 import com.barbarus.prosper.behavior.Behavior
 import com.barbarus.prosper.processor.BehaviorProcessor
+import com.barbarus.prosper.processor.ConditionProcessor
+import org.slf4j.LoggerFactory
 import java.util.UUID
 
 /**
@@ -13,11 +15,11 @@ class Clan(
     val stash: MutableList<Resource> = mutableListOf(),
     val behaviors: MutableList<Behavior> = mutableListOf()
 ) : Actor {
-    private val _desires: MutableList<String> = mutableListOf()
+    private val _conditions: MutableSet<String> = mutableSetOf()
     private val _state: State = State()
 
-    override val desires: List<String>
-        get() = _desires
+    override val conditions: List<String>
+        get() = _conditions.toList()
 
     override val state: State
         get() = _state
@@ -31,8 +33,8 @@ class Clan(
     val hunger: Double
         get() = _state.hunger
 
-    fun addDesire(desire: String) {
-        _desires.add(desire)
+    fun addCondition(desire: String) {
+        _conditions.add(desire)
     }
 
     override fun inventory(): MutableList<Resource> {
@@ -41,6 +43,9 @@ class Clan(
 
     override fun act() {
         val behaviorProcessor = BehaviorProcessor()
+        val conditionProcessor = ConditionProcessor()
+        conditionProcessor.process(this)
+        LOG.info("Clan $id conditions: $conditions")
         behaviorProcessor.process(this, behaviors)
     }
 
@@ -60,6 +65,11 @@ class Clan(
     }
 
     override fun toString(): String {
-        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$behaviors, _desires=$_desires, _state=$_state, desires=$desires, state=$state, health=$health, stamina=$stamina, hunger=$hunger)"
+        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$behaviors, _conditions=$_conditions, _state=$_state)"
+    }
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger("Clan")
     }
 }
+

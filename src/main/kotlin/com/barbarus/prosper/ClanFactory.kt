@@ -1,6 +1,7 @@
 package com.barbarus.prosper
 
 import com.barbarus.prosper.behavior.ConsumptionBehavior
+import com.barbarus.prosper.behavior.WorkBehavior
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
@@ -17,7 +18,8 @@ object ClanFactory {
             ResourceFactory.food()
         ),
         behaviors = mutableListOf(
-            ConsumptionBehavior("hunger")
+            ConsumptionBehavior(),
+            WorkBehavior()
         )
     )
 }

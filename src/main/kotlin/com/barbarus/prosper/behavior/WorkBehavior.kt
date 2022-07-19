@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory
 /**
  * This [Behavior] controls the daily work of a clan.
  */
-class WorkBehavior(
-    val trigger: String
-) : Behavior {
+class WorkBehavior : Behavior {
     override fun trigger(): String {
-        return trigger
+        return "work"
+    }
+
+    override fun blocker(): String {
+        return "sleep"
     }
 
     override fun act(actor: Actor) {

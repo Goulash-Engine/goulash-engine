@@ -9,7 +9,7 @@ import com.barbarus.prosper.core.domain.ResourceType
 import org.junit.jupiter.api.Test
 
 internal class ConsumptionBehaviorTest {
-    private val consumptionBehavior = ConsumptionBehavior("hunger")
+    private val consumptionBehavior = ConsumptionBehavior()
 
     @Test
     fun `should only trigger if actor is in need of consumption`() {

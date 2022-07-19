@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory
 /**
  * This [Behavior] controls the consumption of resources that are consumable.
  */
-class ConsumptionBehavior(
-    val trigger: String
-) : Behavior {
+class ConsumptionBehavior : Behavior {
     override fun trigger(): String {
-        return trigger
+        return "hunger"
+    }
+
+    override fun blocker(): String {
+        return "sick"
     }
 
     override fun act(actor: Actor) {

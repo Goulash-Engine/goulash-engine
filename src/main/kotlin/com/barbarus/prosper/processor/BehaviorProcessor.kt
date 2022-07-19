@@ -5,7 +5,10 @@ import com.barbarus.prosper.core.domain.Actor
 
 class BehaviorProcessor {
     fun process(actor: Actor, behaviors: List<Behavior>) {
-        val desiredBehaviors = behaviors.filter { behavior -> actor.desires.contains(behavior.trigger()) }
+        if (behaviors.any { behavior -> actor.conditions.contains(behavior.blocker()) }) {
+            return
+        }
+        val desiredBehaviors = behaviors.filter { behavior -> actor.conditions.contains(behavior.trigger()) }
         desiredBehaviors.forEach { behavior -> behavior.act(actor) }
     }
 }
