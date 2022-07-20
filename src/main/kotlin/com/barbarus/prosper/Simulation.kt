@@ -13,10 +13,10 @@ class Simulation {
         LOG.info("Initializing simulation")
         village.clans.addAll(
             listOf(
-                ClanFactory.simpleGathererClan(),
-                ClanFactory.simpleGathererClan(),
-                ClanFactory.simpleGathererClan(),
                 ClanFactory.simpleGathererClan()
+                // ClanFactory.simpleGathererClan(),
+                // ClanFactory.simpleGathererClan(),
+                // ClanFactory.simpleGathererClan()
             )
         )
         LOG.info("${village.clans.size} clans initialized")

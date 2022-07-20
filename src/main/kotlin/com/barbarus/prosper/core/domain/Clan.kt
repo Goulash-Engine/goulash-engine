@@ -1,5 +1,6 @@
 package com.barbarus.prosper.core.domain
 
+import com.barbarus.prosper.ClanNameFactory
 import com.barbarus.prosper.behavior.Behavior
 import com.barbarus.prosper.processor.BehaviorProcessor
 import com.barbarus.prosper.processor.ConditionProcessor
@@ -11,16 +12,14 @@ import java.util.UUID
  * The core element of the village. A village is build upon multiple clans that provide a cycle for self-sufficiency.
  */
 class Clan(
+    val name: String = ClanNameFactory.randomName(),
     override val id: String = UUID.randomUUID().toString(),
     val primaryProfession: Profession,
     val stash: MutableList<Resource> = mutableListOf(),
-    val behaviors: MutableList<Behavior> = mutableListOf()
+    override val behaviors: List<Behavior> = listOf(),
+    override val conditions: MutableSet<String> = mutableSetOf()
 ) : Actor {
-    private val _conditions: MutableSet<String> = mutableSetOf()
     private val _state: State = State()
-
-    override val conditions: List<String>
-        get() = _conditions.toList()
 
     override val state: State
         get() = _state
@@ -34,10 +33,6 @@ class Clan(
     val hunger: Double
         get() = _state.hunger
 
-    fun addCondition(condition: String) {
-        _conditions.add(condition)
-    }
-
     override fun inventory(): MutableList<Resource> {
         return this.stash
     }
@@ -47,10 +42,9 @@ class Clan(
         val conditionProcessor = ConditionProcessor()
         val inventoryProcessor = InventoryProcessor()
         conditionProcessor.process(this)
-        behaviorProcessor.process(this, behaviors)
+        behaviorProcessor.process(this)
         inventoryProcessor.process(this)
-        // LOG.info("Clan $id conditions: $conditions")
-        // LOG.info("Clan $id state: $state")
+        LOG.info("Clan $name conditions: $conditions and state: $state")
     }
 
     override fun equals(other: Any?): Boolean {
@@ -69,11 +63,10 @@ class Clan(
     }
 
     override fun toString(): String {
-        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$behaviors, _conditions=$_conditions, _state=$_state)"
+        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$behaviors, conditions=$conditions, _state=$_state)"
     }
 
     companion object {
         private val LOG = LoggerFactory.getLogger("Clan")
     }
 }
-

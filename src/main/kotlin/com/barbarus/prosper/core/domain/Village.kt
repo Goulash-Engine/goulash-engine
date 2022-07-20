@@ -7,6 +7,8 @@ package com.barbarus.prosper.core.domain
 class Village {
     val clans: MutableList<Clan> = mutableListOf()
     fun act() {
-        clans.forEach { it.act() }
+        clans.forEach {
+            it.act()
+        }
     }
 }

@@ -17,7 +17,7 @@ class ResourceProcessor {
     }
 
     private fun generateWoodenMaterial(experience: Double): Resource {
-        val weight = Random.nextDouble(0.1 * (experience / 2), 0.5 * experience)
+        val weight = Random.nextDouble(0.1 * (experience / 2), 0.5 * (experience / 2))
         return Resource(type = ResourceType.WOODEN_MATERIAL, weight = weight)
     }
 

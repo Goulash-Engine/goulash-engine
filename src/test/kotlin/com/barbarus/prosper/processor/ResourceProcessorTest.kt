@@ -6,12 +6,14 @@ import assertk.assertions.isEqualTo
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.domain.ResourceType
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 
 internal class ResourceProcessorTest {
     private val resourceProcessor = ResourceProcessor()
 
     @Test
+    @RepeatedTest(10)
     fun `should generate more wood if the woodworker experience is higher`() {
         var profession = Profession(ProfessionType.WOODWORKER, 1.0)
         var resource = resourceProcessor.process(profession)

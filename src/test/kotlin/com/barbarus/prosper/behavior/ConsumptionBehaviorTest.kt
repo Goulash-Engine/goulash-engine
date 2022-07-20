@@ -19,8 +19,8 @@ internal class ConsumptionBehaviorTest {
 
         consumptionBehavior.act(clan)
 
-        assertThat(clan.stash[0].weight).isEqualTo(0.9)
-        assertThat(clan.hunger).isEqualTo(29)
+        assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(0.9)
+        assertThat(clan.hunger).isEqualTo(29.0)
     }
     @Test
     fun `should only trigger if actor is in need of consumption`() {

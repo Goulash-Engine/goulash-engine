@@ -1,7 +1,7 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import com.barbarus.prosper.Simulation
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
+fun main(args: Array<String>) {
     println("Program arguments: ${args.joinToString()}")
+    val simulation = Simulation()
+    simulation.run(100)
 }
