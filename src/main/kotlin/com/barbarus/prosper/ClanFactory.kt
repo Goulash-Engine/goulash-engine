@@ -9,6 +9,18 @@ import com.barbarus.prosper.core.domain.ProfessionType
 
 object ClanFactory {
 
+    fun poorGathererClan() = Clan(
+        primaryProfession = Profession(ProfessionType.GATHERER, experience = 1.0),
+        stash = mutableListOf(
+            ResourceFactory.woodenMaterial(),
+            ResourceFactory.food(),
+        ),
+        behaviors = mutableListOf(
+            AwakeBehavior(),
+            WorkBehavior(),
+            ConsumptionBehavior()
+        )
+    )
     fun simpleGathererClan() = Clan(
         primaryProfession = Profession(ProfessionType.GATHERER, experience = 1.0),
         stash = mutableListOf(

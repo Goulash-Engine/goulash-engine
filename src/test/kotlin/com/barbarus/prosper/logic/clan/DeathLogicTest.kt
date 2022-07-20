@@ -17,6 +17,4 @@ internal class DeathLogicTest {
 
         assertThat(clan.conditions).contains("dead")
     }
-
-
 }

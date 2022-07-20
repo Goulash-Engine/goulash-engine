@@ -1,5 +1,6 @@
 package com.barbarus.prosper
 
+import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Village
 import com.barbarus.prosper.core.domain.WorldDate
 import org.fusesource.jansi.Ansi
@@ -11,8 +12,8 @@ import java.util.concurrent.TimeUnit
 class Simulation {
     val village = Village(
         mutableListOf(
+            ClanFactory.poorGathererClan(),
             ClanFactory.simpleGathererClan()
-            // ClanFactory.simpleGathererClan(),
             // ClanFactory.simpleGathererClan(),
             // ClanFactory.simpleGathererClan()
         )
@@ -24,7 +25,7 @@ class Simulation {
         LOG.info("${village.clans.size} clans initialized")
     }
 
-    fun run(ticks: Int, millisecondsPerTick: Long = 1000, render: Boolean = false) {
+    fun run(ticks: Int, millisecondsPerTick: Long = 1000, render: Boolean = false, clanDetailFor: Int = 0) {
         AnsiConsole.systemInstall()
         print(ansi().eraseScreen())
 
@@ -45,29 +46,13 @@ class Simulation {
             if (render) {
                 builder.append("Active clans: ${village.clans.size}\n\n")
                 builder.append("Clan Details:\n")
-                village.clans.forEach { clan ->
-                    builder.append(
-                        """
-                @|red -- ${clan.name} --|@
-                @|yellow id: ${clan.id}|@
 
-                @|green ## State ## |@
-                health: ${clan.state.health}
-                stamina: ${clan.state.stamina}
-                hunger: ${clan.state.hunger}
-
-                @|green ## Conditions ## |@
-                ${clan.conditions}
-                        """.trimIndent()
-                    )
-                    builder.append("\n---")
-                    repeat(clan.name.length) { builder.append("-") }
-                    builder.append("---")
-                    builder.append("\n\n")
+                if (village.clans.isNotEmpty()) {
+                    renderClanDetails(village.clans[clanDetailFor], builder)
                 }
 
                 print(ansi().cursorToColumn(1))
-                print(ansi().cursorUpLine(20).eraseScreen(Ansi.Erase.FORWARD))
+                print(ansi().cursorUpLine(14 + (village.clans.size * 6)).eraseScreen(Ansi.Erase.FORWARD))
                 print(ansi().render(builder.toString()))
             }
 
@@ -75,6 +60,27 @@ class Simulation {
         }
 
         LOG.info("Simulation finished")
+    }
+
+    private fun renderClanDetails(clan: Clan, builder: StringBuilder) {
+        builder.append(
+            """
+                    @|red -- ${clan.name} --|@
+                    @|yellow id: ${clan.id}|@
+    
+                    @|green ## State ## |@
+                    health: ${clan.state.health}
+                    stamina: ${clan.state.stamina}
+                    hunger: ${clan.state.hunger}
+    
+                    @|green ## Conditions ## |@
+                    ${clan.conditions}
+            """.trimIndent()
+        )
+        builder.append("\n---")
+        repeat(clan.name.length) { builder.append("-") }
+        builder.append("---")
+        builder.append("\n\n")
     }
 
     companion object {
