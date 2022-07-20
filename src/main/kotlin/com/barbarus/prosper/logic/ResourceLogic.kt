@@ -1,4 +1,4 @@
-package com.barbarus.prosper.processor
+package com.barbarus.prosper.logic
 
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
@@ -6,7 +6,7 @@ import com.barbarus.prosper.core.domain.Resource
 import com.barbarus.prosper.core.domain.ResourceType
 import kotlin.random.Random
 
-class ResourceProcessor {
+class ResourceLogic {
     fun process(profession: Profession): Resource {
         return when (profession.type) {
             ProfessionType.GATHERER -> generateFood(profession.experience)

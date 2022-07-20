@@ -1,13 +1,13 @@
-package com.barbarus.prosper.processor
+package com.barbarus.prosper.logic
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
-import com.barbarus.prosper.processor.actor.BehaviorProcessor
+import com.barbarus.prosper.logic.actor.BehaviorLogic
 import org.junit.jupiter.api.Test
 
-internal class BehaviorProcessorTest {
-    private val behaviorProcessor = BehaviorProcessor()
+internal class BehaviorLogicTest {
+    private val behaviorLogic = BehaviorLogic()
 
     @Test
     fun `should not consume a consumable resource if the actor is sick but should still run awake behavior`() {
@@ -15,7 +15,7 @@ internal class BehaviorProcessorTest {
         clan.conditions.add("sick")
         clan.conditions.add("hunger")
 
-        behaviorProcessor.process(clan)
+        behaviorLogic.process(clan)
 
         assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(1.0)
         assertThat(clan.hunger).isEqualTo(0.1)
@@ -28,7 +28,7 @@ internal class BehaviorProcessorTest {
 
         val expectedWeight = clan.stash.minBy { it.weight }.weight - 0.1
 
-        behaviorProcessor.process(clan)
+        behaviorLogic.process(clan)
 
         assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(expectedWeight)
     }

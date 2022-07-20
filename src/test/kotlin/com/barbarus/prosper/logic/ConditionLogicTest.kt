@@ -1,20 +1,20 @@
-package com.barbarus.prosper.processor
+package com.barbarus.prosper.logic
 
 import assertk.assertThat
 import assertk.assertions.contains
 import com.barbarus.prosper.ClanFactory
-import com.barbarus.prosper.processor.actor.ConditionProcessor
+import com.barbarus.prosper.logic.actor.ConditionLogic
 import org.junit.jupiter.api.Test
 
-internal class ConditionProcessorTest {
-    private val conditionProcessor = ConditionProcessor()
+internal class ConditionLogicTest {
+    private val conditionLogic = ConditionLogic()
 
     @Test
     fun `should add the desire for sleep if health is under 60`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.health = 59.0
 
-        conditionProcessor.process(clan)
+        conditionLogic.process(clan)
 
         assertThat(clan.conditions).contains("sleep")
     }
@@ -24,7 +24,7 @@ internal class ConditionProcessorTest {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.stamina = 25.0
 
-        conditionProcessor.process(clan)
+        conditionLogic.process(clan)
 
         assertThat(clan.conditions).contains("sleep")
     }
@@ -34,7 +34,7 @@ internal class ConditionProcessorTest {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.stamina = 61.0
 
-        conditionProcessor.process(clan)
+        conditionLogic.process(clan)
 
         assertThat(clan.conditions).contains("work")
     }
@@ -44,7 +44,7 @@ internal class ConditionProcessorTest {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.hunger = 31.0
 
-        conditionProcessor.process(clan)
+        conditionLogic.process(clan)
 
         assertThat(clan.conditions).contains("hunger")
     }

@@ -2,10 +2,10 @@ package com.barbarus.prosper.core.domain
 
 import com.barbarus.prosper.ClanNameFactory
 import com.barbarus.prosper.behavior.Behavior
-import com.barbarus.prosper.processor.Processor
-import com.barbarus.prosper.processor.actor.BehaviorProcessor
-import com.barbarus.prosper.processor.actor.ConditionProcessor
-import com.barbarus.prosper.processor.actor.InventoryProcessor
+import com.barbarus.prosper.logic.Logic
+import com.barbarus.prosper.logic.actor.BehaviorLogic
+import com.barbarus.prosper.logic.actor.ConditionLogic
+import com.barbarus.prosper.logic.actor.InventoryLogic
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
@@ -21,10 +21,10 @@ class Clan(
     override val conditions: MutableSet<String> = mutableSetOf()
 ) : Actor {
     private val _state: State = State()
-    private val actorProcessors: List<Processor<Actor>> = listOf(
-        BehaviorProcessor(),
-        ConditionProcessor(),
-        InventoryProcessor()
+    private val actorLogics: List<Logic<Actor>> = listOf(
+        BehaviorLogic(),
+        ConditionLogic(),
+        InventoryLogic()
     )
 
     override val state: State
@@ -44,7 +44,7 @@ class Clan(
     }
 
     override fun act() {
-        actorProcessors.forEach { it.process(this) }
+        actorLogics.forEach { it.process(this) }
         LOG.info("Clan $name conditions: $conditions and state: $state")
     }
 

@@ -1,4 +1,4 @@
-package com.barbarus.prosper.processor
+package com.barbarus.prosper.logic
 
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
@@ -6,13 +6,13 @@ import com.barbarus.prosper.core.domain.Resource
 import com.barbarus.prosper.core.domain.ResourceType
 import spock.lang.*
 
-class ResourceProcessorSpec extends Specification {
+class ResourceLogicSpec extends Specification {
     def "should return the correct resource type for a given profession"() {
         given:
-        ResourceProcessor resourceProcessor = new ResourceProcessor()
+        ResourceLogic resourceLogic = new ResourceLogic()
 
         expect:
-        Resource resource = resourceProcessor.process(profession)
+        Resource resource = resourceLogic.process(profession)
         resource.type == resourceType
 
         where:

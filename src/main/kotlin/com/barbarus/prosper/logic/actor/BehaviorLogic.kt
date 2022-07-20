@@ -1,9 +1,9 @@
-package com.barbarus.prosper.processor.actor
+package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.processor.Processor
+import com.barbarus.prosper.logic.Logic
 
-class BehaviorProcessor : Processor<Actor> {
+class BehaviorLogic : Logic<Actor> {
     override fun process(actor: Actor) {
         val desiredBehaviors =
             actor.behaviors.filter { behavior -> actor.conditions.contains(behavior.trigger()) || behavior.trigger() == "*" }

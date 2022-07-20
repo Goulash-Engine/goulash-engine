@@ -1,9 +1,9 @@
-package com.barbarus.prosper.processor.actor
+package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.processor.Processor
+import com.barbarus.prosper.logic.Logic
 
-class ConditionProcessor : Processor<Actor> {
+class ConditionLogic : Logic<Actor> {
     override fun process(actor: Actor) {
         if (actor.state.health < 60) actor.conditions.add("sleep")
         if (actor.state.stamina < 30) actor.conditions.add("sleep")

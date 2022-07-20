@@ -1,9 +1,9 @@
-package com.barbarus.prosper.processor.actor
+package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.processor.Processor
+import com.barbarus.prosper.logic.Logic
 
-class InventoryProcessor : Processor<Actor> {
+class StarvationLogic : Logic<Actor> {
 
     override fun process(actor: Actor) {
         val inventory = actor.inventory()
