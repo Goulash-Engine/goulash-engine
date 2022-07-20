@@ -3,6 +3,7 @@ package com.barbarus.prosper.core.domain
 import com.barbarus.prosper.behavior.Behavior
 import com.barbarus.prosper.processor.BehaviorProcessor
 import com.barbarus.prosper.processor.ConditionProcessor
+import com.barbarus.prosper.processor.InventoryProcessor
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
@@ -44,10 +45,12 @@ class Clan(
     override fun act() {
         val behaviorProcessor = BehaviorProcessor()
         val conditionProcessor = ConditionProcessor()
+        val inventoryProcessor = InventoryProcessor()
         conditionProcessor.process(this)
         behaviorProcessor.process(this, behaviors)
-        LOG.info("Clan $id conditions: $conditions")
-        LOG.info("Clan $id state: $state")
+        inventoryProcessor.process(this)
+        // LOG.info("Clan $id conditions: $conditions")
+        // LOG.info("Clan $id state: $state")
     }
 
     override fun equals(other: Any?): Boolean {

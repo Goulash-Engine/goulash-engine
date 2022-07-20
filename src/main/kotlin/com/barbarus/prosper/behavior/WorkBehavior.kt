@@ -18,6 +18,7 @@ class WorkBehavior : Behavior {
     override fun act(actor: Actor) {
         // LOG.info("${actor.id} is working")
         actor.state.stamina -= 1
+        actor.state.hunger += 0.5
     }
 
     companion object {
