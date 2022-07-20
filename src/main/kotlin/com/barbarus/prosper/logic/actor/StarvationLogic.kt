@@ -6,7 +6,10 @@ import com.barbarus.prosper.logic.Logic
 class StarvationLogic : Logic<Actor> {
 
     override fun process(actor: Actor) {
-        val inventory = actor.inventory()
-        inventory.removeIf { it.weight < 0.1 }
+        if (actor.state.hunger < 5) {
+            actor.state.health = actor.state.health.minus(5)
+        } else if (actor.state.hunger < 10) {
+            actor.state.health--
+        }
     }
 }

@@ -1,9 +1,8 @@
-package com.barbarus.prosper.logic
+package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
-import com.barbarus.prosper.logic.actor.BehaviorLogic
 import org.junit.jupiter.api.Test
 
 internal class BehaviorLogicTest {

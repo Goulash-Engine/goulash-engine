@@ -1,10 +1,9 @@
-package com.barbarus.prosper.logic
+package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.hasSize
 import com.barbarus.prosper.ClanFactory
 import com.barbarus.prosper.ResourceFactory
-import com.barbarus.prosper.logic.actor.InventoryLogic
 import org.junit.jupiter.api.Test
 
 internal class InventoryLogicTest {
