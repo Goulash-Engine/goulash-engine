@@ -12,7 +12,7 @@ internal class StarvationLogicTest {
     fun `should should reduce health stronger if hunger is over critical threshold`() {
         val clan = ClanFactory.simpleGathererClan()
 
-        clan.state.hunger = 4.9
+        clan.state.hunger = 91.0
 
         starvationLogic.process(clan)
 
@@ -23,7 +23,7 @@ internal class StarvationLogicTest {
     fun `should should reduce health if hunger is over normal threshold`() {
         val clan = ClanFactory.simpleGathererClan()
 
-        clan.state.hunger = 9.0
+        clan.state.hunger = 81.0
 
         starvationLogic.process(clan)
 

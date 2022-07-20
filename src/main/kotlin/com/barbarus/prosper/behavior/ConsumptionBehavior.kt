@@ -16,11 +16,11 @@ class ConsumptionBehavior : Behavior {
     }
 
     override fun act(actor: Actor) {
-        LOG.info("${actor.id} is consuming")
+        LOG.debug("${actor.id} is consuming")
         val inventory = actor.inventory()
         val consumables = inventory.filter { it.traits.contains("consumable") }
         if (consumables.isEmpty()) {
-            LOG.info("${actor.id} has no consumables")
+            LOG.debug("${actor.id} has no consumables")
             return
         }
         val nearestLeftover = consumables.minBy { it.weight }

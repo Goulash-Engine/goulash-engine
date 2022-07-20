@@ -6,6 +6,7 @@ import com.barbarus.prosper.logic.Logic
 import com.barbarus.prosper.logic.actor.BehaviorLogic
 import com.barbarus.prosper.logic.actor.ConditionLogic
 import com.barbarus.prosper.logic.actor.InventoryLogic
+import com.barbarus.prosper.logic.actor.StarvationLogic
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
@@ -24,7 +25,8 @@ class Clan(
     private val actorLogics: List<Logic<Actor>> = listOf(
         BehaviorLogic(),
         ConditionLogic(),
-        InventoryLogic()
+        InventoryLogic(),
+        StarvationLogic()
     )
 
     override val state: State
@@ -45,7 +47,7 @@ class Clan(
 
     override fun act() {
         actorLogics.forEach { it.process(this) }
-        LOG.info("Clan $name conditions: $conditions and state: $state")
+        LOG.debug("Clan $name conditions: $conditions and state: $state")
     }
 
     override fun equals(other: Any?): Boolean {

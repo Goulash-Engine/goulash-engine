@@ -6,9 +6,9 @@ import com.barbarus.prosper.logic.Logic
 class StarvationLogic : Logic<Actor> {
 
     override fun process(actor: Actor) {
-        if (actor.state.hunger < 5) {
+        if (actor.state.hunger > 90) {
             actor.state.health = actor.state.health.minus(5)
-        } else if (actor.state.hunger < 10) {
+        } else if (actor.state.hunger > 80) {
             actor.state.health--
         }
     }
