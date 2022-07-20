@@ -12,7 +12,7 @@ class WorkBehavior : Behavior {
     }
 
     override fun blocker(): String {
-        return "sleep"
+        return "tired"
     }
 
     override fun act(actor: Actor) {

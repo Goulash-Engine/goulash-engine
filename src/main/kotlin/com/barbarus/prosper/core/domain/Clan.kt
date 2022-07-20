@@ -4,7 +4,7 @@ import com.barbarus.prosper.ClanNameFactory
 import com.barbarus.prosper.behavior.Behavior
 import com.barbarus.prosper.logic.Logic
 import com.barbarus.prosper.logic.clan.BehaviorLogic
-import com.barbarus.prosper.logic.clan.ConditionLogic
+import com.barbarus.prosper.logic.clan.StateConditionLogic
 import com.barbarus.prosper.logic.clan.DeathLogic
 import com.barbarus.prosper.logic.clan.InventoryLogic
 import com.barbarus.prosper.logic.clan.StarvationLogic
@@ -25,7 +25,7 @@ class Clan(
     private val _state: State = State()
     private val actorLogics: List<Logic<Actor>> = listOf(
         BehaviorLogic(),
-        ConditionLogic(),
+        StateConditionLogic(),
         InventoryLogic(),
         StarvationLogic(),
         DeathLogic()

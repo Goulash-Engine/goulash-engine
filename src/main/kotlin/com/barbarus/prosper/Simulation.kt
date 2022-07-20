@@ -9,8 +9,8 @@ import org.fusesource.jansi.AnsiConsole
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
-class Simulation {
-    val village = Village(
+class Simulation(
+    val village: Village = Village(
         mutableListOf(
             ClanFactory.poorGathererClan(),
             ClanFactory.simpleGathererClan()
@@ -18,6 +18,7 @@ class Simulation {
             // ClanFactory.simpleGathererClan()
         )
     )
+) {
     private val date = WorldDate()
 
     init {
