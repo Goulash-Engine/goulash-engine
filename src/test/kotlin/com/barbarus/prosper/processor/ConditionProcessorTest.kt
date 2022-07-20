@@ -3,6 +3,7 @@ package com.barbarus.prosper.processor
 import assertk.assertThat
 import assertk.assertions.contains
 import com.barbarus.prosper.ClanFactory
+import com.barbarus.prosper.processor.actor.ConditionProcessor
 import org.junit.jupiter.api.Test
 
 internal class ConditionProcessorTest {

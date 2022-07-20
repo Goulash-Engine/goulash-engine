@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import com.barbarus.prosper.ClanFactory
 import com.barbarus.prosper.ResourceFactory
+import com.barbarus.prosper.processor.actor.InventoryProcessor
 import org.junit.jupiter.api.Test
 
 internal class InventoryProcessorTest {

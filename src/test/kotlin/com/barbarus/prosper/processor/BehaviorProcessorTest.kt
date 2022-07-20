@@ -3,6 +3,7 @@ package com.barbarus.prosper.processor
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
+import com.barbarus.prosper.processor.actor.BehaviorProcessor
 import org.junit.jupiter.api.Test
 
 internal class BehaviorProcessorTest {
