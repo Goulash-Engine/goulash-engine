@@ -9,23 +9,22 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 class Simulation {
-    private val village = Village()
+    val village = Village(
+        mutableListOf(
+            ClanFactory.simpleGathererClan()
+            // ClanFactory.simpleGathererClan(),
+            // ClanFactory.simpleGathererClan(),
+            // ClanFactory.simpleGathererClan()
+        )
+    )
     private val date = WorldDate()
 
     init {
         LOG.info("Initializing simulation")
-        village.clans.addAll(
-            listOf(
-                ClanFactory.simpleGathererClan()
-                // ClanFactory.simpleGathererClan(),
-                // ClanFactory.simpleGathererClan(),
-                // ClanFactory.simpleGathererClan()
-            )
-        )
         LOG.info("${village.clans.size} clans initialized")
     }
 
-    fun run(ticks: Int, millisecondsPerTick: Long = 1000) {
+    fun run(ticks: Int, millisecondsPerTick: Long = 1000, render: Boolean = false) {
         AnsiConsole.systemInstall()
         print(ansi().eraseScreen())
 
@@ -34,15 +33,21 @@ class Simulation {
             village.act()
 
             val builder = StringBuilder()
-            builder.append("Starting simulation\n")
-            builder.append("Maximum ticks: $ticks\n")
-            builder.append("Milliseconds per tick: $millisecondsPerTick\n\n")
+
+            if (render) {
+                builder.append("Starting simulation\n")
+                builder.append("Maximum ticks: $ticks\n")
+                builder.append("Milliseconds per tick: $millisecondsPerTick\n\n")
+            }
+
             builder.append("Tick ${it.plus(1)}/$ticks\n")
-            builder.append("Active clans: ${village.clans.size}\n\n")
-            builder.append("Clan Details:\n")
-            village.clans.forEach { clan ->
-                builder.append(
-                    """
+
+            if (render) {
+                builder.append("Active clans: ${village.clans.size}\n\n")
+                builder.append("Clan Details:\n")
+                village.clans.forEach { clan ->
+                    builder.append(
+                        """
                 @|red -- ${clan.name} --|@
                 @|yellow id: ${clan.id}|@
 
@@ -53,17 +58,18 @@ class Simulation {
 
                 @|green ## Conditions ## |@
                 ${clan.conditions}
-                    """.trimIndent()
-                )
-                builder.append("\n---")
-                repeat(clan.name.length) { builder.append("-") }
-                builder.append("---")
-                builder.append("\n\n")
-            }
+                        """.trimIndent()
+                    )
+                    builder.append("\n---")
+                    repeat(clan.name.length) { builder.append("-") }
+                    builder.append("---")
+                    builder.append("\n\n")
+                }
 
-            print(ansi().cursorToColumn(1))
-            print(ansi().cursorUpLine(20).eraseScreen(Ansi.Erase.FORWARD))
-            print(ansi().render(builder.toString()))
+                print(ansi().cursorToColumn(1))
+                print(ansi().cursorUpLine(20).eraseScreen(Ansi.Erase.FORWARD))
+                print(ansi().render(builder.toString()))
+            }
 
             TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
         }

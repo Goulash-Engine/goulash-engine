@@ -3,10 +3,11 @@ package com.barbarus.prosper.core.domain
 import com.barbarus.prosper.ClanNameFactory
 import com.barbarus.prosper.behavior.Behavior
 import com.barbarus.prosper.logic.Logic
-import com.barbarus.prosper.logic.actor.BehaviorLogic
-import com.barbarus.prosper.logic.actor.ConditionLogic
-import com.barbarus.prosper.logic.actor.InventoryLogic
-import com.barbarus.prosper.logic.actor.StarvationLogic
+import com.barbarus.prosper.logic.clan.BehaviorLogic
+import com.barbarus.prosper.logic.clan.ConditionLogic
+import com.barbarus.prosper.logic.clan.DeathLogic
+import com.barbarus.prosper.logic.clan.InventoryLogic
+import com.barbarus.prosper.logic.clan.StarvationLogic
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
@@ -26,7 +27,8 @@ class Clan(
         BehaviorLogic(),
         ConditionLogic(),
         InventoryLogic(),
-        StarvationLogic()
+        StarvationLogic(),
+        DeathLogic()
     )
 
     override val state: State

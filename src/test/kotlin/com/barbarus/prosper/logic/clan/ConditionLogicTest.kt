@@ -1,9 +1,8 @@
-package com.barbarus.prosper.logic.actor
+package com.barbarus.prosper.logic.clan
 
 import assertk.assertThat
 import assertk.assertions.contains
 import com.barbarus.prosper.ClanFactory
-import com.barbarus.prosper.logic.actor.ConditionLogic
 import org.junit.jupiter.api.Test
 
 internal class ConditionLogicTest {
