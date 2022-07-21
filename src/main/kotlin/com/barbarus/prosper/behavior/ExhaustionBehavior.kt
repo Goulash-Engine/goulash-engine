@@ -8,7 +8,7 @@ class ExhaustionBehavior : Behavior {
     }
 
     override fun blocker(): List<String> {
-        return listOf("*")
+        return listOf("exhausted")
     }
 
     override fun act(actor: Actor) {

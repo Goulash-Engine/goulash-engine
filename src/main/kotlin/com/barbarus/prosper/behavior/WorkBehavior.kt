@@ -11,7 +11,7 @@ class WorkBehavior : Behavior {
     }
 
     override fun blocker(): List<String> {
-        return listOf("tired", "sick")
+        return listOf("tired", "sick", "exhausted")
     }
 
     override fun act(actor: Actor) {

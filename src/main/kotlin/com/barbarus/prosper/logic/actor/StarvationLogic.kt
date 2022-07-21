@@ -6,6 +6,7 @@ import com.barbarus.prosper.logic.Logic
 /**
  * This logic decreases the health of an [Actor] according to the state of hunger.
  */
+// TODO: move to behaviors
 class StarvationLogic : Logic<Actor> {
     override fun process(context: Actor) {
         if (context.state.hunger > 90) {

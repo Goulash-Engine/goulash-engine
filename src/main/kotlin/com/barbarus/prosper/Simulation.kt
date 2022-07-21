@@ -31,7 +31,7 @@ class Simulation(
         print(ansi().eraseScreen())
 
         repeat(ticks) {
-            date.tick()
+            repeat(60) { date.tick() }
             village.act()
 
             val builder = StringBuilder()

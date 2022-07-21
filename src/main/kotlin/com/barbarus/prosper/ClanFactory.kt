@@ -1,7 +1,9 @@
 package com.barbarus.prosper
 
+import com.barbarus.prosper.behavior.AmbitionBehavior
 import com.barbarus.prosper.behavior.AwakeBehavior
 import com.barbarus.prosper.behavior.ConsumptionBehavior
+import com.barbarus.prosper.behavior.ExhaustionBehavior
 import com.barbarus.prosper.behavior.IdleBehavior
 import com.barbarus.prosper.behavior.RestBehavior
 import com.barbarus.prosper.behavior.WorkBehavior
@@ -41,6 +43,8 @@ object ClanFactory {
         WorkBehavior(),
         ConsumptionBehavior(),
         RestBehavior(),
-        IdleBehavior()
+        IdleBehavior(),
+        AmbitionBehavior(),
+        ExhaustionBehavior()
     )
 }
