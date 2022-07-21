@@ -1,4 +1,4 @@
-package com.barbarus.prosper.logic.clan
+package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo

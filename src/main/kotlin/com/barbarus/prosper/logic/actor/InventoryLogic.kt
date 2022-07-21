@@ -1,4 +1,4 @@
-package com.barbarus.prosper.logic.clan
+package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.logic.Logic

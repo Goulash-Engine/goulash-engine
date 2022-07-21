@@ -67,6 +67,8 @@ class Simulation(
                 """
                     @|red -- ${clan.name} --|@
                     @|yellow id: ${clan.id}|@
+                    
+                    @|green Activity: ${clan.currentActivity} |@
     
                     @|green ## State ## |@
                     health: ${clan.state.health}

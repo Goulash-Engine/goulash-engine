@@ -6,6 +6,7 @@ interface Actor {
     val id: String
     val conditions: MutableSet<String>
     val behaviors: List<Behavior>
+    var currentActivity: String
     val state: State
     fun inventory(): MutableList<Resource>
     fun act()

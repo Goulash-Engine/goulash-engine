@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
  */
 class ConsumptionBehavior : Behavior {
     override fun trigger(): String {
-        return "hunger"
+        return "hungry"
     }
 
     override fun blocker(): String {
@@ -16,11 +16,10 @@ class ConsumptionBehavior : Behavior {
     }
 
     override fun act(actor: Actor) {
-        LOG.debug("${actor.id} is consuming")
+        actor.currentActivity = "consuming"
         val inventory = actor.inventory()
         val consumables = inventory.filter { it.traits.contains("consumable") }
         if (consumables.isEmpty()) {
-            LOG.debug("${actor.id} has no consumables")
             return
         }
         val nearestLeftover = consumables.minBy { it.weight }

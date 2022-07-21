@@ -11,7 +11,7 @@ class AwakeBehavior : Behavior {
     }
 
     override fun blocker(): String {
-        return ""
+        return "sleeping"
     }
 
     override fun act(actor: Actor) {

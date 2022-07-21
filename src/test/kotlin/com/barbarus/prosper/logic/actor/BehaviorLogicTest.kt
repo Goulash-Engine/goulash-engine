@@ -1,4 +1,4 @@
-package com.barbarus.prosper.logic.clan
+package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -12,7 +12,7 @@ internal class BehaviorLogicTest {
     fun `should not consume a consumable resource if the actor is sick but should still run awake behavior`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.conditions.add("sick")
-        clan.conditions.add("hunger")
+        clan.conditions.add("hungry")
 
         behaviorLogic.process(clan)
 
@@ -23,7 +23,7 @@ internal class BehaviorLogicTest {
     @Test
     fun `should consume a consumable resource if the actor has the hunger desire`() {
         val clan = ClanFactory.simpleGathererClan()
-        clan.conditions.add("hunger")
+        clan.conditions.add("hungry")
 
         val expectedWeight = clan.stash.minBy { it.weight }.weight - 0.1
 
