@@ -19,13 +19,15 @@ class ConsumptionBehavior : Behavior {
         actor.currentActivity = "consuming"
         val inventory = actor.inventory()
         val consumables = inventory.filter { it.traits.contains("consumable") }
-        if (consumables.isEmpty()) {
-            return
+
+        if (consumables.isNotEmpty()) {
+            val nearestLeftover = consumables.minBy { it.weight }
+            nearestLeftover.weight -= 0.1
+            actor.state.hunger -= 5
         }
-        val nearestLeftover = consumables.minBy { it.weight }
-        nearestLeftover.weight = nearestLeftover.weight.minus(0.1)
-        actor.state.hunger = actor.state.hunger.minus(5)
+
         if (actor.state.hunger < 20) actor.conditions.remove("hungry")
+        if (actor.state.hunger > 80) actor.conditions.add("starving")
     }
 
     companion object {

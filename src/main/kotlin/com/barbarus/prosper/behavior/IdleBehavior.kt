@@ -11,7 +11,7 @@ class IdleBehavior : Behavior {
     }
 
     override fun blocker(): List<String> {
-        return listOf("*")
+        return listOf()
     }
 
     override fun act(actor: Actor) {

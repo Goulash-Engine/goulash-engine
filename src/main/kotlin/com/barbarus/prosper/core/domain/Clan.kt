@@ -6,7 +6,6 @@ import com.barbarus.prosper.logic.Logic
 import com.barbarus.prosper.logic.actor.BehaviorLogic
 import com.barbarus.prosper.logic.actor.DeathLogic
 import com.barbarus.prosper.logic.actor.InventoryLogic
-import com.barbarus.prosper.logic.actor.StarvationLogic
 import com.barbarus.prosper.logic.actor.StateConditionLogic
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -27,7 +26,6 @@ class Clan(
         BehaviorLogic(),
         StateConditionLogic(),
         InventoryLogic(),
-        StarvationLogic(),
         DeathLogic()
     )
     override var currentActivity: String = ""

@@ -6,6 +6,7 @@ import com.barbarus.prosper.behavior.ConsumptionBehavior
 import com.barbarus.prosper.behavior.ExhaustionBehavior
 import com.barbarus.prosper.behavior.IdleBehavior
 import com.barbarus.prosper.behavior.RestBehavior
+import com.barbarus.prosper.behavior.StarvationBehavior
 import com.barbarus.prosper.behavior.WorkBehavior
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
@@ -45,6 +46,7 @@ object ClanFactory {
         RestBehavior(),
         IdleBehavior(),
         AmbitionBehavior(),
-        ExhaustionBehavior()
+        ExhaustionBehavior(),
+        StarvationBehavior()
     )
 }
