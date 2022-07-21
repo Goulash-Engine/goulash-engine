@@ -46,6 +46,7 @@ class Simulation(
 
             if (render) {
                 builder.append("Active clans: ${village.clans.size}\n\n")
+                builder.append("Date: ${date.toString()}\n\n")
                 builder.append("Clan Details:\n")
 
                 if (village.clans.isNotEmpty()) {
@@ -74,7 +75,7 @@ class Simulation(
                     @|green ## State ## |@
                     health: ${clan.state.health}
                     stamina: ${clan.state.stamina}
-                    hunger: ${clan.state.hunger}
+                    hunger: ${String.format(Locale.US, "%.2f", clan.state.hunger)}
                     
                     @|green ## Stash ## |@
                     ${

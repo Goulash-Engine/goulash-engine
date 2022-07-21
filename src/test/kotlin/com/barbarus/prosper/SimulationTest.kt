@@ -12,6 +12,8 @@ internal class SimulationTest {
         val clans = mutableListOf(
             ClanFactory.poorGathererClan()
         )
+        clans.first().stash.clear()
+
         val village = Village(clans)
         val simulation = Simulation(village)
 

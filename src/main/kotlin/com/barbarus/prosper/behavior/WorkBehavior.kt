@@ -16,7 +16,11 @@ class WorkBehavior : Behavior {
 
     override fun act(actor: Actor) {
         actor.currentActivity = "working"
-        actor.state.stamina -= 1
+        actor.state.stamina -= 3
         actor.state.hunger += 0.5
+        if (actor.state.stamina < 30) {
+            actor.conditions.add(blocker())
+            actor.conditions.remove(trigger())
+        }
     }
 }

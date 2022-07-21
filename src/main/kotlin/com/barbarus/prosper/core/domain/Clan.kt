@@ -49,6 +49,7 @@ class Clan(
     }
 
     override fun act() {
+        this.currentActivity = ""
         actorLogics.forEach { it.process(this) }
         LOG.debug("Clan $name conditions: $conditions and state: $state")
     }

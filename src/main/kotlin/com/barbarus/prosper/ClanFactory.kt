@@ -2,6 +2,8 @@ package com.barbarus.prosper
 
 import com.barbarus.prosper.behavior.AwakeBehavior
 import com.barbarus.prosper.behavior.ConsumptionBehavior
+import com.barbarus.prosper.behavior.IdleBehavior
+import com.barbarus.prosper.behavior.RestBehavior
 import com.barbarus.prosper.behavior.WorkBehavior
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
@@ -19,11 +21,7 @@ object ClanFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
-        behaviors = mutableListOf(
-            AwakeBehavior(),
-            WorkBehavior(),
-            ConsumptionBehavior()
-        )
+        behaviors = clanBehavior()
     )
 
     fun simpleGathererClan() = Clan(
@@ -35,10 +33,14 @@ object ClanFactory {
             ResourceFactory.food(),
             ResourceFactory.food()
         ),
-        behaviors = mutableListOf(
-            AwakeBehavior(),
-            WorkBehavior(),
-            ConsumptionBehavior()
-        )
+        behaviors = clanBehavior()
+    )
+
+    private fun clanBehavior() = mutableListOf(
+        AwakeBehavior(),
+        WorkBehavior(),
+        ConsumptionBehavior(),
+        RestBehavior(),
+        IdleBehavior()
     )
 }
