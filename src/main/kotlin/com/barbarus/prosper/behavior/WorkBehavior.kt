@@ -6,12 +6,12 @@ import com.barbarus.prosper.core.domain.Actor
  * This [Behavior] controls the daily work of a clan.
  */
 class WorkBehavior : Behavior {
-    override fun trigger(): String {
-        return "ambitious"
+    override fun trigger(): List<String> {
+        return listOf("ambitious")
     }
 
-    override fun blocker(): String {
-        return "tired"
+    override fun blocker(): List<String> {
+        return listOf("tired", "sick")
     }
 
     override fun act(actor: Actor) {
@@ -19,8 +19,8 @@ class WorkBehavior : Behavior {
         actor.state.stamina -= 3
         actor.state.hunger += 0.5
         if (actor.state.stamina < 30) {
-            actor.conditions.add(blocker())
-            actor.conditions.remove(trigger())
+            actor.conditions.add("tired")
+            actor.conditions.remove("ambitious")
         }
     }
 }

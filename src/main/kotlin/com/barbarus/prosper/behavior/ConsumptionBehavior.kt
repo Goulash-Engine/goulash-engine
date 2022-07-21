@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory
  * This [Behavior] controls the consumption of resources that are consumable.
  */
 class ConsumptionBehavior : Behavior {
-    override fun trigger(): String {
-        return "hungry"
+    override fun trigger(): List<String> {
+        return listOf("hungry")
     }
 
-    override fun blocker(): String {
-        return "sick"
+    override fun blocker(): List<String> {
+        return listOf("sick")
     }
 
     override fun act(actor: Actor) {

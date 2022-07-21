@@ -19,8 +19,8 @@ internal class WorkBehaviorTest {
 
         assertThat(clan.stamina).isEqualTo(28.0)
         assertThat(clan.hunger).isEqualTo(0.5)
-        assertThat(clan.conditions).contains(workBehavior.blocker())
-        assertThat(clan.conditions).doesNotContain(workBehavior.trigger())
+        assertThat(clan.conditions).contains("tired")
+        assertThat(clan.conditions).doesNotContain("ambitious")
     }
 
     @Test

@@ -9,9 +9,15 @@ import com.barbarus.prosper.logic.Logic
 class BehaviorLogic : Logic<Actor> {
     override fun process(context: Actor) {
         val desiredBehaviors =
-            context.behaviors.filter { behavior -> context.conditions.contains(behavior.trigger()) || behavior.trigger() == "*" }
+            context.behaviors.filter { behavior ->
+                (
+                    context.conditions.any {
+                        behavior.trigger().contains(it)
+                    } || behavior.trigger() == listOf("*")
+                    )
+            }
         val unblockedBehaviors =
-            desiredBehaviors.filterNot { behavior -> context.conditions.contains(behavior.blocker()) }
+            desiredBehaviors.filterNot { behavior -> context.conditions.any { behavior.blocker().contains(it) } }
         unblockedBehaviors.forEach { behavior -> behavior.act(context) }
     }
 }
