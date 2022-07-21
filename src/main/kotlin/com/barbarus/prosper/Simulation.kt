@@ -1,6 +1,5 @@
 package com.barbarus.prosper
 
-import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Village
 import com.barbarus.prosper.core.domain.WorldDate
 import org.fusesource.jansi.Ansi
@@ -13,9 +12,9 @@ class Simulation(
     val village: Village = Village(
         mutableListOf(
             ClanFactory.poorGathererClan(),
+            ClanFactory.poorGathererClan(),
+            ClanFactory.poorGathererClan(),
             ClanFactory.simpleGathererClan()
-            // ClanFactory.simpleGathererClan(),
-            // ClanFactory.simpleGathererClan()
         )
     )
 ) {
@@ -26,7 +25,7 @@ class Simulation(
         LOG.info("${village.clans.size} clans initialized")
     }
 
-    fun run(ticks: Int, millisecondsPerTick: Long = 1000, render: Boolean = false, clanDetailFor: Int = 0) {
+    fun run(ticks: Int, millisecondsPerTick: Long = 1000, render: Boolean = false) {
         AnsiConsole.systemInstall()
         print(ansi().eraseScreen())
 
@@ -49,11 +48,10 @@ class Simulation(
                 builder.append("Clan Details:\n")
 
                 if (village.clans.isNotEmpty()) {
-                    renderClanDetails(village.clans[clanDetailFor], builder)
+                    renderClanDetails(builder)
                 }
 
-                print(ansi().cursorToColumn(1))
-                print(ansi().cursorUpLine(14 + (village.clans.size * 6)).eraseScreen(Ansi.Erase.FORWARD))
+                print(ansi().cursor(1, 1).eraseScreen(Ansi.Erase.FORWARD))
                 print(ansi().render(builder.toString()))
             }
 
@@ -63,9 +61,10 @@ class Simulation(
         LOG.info("Simulation finished")
     }
 
-    private fun renderClanDetails(clan: Clan, builder: StringBuilder) {
-        builder.append(
-            """
+    private fun renderClanDetails(builder: StringBuilder) {
+        village.clans.forEach { clan ->
+            builder.append(
+                """
                     @|red -- ${clan.name} --|@
                     @|yellow id: ${clan.id}|@
     
@@ -76,12 +75,13 @@ class Simulation(
     
                     @|green ## Conditions ## |@
                     ${clan.conditions}
-            """.trimIndent()
-        )
-        builder.append("\n---")
-        repeat(clan.name.length) { builder.append("-") }
-        builder.append("---")
-        builder.append("\n\n")
+                """.trimIndent()
+            )
+            builder.append("\n---")
+            repeat(clan.name.length) { builder.append("-") }
+            builder.append("---")
+            builder.append("\n\n")
+        }
     }
 
     companion object {

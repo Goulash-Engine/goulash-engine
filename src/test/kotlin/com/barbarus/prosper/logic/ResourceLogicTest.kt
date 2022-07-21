@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test
 internal class ResourceLogicTest {
     private val resourceLogic = ResourceLogic()
 
-    @Test
     @RepeatedTest(10)
     fun `should generate more wood if the woodworker experience is higher`() {
         var profession = Profession(ProfessionType.WOODWORKER, 1.0)
