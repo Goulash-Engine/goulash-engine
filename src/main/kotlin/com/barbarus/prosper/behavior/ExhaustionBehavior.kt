@@ -4,14 +4,16 @@ import com.barbarus.prosper.core.domain.Actor
 
 class ExhaustionBehavior : Behavior {
     override fun trigger(): List<String> {
-        TODO("Not yet implemented")
+        return listOf("*")
     }
 
     override fun blocker(): List<String> {
-        TODO("Not yet implemented")
+        return listOf("*")
     }
 
     override fun act(actor: Actor) {
-        TODO("Not yet implemented")
+        if (actor.state.stamina < 10) actor.conditions.add("exhausted")
+        else if (actor.state.stamina < 30) actor.conditions.add("tired")
+        else if (actor.state.stamina < 90) actor.conditions.remove("rested")
     }
 }

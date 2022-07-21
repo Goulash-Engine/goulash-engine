@@ -2,8 +2,6 @@ package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.contains
-import assertk.assertions.containsOnly
-import assertk.assertions.doesNotContain
 import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 

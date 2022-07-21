@@ -46,7 +46,7 @@ class Simulation(
 
             if (render) {
                 builder.append("Active clans: ${village.clans.size}\n\n")
-                builder.append("Date: ${date.toString()}\n\n")
+                builder.append("Date: ${date}\n\n")
                 builder.append("Clan Details:\n")
 
                 if (village.clans.isNotEmpty()) {

@@ -7,16 +7,17 @@ import com.barbarus.prosper.core.domain.Actor
  */
 class RestBehavior : Behavior {
     override fun trigger(): List<String> {
-        return listOf("tired")
+        return listOf("tired", "exhausted")
     }
 
     override fun blocker(): List<String> {
-        return listOf("*")
+        return listOf("rested")
     }
 
     override fun act(actor: Actor) {
         actor.currentActivity = "resting"
         actor.state.stamina += 2
         if (actor.state.stamina > 75) actor.conditions.remove("tired")
+        if (actor.state.stamina >= 90) actor.conditions.add("rested")
     }
 }

@@ -1,7 +1,6 @@
 package com.barbarus.prosper.behavior
 
 import assertk.assertThat
-import assertk.assertions.contains
 import assertk.assertions.doesNotContain
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
@@ -19,7 +18,6 @@ internal class WorkBehaviorTest {
 
         assertThat(clan.stamina).isEqualTo(28.0)
         assertThat(clan.hunger).isEqualTo(0.5)
-        assertThat(clan.conditions).contains("tired")
         assertThat(clan.conditions).doesNotContain("ambitious")
     }
 
