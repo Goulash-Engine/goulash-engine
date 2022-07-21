@@ -2,11 +2,27 @@ package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.contains
+import assertk.assertions.doesNotContain
 import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 
 internal class StateConditionLogicTest {
     private val stateConditionLogic = StateConditionLogic()
+
+    @Test
+    fun `should reset condition if threshold is not reached`() {
+        val clan = ClanFactory.simpleGathererClan()
+        clan.state.hunger = 31.0
+
+        stateConditionLogic.process(clan)
+
+        assertThat(clan.conditions).contains("hungry")
+
+        clan.state.hunger = 10.0
+        stateConditionLogic.process(clan)
+
+        assertThat(clan.conditions).doesNotContain("hungry")
+    }
 
     @Test
     fun `should add the condition for sleep if health is under 60`() {

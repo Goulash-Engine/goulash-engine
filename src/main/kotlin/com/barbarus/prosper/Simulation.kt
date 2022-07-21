@@ -6,15 +6,16 @@ import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole
 import org.slf4j.LoggerFactory
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class Simulation(
     val village: Village = Village(
         mutableListOf(
-            ClanFactory.poorGathererClan(),
-            ClanFactory.poorGathererClan(),
-            ClanFactory.poorGathererClan(),
-            ClanFactory.simpleGathererClan()
+            ClanFactory.poorGathererClan()
+            // ClanFactory.poorGathererClan(),
+            // ClanFactory.poorGathererClan(),
+            // ClanFactory.simpleGathererClan()
         )
     )
 ) {
@@ -74,7 +75,14 @@ class Simulation(
                     health: ${clan.state.health}
                     stamina: ${clan.state.stamina}
                     hunger: ${clan.state.hunger}
-    
+                    
+                    @|green ## Stash ## |@
+                    ${
+                clan.stash.joinToString("") {
+                    """${String.format(Locale.US, "%.2f", it.weight)} | ${it.type}
+                    """
+                }
+                }
                     @|green ## Conditions ## |@
                     ${clan.conditions}
                 """.trimIndent()

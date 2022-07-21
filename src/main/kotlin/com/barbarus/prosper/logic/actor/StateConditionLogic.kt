@@ -8,6 +8,7 @@ import com.barbarus.prosper.logic.Logic
  */
 class StateConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
+        context.conditions.clear()
         if (context.state.health < 60) context.conditions.add("tired")
         if (context.state.stamina < 30) context.conditions.add("tired")
         if (context.state.hunger > 30) context.conditions.add("hungry")

@@ -24,7 +24,7 @@ class ConsumptionBehavior : Behavior {
         }
         val nearestLeftover = consumables.minBy { it.weight }
         nearestLeftover.weight = nearestLeftover.weight.minus(0.1)
-        actor.state.hunger--
+        actor.state.hunger = actor.state.hunger.minus(5)
     }
 
     companion object {
