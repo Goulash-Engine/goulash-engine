@@ -18,6 +18,10 @@ class IdleActivity : Activity {
         return "idle"
     }
 
+    override fun duration(): Int {
+        return 1
+    }
+
     override fun act(actor: Actor) {
         if (actor.currentActivity.isBlank()) {
             actor.urges.increaseUrge("work", 0.5)

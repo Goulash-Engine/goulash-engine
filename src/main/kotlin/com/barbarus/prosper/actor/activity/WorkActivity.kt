@@ -18,6 +18,10 @@ class WorkActivity : Activity {
         return "working"
     }
 
+    override fun duration(): Int {
+        return 100
+    }
+
     override fun act(actor: Actor) {
         actor.state.hunger += 0.5
         actor.urges.increaseUrge("rest", 1.0)

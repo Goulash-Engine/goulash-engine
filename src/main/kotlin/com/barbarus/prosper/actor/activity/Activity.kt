@@ -13,6 +13,14 @@ interface Activity {
      */
     fun blockerCondition(): List<String>
 
+    /**
+     * The activity that should be set as current activity for the [Actor]
+     */
     fun activity(): String
+
+    /**
+     * Duration of the activity to last in ticks
+     */
+    fun duration(): Int
     fun act(actor: Actor)
 }

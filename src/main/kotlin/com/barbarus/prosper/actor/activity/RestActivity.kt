@@ -18,6 +18,10 @@ class RestActivity : Activity {
         return "resting"
     }
 
+    override fun duration(): Int {
+        return 30
+    }
+
     override fun act(actor: Actor) {
         actor.currentActivity = "resting"
         actor.urges.decreaseUrge("rest", 0.5)
