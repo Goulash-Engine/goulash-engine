@@ -7,11 +7,11 @@ import com.barbarus.prosper.core.domain.ResourceType
  * This [Behavior] controls the condition of an [Actor]s ambition.
  */
 class AmbitionBehavior : Behavior {
-    override fun trigger(): List<String> {
+    override fun triggerUrge(): List<String> {
         return listOf("*")
     }
 
-    override fun blocker(): List<String> {
+    override fun blockerCondition(): List<String> {
         return listOf("sick", "exhausted")
     }
 

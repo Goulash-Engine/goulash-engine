@@ -3,10 +3,12 @@ package com.barbarus.prosper
 import assertk.assertThat
 import assertk.assertions.hasSize
 import com.barbarus.prosper.core.domain.Village
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 internal class SimulationTest {
 
+    @Disabled
     @Test
     fun `all clans should die due to starvation`() {
         val clans = mutableListOf(

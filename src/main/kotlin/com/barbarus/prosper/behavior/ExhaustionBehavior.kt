@@ -3,11 +3,11 @@ package com.barbarus.prosper.behavior
 import com.barbarus.prosper.core.domain.Actor
 
 class ExhaustionBehavior : Behavior {
-    override fun trigger(): List<String> {
+    override fun triggerUrge(): List<String> {
         return listOf("*")
     }
 
-    override fun blocker(): List<String> {
+    override fun blockerCondition(): List<String> {
         return listOf("exhausted")
     }
 

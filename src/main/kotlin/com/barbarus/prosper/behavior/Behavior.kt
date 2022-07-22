@@ -4,13 +4,13 @@ import com.barbarus.prosper.core.domain.Actor
 
 interface Behavior {
     /**
-     * The conditions of an [Actor] that trigger this behavior
+     * The urges of an [Actor] that trigger this behavior
      */
-    fun trigger(): List<String>
+    fun triggerUrge(): List<String>
 
     /**
      * A blacklist conditions that prevents the [Behavior] from being triggered
      */
-    fun blocker(): List<String>
+    fun blockerCondition(): List<String>
     fun act(actor: Actor)
 }

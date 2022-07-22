@@ -6,11 +6,11 @@ import com.barbarus.prosper.core.domain.Actor
  * Represents the [Behavior] an [Actor] is executing when the "starving" condition occurs.
  */
 class StarvationBehavior : Behavior {
-    override fun trigger(): List<String> {
+    override fun triggerUrge(): List<String> {
         return listOf("starving")
     }
 
-    override fun blocker(): List<String> {
+    override fun blockerCondition(): List<String> {
         return listOf()
     }
 

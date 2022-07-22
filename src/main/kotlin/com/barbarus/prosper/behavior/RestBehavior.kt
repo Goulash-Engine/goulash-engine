@@ -6,11 +6,11 @@ import com.barbarus.prosper.core.domain.Actor
  * This [Behavior] controls the [Actor]'s behavior when it has no activity.
  */
 class RestBehavior : Behavior {
-    override fun trigger(): List<String> {
+    override fun triggerUrge(): List<String> {
         return listOf("tired", "exhausted")
     }
 
-    override fun blocker(): List<String> {
+    override fun blockerCondition(): List<String> {
         return listOf("rested")
     }
 

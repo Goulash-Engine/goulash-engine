@@ -5,12 +5,12 @@ import com.barbarus.prosper.core.domain.Actor
 /**
  * This [Behavior] controls the daily work of a clan.
  */
-class WorkBehavior : Behavior {
-    override fun trigger(): List<String> {
-        return listOf("*")
+class WorkActivity : Behavior {
+    override fun triggerUrge(): List<String> {
+        return listOf("work")
     }
 
-    override fun blocker(): List<String> {
+    override fun blockerCondition(): List<String> {
         return listOf("tired", "sick", "exhausted")
     }
 

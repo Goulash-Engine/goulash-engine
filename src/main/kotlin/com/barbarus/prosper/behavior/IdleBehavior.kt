@@ -6,16 +6,17 @@ import com.barbarus.prosper.core.domain.Actor
  * This [Behavior] controls the [Actor]'s behavior when it has no activity.
  */
 class IdleBehavior : Behavior {
-    override fun trigger(): List<String> {
+    override fun triggerUrge(): List<String> {
         return listOf("*")
     }
 
-    override fun blocker(): List<String> {
+    override fun blockerCondition(): List<String> {
         return listOf()
     }
 
     override fun act(actor: Actor) {
         if (actor.currentActivity.isBlank()) {
+            actor.urges.increaseUrge("work", 0.5)
         }
     }
 }

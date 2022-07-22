@@ -12,12 +12,12 @@ class BehaviorLogic : Logic<Actor> {
             context.behaviors.filter { behavior ->
                 (
                     context.conditions.any {
-                        behavior.trigger().contains(it)
-                    } || behavior.trigger() == listOf("*")
+                        behavior.triggerUrge().contains(it)
+                    } || behavior.triggerUrge() == listOf("*")
                     )
             }
         val unblockedBehaviors =
-            desiredBehaviors.filterNot { behavior -> context.conditions.any { behavior.blocker().contains(it) } }
+            desiredBehaviors.filterNot { behavior -> context.conditions.any { behavior.blockerCondition().contains(it) } }
         unblockedBehaviors.forEach { behavior -> behavior.act(context) }
     }
 }
