@@ -12,5 +12,7 @@ interface Activity {
      * A blacklist conditions that prevents the [Activity] from being triggered
      */
     fun blockerCondition(): List<String>
+
+    fun activity(): String
     fun act(actor: Actor)
 }

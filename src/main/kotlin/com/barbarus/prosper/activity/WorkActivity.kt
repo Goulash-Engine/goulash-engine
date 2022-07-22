@@ -14,8 +14,11 @@ class WorkActivity : Activity {
         return listOf("tired", "sick", "exhausted")
     }
 
+    override fun activity(): String {
+        return "working"
+    }
+
     override fun act(actor: Actor) {
-        actor.currentActivity = "working"
         actor.state.hunger += 0.5
         actor.urges.increaseUrge("rest", 1.0)
     }

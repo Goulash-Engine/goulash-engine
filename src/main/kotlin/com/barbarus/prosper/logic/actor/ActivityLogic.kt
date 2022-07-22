@@ -8,25 +8,20 @@ import com.barbarus.prosper.logic.Logic
  */
 class ActivityLogic : Logic<Actor> {
     override fun process(context: Actor) {
-        val activitys = context.activities
-        val conditions = context.conditions
-        val urges = context.urges.getUrges()
         executeFreeActivities(context)
-        if (urges.isEmpty()) return
-        executeUrgentActivities(urges, context)
+        if (context.urges.getUrges().isEmpty()) return
+        executeUrgentActivities(context)
     }
 
-    private fun executeUrgentActivities(
-        urges: Map<String, Double>,
-        context: Actor
-    ) {
-        val topUrge = urges.maxBy { it.value }
-        val urgentActivities = context.activities
-            .filter { it.triggerUrge().contains(topUrge.key) }
+    // TODO: set current activity
+    private fun executeUrgentActivities(context: Actor) {
+        val topUrge = context.urges.getUrges().maxBy { it.value }
+        val urgentActivity = context.activities
             .filterNot {
                 it.blockerCondition().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
             }
-        urgentActivities.forEach { it.act(context) }
+            .find { it.triggerUrge().contains(topUrge.key) }
+        urgentActivity?.act(context)
     }
 
     /**

@@ -9,6 +9,11 @@ internal class WorkActivityTest {
     private val workActivity = WorkActivity()
 
     @Test
+    fun `should return 'working' activity`() {
+        assertThat(workActivity.activity()).isEqualTo("working")
+    }
+
+    @Test
     fun `should increase urge to rest by 1_0`() {
         val clan = ClanFactory.poorGathererClan()
 
@@ -24,6 +29,5 @@ internal class WorkActivityTest {
         workActivity.act(clan)
 
         assertThat(clan.state.hunger).isEqualTo(0.5)
-        assertThat(clan.currentActivity).isEqualTo("working")
     }
 }

@@ -13,6 +13,25 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should only execute one urgent activity`() {
+        val firstActivity = mockk<Activity>()
+        val secondActivity = mockk<Activity>()
+        every { firstActivity.triggerUrge() } returns listOf("work")
+        every { firstActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { secondActivity.triggerUrge() } returns listOf("work")
+        every { secondActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        val clan = ClanFactory.testClan(listOf(firstActivity, secondActivity))
+        justRun { firstActivity.act(clan) }
+        justRun { secondActivity.act(clan) }
+        clan.urges.increaseUrge("work", 10.0)
+
+        activityLogic.process(clan)
+
+        verify { firstActivity.act(clan) }
+        verify(inverse = true) { secondActivity.act(clan) }
+    }
+
+    @Test
     fun `should execute activities that always will be executed`() {
         val mockedIdleActivity = mockk<Activity>()
         every { mockedIdleActivity.triggerUrge() } returns listOf("*")
