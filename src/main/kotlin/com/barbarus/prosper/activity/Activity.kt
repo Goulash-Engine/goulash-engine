@@ -4,7 +4,7 @@ import com.barbarus.prosper.core.domain.Actor
 
 interface Activity {
     /**
-     * The urges of an [Actor] that trigger this behavior
+     * The urges of an [Actor] that trigger this activity
      */
     fun triggerUrge(): List<String>
 

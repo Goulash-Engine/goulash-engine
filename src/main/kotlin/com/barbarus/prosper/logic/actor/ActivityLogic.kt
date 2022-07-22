@@ -8,7 +8,7 @@ import com.barbarus.prosper.logic.Logic
  */
 class ActivityLogic : Logic<Actor> {
     override fun process(context: Actor) {
-        val behaviors = context.activities
+        val activitys = context.activities
         val conditions = context.conditions
         val urges = context.urges.getUrges()
         executeFreeActivities(context)

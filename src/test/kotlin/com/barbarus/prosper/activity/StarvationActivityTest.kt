@@ -8,7 +8,7 @@ import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 
 internal class StarvationActivityTest {
-    private val starvationBehavior = StarvationActivity()
+    private val starvationActivity = StarvationActivity()
 
     @Test
     fun `should reduce health by 5`() {
@@ -16,7 +16,7 @@ internal class StarvationActivityTest {
         clan.conditions.add("starving")
         clan.state.hunger = 91.0
 
-        starvationBehavior.act(clan)
+        starvationActivity.act(clan)
 
         assertThat(clan.state.health).isEqualTo(95.0)
         assertThat(clan.conditions).contains("dying")
@@ -28,7 +28,7 @@ internal class StarvationActivityTest {
         clan.conditions.add("starving")
         clan.state.hunger = 81.0
 
-        starvationBehavior.act(clan)
+        starvationActivity.act(clan)
 
         assertThat(clan.state.health).isEqualTo(99.0)
     }
@@ -38,7 +38,7 @@ internal class StarvationActivityTest {
         val clan = ClanFactory.poorGathererClan()
         clan.conditions.add("starving")
 
-        starvationBehavior.act(clan)
+        starvationActivity.act(clan)
 
         assertThat(clan.conditions).doesNotContain("starving")
     }

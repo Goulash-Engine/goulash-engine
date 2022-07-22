@@ -60,7 +60,7 @@ class Clan(
     }
 
     override fun toString(): String {
-        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$activities, conditions=$conditions, _state=$_state)"
+        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, activitys=$activities, conditions=$conditions, _state=$_state)"
     }
 
     companion object {

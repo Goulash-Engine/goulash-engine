@@ -10,14 +10,14 @@ import com.barbarus.prosper.core.domain.ResourceType
 import org.junit.jupiter.api.Test
 
 internal class ConsumptionActivityTest {
-    private val consumptionBehavior = ConsumptionActivity()
+    private val consumptionActivity = ConsumptionActivity()
 
     @Test
     fun `should decrease hunger if consumed successfully`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.hunger = 30.0
 
-        consumptionBehavior.act(clan)
+        consumptionActivity.act(clan)
 
         assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(0.9)
         assertThat(clan.state.hunger).isEqualTo(25.0)
@@ -37,7 +37,7 @@ internal class ConsumptionActivityTest {
             )
         )
 
-        consumptionBehavior.act(clan)
+        consumptionActivity.act(clan)
 
         assertThat(clan.stash[0].weight).isEqualTo(0.9)
         assertThat(clan.currentActivity).isEqualTo("consuming")
@@ -56,7 +56,7 @@ internal class ConsumptionActivityTest {
             )
         )
 
-        consumptionBehavior.act(clan)
+        consumptionActivity.act(clan)
 
         assertThat(clan.stash[0].weight).isEqualTo(0.9)
         assertThat(clan.currentActivity).isEqualTo("consuming")

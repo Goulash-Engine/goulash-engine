@@ -3,7 +3,7 @@ package com.barbarus.prosper.activity
 import com.barbarus.prosper.core.domain.Actor
 
 /**
- * This [Activity] controls the [Actor]'s behavior when it has no activity.
+ * This [Activity] controls the [Actor]'s activity when it has no activity.
  */
 class RestActivity : Activity {
     override fun triggerUrge(): List<String> {

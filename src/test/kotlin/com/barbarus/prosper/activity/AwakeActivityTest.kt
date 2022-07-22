@@ -6,13 +6,13 @@ import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 
 internal class AwakeActivityTest {
-    private val awakeBehavior = AwakeActivity()
+    private val awakeActivity = AwakeActivity()
 
     @Test
     fun `should increase hunger`() {
         val clan = ClanFactory.simpleGathererClan()
 
-        awakeBehavior.act(clan)
+        awakeActivity.act(clan)
 
         assertThat(clan.state.hunger).isEqualTo(0.1)
     }

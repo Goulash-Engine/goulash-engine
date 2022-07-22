@@ -37,7 +37,7 @@ object ClanFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
-        activities = clanBehavior()
+        activities = clanActivity()
     )
 
     fun simpleGathererClan() = Clan(
@@ -49,10 +49,10 @@ object ClanFactory {
             ResourceFactory.food(),
             ResourceFactory.food()
         ),
-        activities = clanBehavior()
+        activities = clanActivity()
     )
 
-    private fun clanBehavior() = mutableListOf(
+    private fun clanActivity() = mutableListOf(
         AwakeActivity(),
         WorkActivity(),
         ConsumptionActivity(),

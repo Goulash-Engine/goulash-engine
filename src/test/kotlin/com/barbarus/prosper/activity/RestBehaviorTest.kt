@@ -1,5 +1,5 @@
 package com.barbarus.prosper.activity
 
-internal class RestBehaviorTest {
-    private val restBehavior = RestActivity()
+internal class RestActivityTest {
+    private val restActivity = RestActivity()
 }

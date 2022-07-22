@@ -1,5 +1,5 @@
 package com.barbarus.prosper.activity
 
-internal class ExhaustionBehaviorTest {
-    private val exhaustionBehavior = ExhaustionActivity()
+internal class ExhaustionActivityTest {
+    private val exhaustionActivity = ExhaustionActivity()
 }

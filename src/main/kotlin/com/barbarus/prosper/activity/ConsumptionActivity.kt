@@ -31,6 +31,6 @@ class ConsumptionActivity : Activity {
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger("ConsumptionBehavior")
+        private val LOG = LoggerFactory.getLogger("ConsumptionActivity")
     }
 }
