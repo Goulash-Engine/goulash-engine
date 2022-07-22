@@ -1,5 +1,7 @@
 package com.barbarus.prosper.logic.actor
 
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
 import com.barbarus.prosper.activity.Activity
 import com.barbarus.prosper.exceptions.ActivityRedundancyException
@@ -13,6 +15,21 @@ import org.junit.jupiter.api.assertThrows
 internal class ActivityLogicTest {
 
     private val activityLogic = ActivityLogic()
+
+    @Test
+    fun `should set current activity of a context`() {
+        val firstActivity = mockk<Activity>()
+        every { firstActivity.triggerUrge() } returns listOf("work")
+        every { firstActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { firstActivity.activity() } returns "working"
+        val clan = ClanFactory.testClan(listOf(firstActivity))
+        justRun { firstActivity.act(clan) }
+        clan.urges.increaseUrge("work", 10.0)
+
+        activityLogic.process(clan)
+
+        assertThat(clan.currentActivity).isEqualTo(firstActivity.activity())
+    }
 
     @Test
     fun `should throw exception if more than one activity for the same urge exist`() {
@@ -37,6 +54,7 @@ internal class ActivityLogicTest {
         val mockedIdleActivity = mockk<Activity>()
         every { mockedIdleActivity.triggerUrge() } returns listOf("*")
         every { mockedIdleActivity.blockerCondition() } returns listOf("sick")
+        every { mockedIdleActivity.activity() } returns "idle"
         val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
         justRun { mockedIdleActivity.act(clan) }
 
@@ -67,6 +85,7 @@ internal class ActivityLogicTest {
         val mockedWorkActivity = mockk<Activity>()
         every { mockedWorkActivity.triggerUrge() } returns listOf("work")
         every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.activity() } returns "work"
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
         justRun { mockedWorkActivity.act(clan) }
         clan.urges.increaseUrge("work", 10.0)
@@ -84,6 +103,7 @@ internal class ActivityLogicTest {
         val mockedWorkActivity = mockk<Activity>()
         every { mockedWorkActivity.triggerUrge() } returns listOf("work")
         every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.activity() } returns "work"
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
         justRun { mockedWorkActivity.act(clan) }
         clan.urges.increaseUrge("work", 10.0)
@@ -102,6 +122,7 @@ internal class ActivityLogicTest {
         val mockedWorkActivity = mockk<Activity>()
         every { mockedWorkActivity.triggerUrge() } returns listOf("work")
         every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.activity() } returns "work"
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
         justRun { mockedWorkActivity.act(clan) }
         clan.urges.increaseUrge("work", 10.0)

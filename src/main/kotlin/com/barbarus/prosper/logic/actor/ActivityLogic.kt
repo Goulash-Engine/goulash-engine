@@ -14,7 +14,6 @@ class ActivityLogic : Logic<Actor> {
         executeUrgentActivities(context)
     }
 
-    // TODO: set current activity
     private fun executeUrgentActivities(context: Actor) {
         val topUrge = context.urges.getUrges().maxBy { it.value }
         if (context.activities.count { it.triggerUrge().contains(topUrge.key) } > 1) {
@@ -25,7 +24,11 @@ class ActivityLogic : Logic<Actor> {
                 it.blockerCondition().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
             }
             .find { it.triggerUrge().contains(topUrge.key) }
-        urgentActivity?.act(context)
+
+        urgentActivity?.let {
+            it.act(context)
+            context.currentActivity = it.activity()
+        }
     }
 
     /**
@@ -37,6 +40,9 @@ class ActivityLogic : Logic<Actor> {
             .filterNot {
                 it.blockerCondition().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
             }
-            .forEach { it.act(context) }
+            .forEach {
+                it.act(context)
+                context.currentActivity = it.activity()
+            }
     }
 }
