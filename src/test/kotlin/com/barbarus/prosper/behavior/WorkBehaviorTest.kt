@@ -10,6 +10,15 @@ internal class WorkBehaviorTest {
     private val workBehavior = WorkBehavior()
 
     @Test
+    fun `should increase urge to rest by 1_0`() {
+        val clan = ClanFactory.poorGathererClan()
+
+        workBehavior.act(clan)
+
+        assertThat(clan.urges.getUrges()["rest"]).isEqualTo(1.0)
+    }
+
+    @Test
     fun `should add the tired condition and remove ambitious condition if stamina is below 30`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.stamina = 31.0

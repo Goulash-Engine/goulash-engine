@@ -18,6 +18,7 @@ class WorkBehavior : Behavior {
         actor.currentActivity = "working"
         actor.state.stamina -= 3
         actor.state.hunger += 0.5
+        actor.urges.increaseUrge("rest", 1.0)
         if (actor.state.stamina < 60) {
             actor.conditions.remove("ambitious")
         }

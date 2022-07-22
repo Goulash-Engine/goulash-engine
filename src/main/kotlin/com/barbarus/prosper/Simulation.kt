@@ -79,7 +79,7 @@ class Simulation(
                     
                     @|green ## Urges ## |@
                     ${
-                clan.urges.map { (key, value) ->
+                clan.urges.getUrges().map { (key, value) ->
                     """${String.format(Locale.US, "%.2f", value)} | $key
                     """
                 }.joinToString("")
