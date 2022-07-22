@@ -13,6 +13,21 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should do nothing is no urges exist`() {
+        val mockedWorkActivity = mockk<Behavior>()
+        every { mockedWorkActivity.triggerUrge() } returns listOf("work")
+        every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        justRun { mockedWorkActivity.act(clan) }
+
+        activityLogic.process(clan)
+
+        verify(inverse = true) { mockedWorkActivity.triggerUrge() }
+        verify(inverse = true) { mockedWorkActivity.blockerCondition() }
+        verify(inverse = true) { mockedWorkActivity.act(clan) }
+    }
+
+    @Test
     fun `should chose the first of two equally urgent urges`() {
         val mockedWorkActivity = mockk<Behavior>()
         every { mockedWorkActivity.triggerUrge() } returns listOf("work")

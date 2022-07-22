@@ -3,7 +3,7 @@ package com.barbarus.prosper.core.domain
 import com.barbarus.prosper.ClanNameFactory
 import com.barbarus.prosper.behavior.Behavior
 import com.barbarus.prosper.logic.Logic
-import com.barbarus.prosper.logic.actor.BehaviorLogic
+import com.barbarus.prosper.logic.actor.ActivityLogic
 import com.barbarus.prosper.logic.actor.DeathLogic
 import com.barbarus.prosper.logic.actor.InventoryLogic
 import com.barbarus.prosper.logic.actor.StateConditionLogic
@@ -24,7 +24,7 @@ class Clan(
     override val urges: Urges = Urges()
     private val _state: State = State()
     private val actorLogics: List<Logic<Actor>> = listOf(
-        BehaviorLogic(),
+        ActivityLogic(),
         StateConditionLogic(),
         InventoryLogic(),
         DeathLogic()

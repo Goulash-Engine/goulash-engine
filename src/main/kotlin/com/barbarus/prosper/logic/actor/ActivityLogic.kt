@@ -4,13 +4,16 @@ import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.logic.Logic
 
 /**
- * This logic will check all [Activity]] objects if they are executed by the required urge level.
+ * This logic will check all [Activity] objects if they are executed by the required urge level.
  */
 class ActivityLogic : Logic<Actor> {
     override fun process(context: Actor) {
         val behaviors = context.behaviors
         val conditions = context.conditions
-        val topUrge = context.urges.getUrges().maxBy { it.value }
+        val urges = context.urges.getUrges()
+        if (urges.isEmpty()) return
+
+        val topUrge = urges.maxBy { it.value }
         val urgentActivities = context.behaviors
             .filter { it.triggerUrge().contains(topUrge.key) }
             .filterNot {
