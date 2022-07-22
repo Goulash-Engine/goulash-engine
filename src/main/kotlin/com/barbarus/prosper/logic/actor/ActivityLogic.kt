@@ -1,6 +1,7 @@
 package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.core.domain.Actor
+import com.barbarus.prosper.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.logic.Logic
 
 /**
@@ -16,6 +17,9 @@ class ActivityLogic : Logic<Actor> {
     // TODO: set current activity
     private fun executeUrgentActivities(context: Actor) {
         val topUrge = context.urges.getUrges().maxBy { it.value }
+        if (context.activities.count { it.triggerUrge().contains(topUrge.key) } > 1) {
+            throw ActivityRedundancyException("More than one activity with urge trigger found")
+        }
         val urgentActivity = context.activities
             .filterNot {
                 it.blockerCondition().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }

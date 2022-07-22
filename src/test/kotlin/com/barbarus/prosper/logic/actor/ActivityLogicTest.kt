@@ -2,18 +2,20 @@ package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.ClanFactory
 import com.barbarus.prosper.activity.Activity
+import com.barbarus.prosper.exceptions.ActivityRedundancyException
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 internal class ActivityLogicTest {
 
     private val activityLogic = ActivityLogic()
 
     @Test
-    fun `should only execute one urgent activity`() {
+    fun `should throw exception if more than one activity for the same urge exist`() {
         val firstActivity = mockk<Activity>()
         val secondActivity = mockk<Activity>()
         every { firstActivity.triggerUrge() } returns listOf("work")
@@ -25,10 +27,9 @@ internal class ActivityLogicTest {
         justRun { secondActivity.act(clan) }
         clan.urges.increaseUrge("work", 10.0)
 
-        activityLogic.process(clan)
-
-        verify { firstActivity.act(clan) }
-        verify(inverse = true) { secondActivity.act(clan) }
+        assertThrows<ActivityRedundancyException> {
+            activityLogic.process(clan)
+        }
     }
 
     @Test
