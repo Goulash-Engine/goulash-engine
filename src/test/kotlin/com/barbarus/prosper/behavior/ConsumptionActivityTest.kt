@@ -9,8 +9,8 @@ import com.barbarus.prosper.core.domain.Resource
 import com.barbarus.prosper.core.domain.ResourceType
 import org.junit.jupiter.api.Test
 
-internal class ConsumptionBehaviorTest {
-    private val consumptionBehavior = ConsumptionBehavior()
+internal class ConsumptionActivityTest {
+    private val consumptionBehavior = ConsumptionActivity()
 
     @Test
     fun `should decrease hunger if consumed successfully`() {

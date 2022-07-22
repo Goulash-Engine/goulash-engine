@@ -4,9 +4,9 @@ import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.ResourceType
 
 /**
- * This [Behavior] controls the condition of an [Actor]s ambition.
+ * This [Activity] controls the condition of an [Actor]s ambition.
  */
-class AmbitionBehavior : Behavior {
+class AmbitionActivity : Activity {
     override fun triggerUrge(): List<String> {
         return listOf("*")
     }

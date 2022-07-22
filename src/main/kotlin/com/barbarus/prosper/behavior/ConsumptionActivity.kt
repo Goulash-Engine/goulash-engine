@@ -4,9 +4,9 @@ import com.barbarus.prosper.core.domain.Actor
 import org.slf4j.LoggerFactory
 
 /**
- * This [Behavior] controls the consumption of resources that are consumable.
+ * This [Activity] controls the consumption of resources that are consumable.
  */
-class ConsumptionBehavior : Behavior {
+class ConsumptionActivity : Activity {
     override fun triggerUrge(): List<String> {
         return listOf("hungry")
     }

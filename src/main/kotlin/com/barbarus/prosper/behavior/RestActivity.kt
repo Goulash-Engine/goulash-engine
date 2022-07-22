@@ -2,15 +2,19 @@ package com.barbarus.prosper.behavior
 
 import com.barbarus.prosper.core.domain.Actor
 
-class ExhaustionBehavior : Behavior {
+/**
+ * This [Activity] controls the [Actor]'s behavior when it has no activity.
+ */
+class RestActivity : Activity {
     override fun triggerUrge(): List<String> {
-        return listOf("*")
+        return listOf("tired", "exhausted")
     }
 
     override fun blockerCondition(): List<String> {
-        return listOf("exhausted")
+        return listOf("rested")
     }
 
     override fun act(actor: Actor) {
+        actor.currentActivity = "resting"
     }
 }

@@ -3,9 +3,9 @@ package com.barbarus.prosper.behavior
 import com.barbarus.prosper.core.domain.Actor
 
 /**
- * Represents the [Behavior] an [Actor] is executing when the "starving" condition occurs.
+ * Represents the [Activity] an [Actor] is executing when the "starving" condition occurs.
  */
-class StarvationBehavior : Behavior {
+class StarvationActivity : Activity {
     override fun triggerUrge(): List<String> {
         return listOf("starving")
     }

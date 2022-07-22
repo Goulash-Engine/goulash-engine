@@ -9,7 +9,7 @@ import com.barbarus.prosper.logic.Logic
 class BehaviorLogic : Logic<Actor> {
     override fun process(context: Actor) {
         val desiredBehaviors =
-            context.behaviors.filter { behavior ->
+            context.activities.filter { behavior ->
                 (
                     context.conditions.any {
                         behavior.triggerUrge().contains(it)

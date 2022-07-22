@@ -1,13 +1,13 @@
 package com.barbarus.prosper
 
-import com.barbarus.prosper.behavior.AmbitionBehavior
-import com.barbarus.prosper.behavior.AwakeBehavior
-import com.barbarus.prosper.behavior.Behavior
-import com.barbarus.prosper.behavior.ConsumptionBehavior
-import com.barbarus.prosper.behavior.ExhaustionBehavior
-import com.barbarus.prosper.behavior.IdleBehavior
-import com.barbarus.prosper.behavior.RestBehavior
-import com.barbarus.prosper.behavior.StarvationBehavior
+import com.barbarus.prosper.behavior.AmbitionActivity
+import com.barbarus.prosper.behavior.AwakeActivity
+import com.barbarus.prosper.behavior.Activity
+import com.barbarus.prosper.behavior.ConsumptionActivity
+import com.barbarus.prosper.behavior.ExhaustionActivity
+import com.barbarus.prosper.behavior.IdleActivity
+import com.barbarus.prosper.behavior.RestActivity
+import com.barbarus.prosper.behavior.StarvationActivity
 import com.barbarus.prosper.behavior.WorkActivity
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
@@ -16,7 +16,7 @@ import kotlin.random.Random
 
 object ClanFactory {
 
-    fun testClan(mockedBehaviors: List<Behavior> = listOf()) = Clan(
+    fun testClan(mockedActivities: List<Activity> = listOf()) = Clan(
         primaryProfession = Profession(ProfessionType.GATHERER, experience = 1.0),
         stash = mutableListOf(
             ResourceFactory.woodenMaterial()
@@ -25,7 +25,7 @@ object ClanFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
-        behaviors = mockedBehaviors
+        activities = mockedActivities
     )
 
     fun poorGathererClan() = Clan(
@@ -37,7 +37,7 @@ object ClanFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
-        behaviors = clanBehavior()
+        activities = clanBehavior()
     )
 
     fun simpleGathererClan() = Clan(
@@ -49,17 +49,17 @@ object ClanFactory {
             ResourceFactory.food(),
             ResourceFactory.food()
         ),
-        behaviors = clanBehavior()
+        activities = clanBehavior()
     )
 
     private fun clanBehavior() = mutableListOf(
-        AwakeBehavior(),
+        AwakeActivity(),
         WorkActivity(),
-        ConsumptionBehavior(),
-        RestBehavior(),
-        IdleBehavior(),
-        AmbitionBehavior(),
-        ExhaustionBehavior(),
-        StarvationBehavior()
+        ConsumptionActivity(),
+        RestActivity(),
+        IdleActivity(),
+        AmbitionActivity(),
+        ExhaustionActivity(),
+        StarvationActivity()
     )
 }

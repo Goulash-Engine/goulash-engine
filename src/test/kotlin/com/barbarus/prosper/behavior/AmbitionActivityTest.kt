@@ -5,8 +5,8 @@ import assertk.assertions.contains
 import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 
-internal class AmbitionBehaviorTest {
-    private val ambitionBehavior = AmbitionBehavior()
+internal class AmbitionActivityTest {
+    private val ambitionBehavior = AmbitionActivity()
 
     @Test
     fun `should make an actor ambitious if no food resource is in its inventory`() {

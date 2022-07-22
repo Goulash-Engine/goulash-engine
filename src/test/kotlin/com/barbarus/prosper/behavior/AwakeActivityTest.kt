@@ -5,8 +5,8 @@ import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 
-internal class AwakeBehaviorTest {
-    private val awakeBehavior = AwakeBehavior()
+internal class AwakeActivityTest {
+    private val awakeBehavior = AwakeActivity()
 
     @Test
     fun `should increase hunger`() {

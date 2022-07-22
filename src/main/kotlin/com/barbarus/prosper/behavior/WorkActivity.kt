@@ -3,9 +3,9 @@ package com.barbarus.prosper.behavior
 import com.barbarus.prosper.core.domain.Actor
 
 /**
- * This [Behavior] controls the daily work of a clan.
+ * This [Activity] controls the daily work of a clan.
  */
-class WorkActivity : Behavior {
+class WorkActivity : Activity {
     override fun triggerUrge(): List<String> {
         return listOf("work")
     }

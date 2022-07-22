@@ -7,8 +7,8 @@ import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
 import org.junit.jupiter.api.Test
 
-internal class StarvationBehaviorTest {
-    private val starvationBehavior = StarvationBehavior()
+internal class StarvationActivityTest {
+    private val starvationBehavior = StarvationActivity()
 
     @Test
     fun `should reduce health by 5`() {

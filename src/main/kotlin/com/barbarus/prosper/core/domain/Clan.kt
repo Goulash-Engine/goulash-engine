@@ -1,7 +1,7 @@
 package com.barbarus.prosper.core.domain
 
 import com.barbarus.prosper.ClanNameFactory
-import com.barbarus.prosper.behavior.Behavior
+import com.barbarus.prosper.behavior.Activity
 import com.barbarus.prosper.logic.Logic
 import com.barbarus.prosper.logic.actor.ActivityLogic
 import com.barbarus.prosper.logic.actor.DeathLogic
@@ -18,7 +18,7 @@ class Clan(
     override val id: String = UUID.randomUUID().toString(),
     val primaryProfession: Profession,
     val stash: MutableList<Resource> = mutableListOf(),
-    override val behaviors: List<Behavior> = listOf(),
+    override val activities: List<Activity> = listOf(),
     override val conditions: MutableSet<String> = mutableSetOf()
 ) : Actor {
     override val urges: Urges = Urges()
@@ -60,7 +60,7 @@ class Clan(
     }
 
     override fun toString(): String {
-        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$behaviors, conditions=$conditions, _state=$_state)"
+        return "Clan(id='$id', primaryProfession=$primaryProfession, stash=$stash, behaviors=$activities, conditions=$conditions, _state=$_state)"
     }
 
     companion object {

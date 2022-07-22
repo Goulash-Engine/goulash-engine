@@ -3,9 +3,9 @@ package com.barbarus.prosper.behavior
 import com.barbarus.prosper.core.domain.Actor
 
 /**
- * This [Behavior] controls the [Actor]'s behavior when it is awake.
+ * This [Activity] controls the [Actor]'s behavior when it is awake.
  */
-class AwakeBehavior : Behavior {
+class AwakeActivity : Activity {
     override fun triggerUrge(): List<String> {
         return listOf("*")
     }
