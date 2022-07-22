@@ -2,7 +2,7 @@ package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.contains
-import com.barbarus.prosper.ClanFactory
+import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.actor.logic.DeathLogic
 import org.junit.jupiter.api.Test
 

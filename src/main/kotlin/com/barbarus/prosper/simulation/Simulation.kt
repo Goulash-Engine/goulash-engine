@@ -1,7 +1,8 @@
-package com.barbarus.prosper
+package com.barbarus.prosper.simulation
 
 import com.barbarus.prosper.core.domain.Village
 import com.barbarus.prosper.core.domain.WorldDate
+import com.barbarus.prosper.factories.ClanFactory
 import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole

@@ -1,4 +1,4 @@
-package com.barbarus.prosper
+package com.barbarus.prosper.factories
 
 object ClanNameFactory {
 

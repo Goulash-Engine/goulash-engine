@@ -1,6 +1,6 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.ClanNameFactory
+import com.barbarus.prosper.factories.ClanNameFactory
 import com.barbarus.prosper.actor.activity.Activity
 import com.barbarus.prosper.core.logic.Logic
 import com.barbarus.prosper.actor.logic.ActivityLogic

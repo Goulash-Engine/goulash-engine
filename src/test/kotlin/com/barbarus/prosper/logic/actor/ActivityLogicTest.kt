@@ -2,7 +2,7 @@ package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.ClanFactory
+import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.actor.activity.Activity
 import com.barbarus.prosper.actor.logic.ActivityLogic
 import com.barbarus.prosper.core.exceptions.ActivityRedundancyException

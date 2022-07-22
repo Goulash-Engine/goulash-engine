@@ -2,8 +2,8 @@ package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
 import assertk.assertions.hasSize
-import com.barbarus.prosper.ClanFactory
-import com.barbarus.prosper.ResourceFactory
+import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ResourceFactory
 import com.barbarus.prosper.actor.logic.InventoryLogic
 import org.junit.jupiter.api.Test
 
