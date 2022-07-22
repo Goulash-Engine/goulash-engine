@@ -1,4 +1,4 @@
-package com.barbarus.prosper.logic
+package com.barbarus.prosper.core.logic
 
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType

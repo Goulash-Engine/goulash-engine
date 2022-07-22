@@ -1,7 +1,7 @@
-package com.barbarus.prosper.logic.village
+package com.barbarus.prosper.village.logic
 
 import com.barbarus.prosper.core.domain.Village
-import com.barbarus.prosper.logic.Logic
+import com.barbarus.prosper.core.logic.Logic
 
 /**
  * This logic simulates the disappearance of [Clan]s .

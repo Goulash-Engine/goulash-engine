@@ -7,6 +7,7 @@ import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.domain.Resource
 import com.barbarus.prosper.core.domain.ResourceType
+import com.barbarus.prosper.core.logic.StashLogic
 import org.junit.jupiter.api.Test
 
 internal class StashLogicTest {

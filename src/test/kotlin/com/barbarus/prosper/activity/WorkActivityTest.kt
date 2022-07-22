@@ -3,6 +3,7 @@ package com.barbarus.prosper.activity
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
+import com.barbarus.prosper.actor.activity.WorkActivity
 import org.junit.jupiter.api.Test
 
 internal class WorkActivityTest {

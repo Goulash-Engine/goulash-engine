@@ -4,6 +4,7 @@ import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.domain.Resource
 import com.barbarus.prosper.core.domain.ResourceType
+import com.barbarus.prosper.core.logic.ResourceLogic
 import spock.lang.*
 
 class ResourceLogicSpec extends Specification {

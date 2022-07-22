@@ -1,3 +1,3 @@
-package com.barbarus.prosper.exceptions
+package com.barbarus.prosper.core.exceptions
 
 class ActivityRedundancyException(msg: String) : Exception(msg)

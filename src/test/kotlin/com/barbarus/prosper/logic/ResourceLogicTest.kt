@@ -6,6 +6,7 @@ import assertk.assertions.isEqualTo
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.domain.ResourceType
+import com.barbarus.prosper.core.logic.ResourceLogic
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 

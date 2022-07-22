@@ -1,7 +1,7 @@
-package com.barbarus.prosper.logic.actor
+package com.barbarus.prosper.actor.logic
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.logic.Logic
+import com.barbarus.prosper.core.logic.Logic
 
 /**
  * Changes the condition of an [Actor] depending on the state of the [Actor].

@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.ClanFactory
 import com.barbarus.prosper.core.domain.Village
+import com.barbarus.prosper.village.logic.GraveyardLogic
 import org.junit.jupiter.api.Test
 
 internal class GraveyardLogicTest {

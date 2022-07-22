@@ -1,7 +1,7 @@
-package com.barbarus.prosper.logic.actor
+package com.barbarus.prosper.actor.logic
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.logic.Logic
+import com.barbarus.prosper.core.logic.Logic
 
 /**
  * Removes [Resource]s that have no relevant weight and therefore disappear.

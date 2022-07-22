@@ -1,12 +1,12 @@
 package com.barbarus.prosper.core.domain
 
 import com.barbarus.prosper.ClanNameFactory
-import com.barbarus.prosper.activity.Activity
-import com.barbarus.prosper.logic.Logic
-import com.barbarus.prosper.logic.actor.ActivityLogic
-import com.barbarus.prosper.logic.actor.DeathLogic
-import com.barbarus.prosper.logic.actor.InventoryLogic
-import com.barbarus.prosper.logic.actor.StateConditionLogic
+import com.barbarus.prosper.actor.activity.Activity
+import com.barbarus.prosper.core.logic.Logic
+import com.barbarus.prosper.actor.logic.ActivityLogic
+import com.barbarus.prosper.actor.logic.DeathLogic
+import com.barbarus.prosper.actor.logic.InventoryLogic
+import com.barbarus.prosper.actor.logic.StateConditionLogic
 import org.slf4j.LoggerFactory
 import java.util.UUID
 

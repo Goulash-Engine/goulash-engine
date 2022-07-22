@@ -1,7 +1,7 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.logic.Logic
-import com.barbarus.prosper.logic.village.GraveyardLogic
+import com.barbarus.prosper.core.logic.Logic
+import com.barbarus.prosper.village.logic.GraveyardLogic
 
 /**
  * The core entity of the prosper engine. Within a village multiple [Clan]s try to survive and prosper through work,

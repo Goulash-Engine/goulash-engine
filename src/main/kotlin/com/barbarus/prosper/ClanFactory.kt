@@ -1,9 +1,9 @@
 package com.barbarus.prosper
 
-import com.barbarus.prosper.activity.Activity
-import com.barbarus.prosper.activity.IdleActivity
-import com.barbarus.prosper.activity.RestActivity
-import com.barbarus.prosper.activity.WorkActivity
+import com.barbarus.prosper.actor.activity.Activity
+import com.barbarus.prosper.actor.activity.IdleActivity
+import com.barbarus.prosper.actor.activity.RestActivity
+import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
