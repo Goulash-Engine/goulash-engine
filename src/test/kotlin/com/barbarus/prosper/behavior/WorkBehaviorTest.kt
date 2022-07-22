@@ -16,8 +16,8 @@ internal class WorkBehaviorTest {
 
         workBehavior.act(clan)
 
-        assertThat(clan.stamina).isEqualTo(28.0)
-        assertThat(clan.hunger).isEqualTo(0.5)
+        assertThat(clan.state.stamina).isEqualTo(28.0)
+        assertThat(clan.state.hunger).isEqualTo(0.5)
         assertThat(clan.conditions).doesNotContain("ambitious")
     }
 
@@ -27,8 +27,8 @@ internal class WorkBehaviorTest {
 
         workBehavior.act(clan)
 
-        assertThat(clan.stamina).isEqualTo(97.0)
-        assertThat(clan.hunger).isEqualTo(0.5)
+        assertThat(clan.state.stamina).isEqualTo(97.0)
+        assertThat(clan.state.hunger).isEqualTo(0.5)
         assertThat(clan.currentActivity).isEqualTo("working")
     }
 }

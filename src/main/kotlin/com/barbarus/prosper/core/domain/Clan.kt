@@ -7,6 +7,7 @@ import com.barbarus.prosper.logic.actor.BehaviorLogic
 import com.barbarus.prosper.logic.actor.DeathLogic
 import com.barbarus.prosper.logic.actor.InventoryLogic
 import com.barbarus.prosper.logic.actor.StateConditionLogic
+import com.barbarus.prosper.logic.actor.UrgeLogic
 import org.slf4j.LoggerFactory
 import java.util.UUID
 
@@ -21,26 +22,19 @@ class Clan(
     override val behaviors: List<Behavior> = listOf(),
     override val conditions: MutableSet<String> = mutableSetOf()
 ) : Actor {
+    override val urges: MutableMap<String, Double> = mutableMapOf()
     private val _state: State = State()
     private val actorLogics: List<Logic<Actor>> = listOf(
         BehaviorLogic(),
         StateConditionLogic(),
         InventoryLogic(),
-        DeathLogic()
+        DeathLogic(),
+        UrgeLogic()
     )
     override var currentActivity: String = ""
 
     override val state: State
         get() = _state
-
-    val health: Double
-        get() = _state.health
-
-    val stamina: Double
-        get() = _state.stamina
-
-    val hunger: Double
-        get() = _state.hunger
 
     override fun inventory(): MutableList<Resource> {
         return this.stash

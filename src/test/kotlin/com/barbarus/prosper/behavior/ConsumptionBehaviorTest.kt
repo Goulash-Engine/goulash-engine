@@ -20,7 +20,7 @@ internal class ConsumptionBehaviorTest {
         consumptionBehavior.act(clan)
 
         assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(0.9)
-        assertThat(clan.hunger).isEqualTo(25.0)
+        assertThat(clan.state.hunger).isEqualTo(25.0)
         assertThat(clan.currentActivity).isEqualTo("consuming")
     }
     @Test

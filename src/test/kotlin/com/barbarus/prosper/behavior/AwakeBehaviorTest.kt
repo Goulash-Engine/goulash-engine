@@ -14,6 +14,6 @@ internal class AwakeBehaviorTest {
 
         awakeBehavior.act(clan)
 
-        assertThat(clan.hunger).isEqualTo(0.1)
+        assertThat(clan.state.hunger).isEqualTo(0.1)
     }
 }

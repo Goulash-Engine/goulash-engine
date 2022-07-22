@@ -77,6 +77,13 @@ class Simulation(
                     stamina: ${clan.state.stamina}
                     hunger: ${String.format(Locale.US, "%.2f", clan.state.hunger)}
                     
+                    @|green ## Urges ## |@
+                    ${
+                clan.urges.map { (key, value) ->
+                    """${String.format(Locale.US, "%.2f", value)} | $key
+                    """
+                }.joinToString("")
+                }
                     @|green ## Stash ## |@
                     ${
                 clan.stash.joinToString("") {

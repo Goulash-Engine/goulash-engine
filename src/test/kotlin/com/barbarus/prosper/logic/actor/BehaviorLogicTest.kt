@@ -17,7 +17,7 @@ internal class BehaviorLogicTest {
         behaviorLogic.process(clan)
 
         assertThat(clan.stash.minBy { it.weight }.weight).isEqualTo(1.0)
-        assertThat(clan.hunger).isEqualTo(0.1)
+        assertThat(clan.state.hunger).isEqualTo(0.1)
     }
 
     @Test
