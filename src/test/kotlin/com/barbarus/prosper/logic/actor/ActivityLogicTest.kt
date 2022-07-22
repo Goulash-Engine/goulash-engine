@@ -13,6 +13,21 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should execute activities that always will be executed`() {
+        val mockedIdleActivity = mockk<Behavior>()
+        every { mockedIdleActivity.triggerUrge() } returns listOf("*")
+        every { mockedIdleActivity.blockerCondition() } returns listOf("sick")
+        val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
+        justRun { mockedIdleActivity.act(clan) }
+
+        activityLogic.process(clan)
+
+        verify { mockedIdleActivity.triggerUrge() }
+        verify { mockedIdleActivity.blockerCondition() }
+        verify { mockedIdleActivity.act(clan) }
+    }
+
+    @Test
     fun `should do nothing is no urges exist`() {
         val mockedWorkActivity = mockk<Behavior>()
         every { mockedWorkActivity.triggerUrge() } returns listOf("work")
@@ -22,7 +37,7 @@ internal class ActivityLogicTest {
 
         activityLogic.process(clan)
 
-        verify(inverse = true) { mockedWorkActivity.triggerUrge() }
+        verify { mockedWorkActivity.triggerUrge() }
         verify(inverse = true) { mockedWorkActivity.blockerCondition() }
         verify(inverse = true) { mockedWorkActivity.act(clan) }
     }
