@@ -1,7 +1,7 @@
 package com.barbarus.prosper.core.domain
 
 import com.barbarus.prosper.ClanNameFactory
-import com.barbarus.prosper.behavior.Activity
+import com.barbarus.prosper.activity.Activity
 import com.barbarus.prosper.logic.Logic
 import com.barbarus.prosper.logic.actor.ActivityLogic
 import com.barbarus.prosper.logic.actor.DeathLogic

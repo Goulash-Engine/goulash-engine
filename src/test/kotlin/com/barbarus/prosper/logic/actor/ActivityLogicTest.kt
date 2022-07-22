@@ -1,7 +1,7 @@
 package com.barbarus.prosper.logic.actor
 
 import com.barbarus.prosper.ClanFactory
-import com.barbarus.prosper.behavior.Activity
+import com.barbarus.prosper.activity.Activity
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk

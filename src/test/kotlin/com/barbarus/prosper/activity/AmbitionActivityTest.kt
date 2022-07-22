@@ -1,4 +1,4 @@
-package com.barbarus.prosper.behavior
+package com.barbarus.prosper.activity
 
 import assertk.assertThat
 import assertk.assertions.contains

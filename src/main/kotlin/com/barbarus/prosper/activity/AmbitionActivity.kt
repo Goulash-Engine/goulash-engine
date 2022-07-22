@@ -1,4 +1,4 @@
-package com.barbarus.prosper.behavior
+package com.barbarus.prosper.activity
 
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.ResourceType

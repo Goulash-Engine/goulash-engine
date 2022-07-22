@@ -1,14 +1,14 @@
 package com.barbarus.prosper
 
-import com.barbarus.prosper.behavior.AmbitionActivity
-import com.barbarus.prosper.behavior.AwakeActivity
-import com.barbarus.prosper.behavior.Activity
-import com.barbarus.prosper.behavior.ConsumptionActivity
-import com.barbarus.prosper.behavior.ExhaustionActivity
-import com.barbarus.prosper.behavior.IdleActivity
-import com.barbarus.prosper.behavior.RestActivity
-import com.barbarus.prosper.behavior.StarvationActivity
-import com.barbarus.prosper.behavior.WorkActivity
+import com.barbarus.prosper.activity.Activity
+import com.barbarus.prosper.activity.AmbitionActivity
+import com.barbarus.prosper.activity.AwakeActivity
+import com.barbarus.prosper.activity.ConsumptionActivity
+import com.barbarus.prosper.activity.ExhaustionActivity
+import com.barbarus.prosper.activity.IdleActivity
+import com.barbarus.prosper.activity.RestActivity
+import com.barbarus.prosper.activity.StarvationActivity
+import com.barbarus.prosper.activity.WorkActivity
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
