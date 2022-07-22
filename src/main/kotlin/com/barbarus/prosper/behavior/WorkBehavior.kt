@@ -7,7 +7,7 @@ import com.barbarus.prosper.core.domain.Actor
  */
 class WorkBehavior : Behavior {
     override fun trigger(): List<String> {
-        return listOf("ambitious")
+        return listOf("*")
     }
 
     override fun blocker(): List<String> {
@@ -16,11 +16,7 @@ class WorkBehavior : Behavior {
 
     override fun act(actor: Actor) {
         actor.currentActivity = "working"
-        actor.state.stamina -= 3
         actor.state.hunger += 0.5
         actor.urges.increaseUrge("rest", 1.0)
-        if (actor.state.stamina < 60) {
-            actor.conditions.remove("ambitious")
-        }
     }
 }

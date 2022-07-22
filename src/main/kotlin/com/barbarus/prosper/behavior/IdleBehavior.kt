@@ -16,7 +16,6 @@ class IdleBehavior : Behavior {
 
     override fun act(actor: Actor) {
         if (actor.currentActivity.isBlank()) {
-            actor.state.stamina += 1
         }
     }
 }

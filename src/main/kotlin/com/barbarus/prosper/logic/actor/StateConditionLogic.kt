@@ -10,6 +10,5 @@ class StateConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         if (context.state.health < 60) context.conditions.add("tired")
         if (context.state.hunger >= 70) context.conditions.add("hungry")
-        if (context.state.stamina >= 90) context.conditions.add("ambitious")
     }
 }

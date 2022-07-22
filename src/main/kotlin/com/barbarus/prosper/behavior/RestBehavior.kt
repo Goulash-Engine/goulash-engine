@@ -16,9 +16,5 @@ class RestBehavior : Behavior {
 
     override fun act(actor: Actor) {
         actor.currentActivity = "resting"
-        actor.state.stamina += 2
-        if (actor.state.stamina >= 10) actor.conditions.remove("exhausted")
-        if (actor.state.stamina > 75) actor.conditions.remove("tired")
-        if (actor.state.stamina >= 90) actor.conditions.add("rested")
     }
 }

@@ -19,16 +19,6 @@ internal class StateConditionLogicTest {
     }
 
     @Test
-    fun `should add the condition for work if stamina is over 60`() {
-        val clan = ClanFactory.simpleGathererClan()
-        clan.state.stamina = 91.0
-
-        stateConditionLogic.process(clan)
-
-        assertThat(clan.conditions).contains("ambitious")
-    }
-
-    @Test
     fun `should add the condition for hunger if hunger is over 70`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.hunger = 71.0

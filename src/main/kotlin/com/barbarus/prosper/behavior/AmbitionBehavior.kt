@@ -20,7 +20,6 @@ class AmbitionBehavior : Behavior {
      * realises that no food is in it's inventory anymore
      */
     override fun act(actor: Actor) {
-        if (actor.state.stamina >= 90) actor.conditions.add("ambitious")
         if (actor.inventory().none { it.type == ResourceType.FOOD }) {
             actor.conditions.add("ambitious")
         }

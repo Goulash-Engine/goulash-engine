@@ -17,14 +17,4 @@ internal class AmbitionBehaviorTest {
 
         assertThat(clan.conditions).contains("ambitious")
     }
-
-    @Test
-    fun `should make an actor ambitious if his stamina is above 90`() {
-        val clan = ClanFactory.poorGathererClan()
-        clan.state.stamina = 91.0
-
-        ambitionBehavior.act(clan)
-
-        assertThat(clan.conditions).contains("ambitious")
-    }
 }
