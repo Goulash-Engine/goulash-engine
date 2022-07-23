@@ -26,41 +26,56 @@ class Simulation(
         LOG.info("${village.clans.size} clans initialized")
     }
 
-    fun run(ticks: Int, millisecondsPerTick: Long = 1000, render: Boolean = false) {
+    fun run(maximumTicks: Int = -1, millisecondsPerTick: Long = 1000, render: Boolean = false) {
         AnsiConsole.systemInstall()
         print(ansi().eraseScreen())
 
-        repeat(ticks) {
-            WORLD_TIME.tick(WorldDate.HOUR)
-            village.act()
-
-            val builder = StringBuilder()
-
-            if (render) {
-                builder.append("Starting simulation\n")
-                builder.append("Maximum ticks: $ticks\n")
-                builder.append("Milliseconds per tick: $millisecondsPerTick\n\n")
+        if (maximumTicks == -1) {
+            while (true) {
+                runSimulation(render, null, millisecondsPerTick, null)
             }
-
-            builder.append("Tick ${it.plus(1)}/$ticks\n")
-
-            if (render) {
-                builder.append("Active clans: ${village.clans.size}\n\n")
-                builder.append("Date: ${WORLD_TIME}\n\n")
-                builder.append("Clan Details:\n")
-
-                if (village.clans.isNotEmpty()) {
-                    renderClanDetails(builder)
-                }
-
-                print(ansi().cursor(1, 1).eraseScreen(Ansi.Erase.FORWARD))
-                print(ansi().render(builder.toString()))
+        } else {
+            repeat(maximumTicks) { currentTick ->
+                runSimulation(render, maximumTicks, millisecondsPerTick, currentTick)
             }
-
-            TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
         }
 
         LOG.info("Simulation finished")
+    }
+
+    private fun runSimulation(
+        render: Boolean,
+        maximumTicks: Int?,
+        millisecondsPerTick: Long,
+        currentTick: Int?
+    ) {
+        WORLD_TIME.tick(WorldDate.HOUR)
+        village.act()
+
+        val builder = StringBuilder()
+
+        if (render) {
+            builder.append("Starting simulation\n")
+            builder.append("Maximum ticks: ${maximumTicks ?: "\u221E"}\n")
+            builder.append("Milliseconds per tick: $millisecondsPerTick\n\n")
+        }
+
+        builder.append("Tick ${currentTick?.plus(1) ?: "\u221E"}/${maximumTicks ?: "\u221E"}\n")
+
+        if (render) {
+            builder.append("Active clans: ${village.clans.size}\n\n")
+            builder.append("Date: ${WORLD_TIME}\n\n")
+            builder.append("Clan Details:\n")
+
+            if (village.clans.isNotEmpty()) {
+                renderClanDetails(builder)
+            }
+
+            print(ansi().cursor(1, 1).eraseScreen(Ansi.Erase.FORWARD))
+            print(ansi().render(builder.toString()))
+        }
+
+        TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
     }
 
     private fun renderClanDetails(builder: StringBuilder) {
