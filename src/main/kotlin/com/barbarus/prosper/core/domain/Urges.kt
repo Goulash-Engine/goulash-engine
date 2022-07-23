@@ -12,9 +12,11 @@ class Urges {
     }
 
     fun decreaseUrge(name: String, value: Double) {
-        _urges[name] = _urges[name]?.minus(value) ?: value
-        if (_urges[name]!! < 0) {
-            _urges.remove(name)
+        if (_urges.containsKey(name)) {
+            _urges[name] = _urges[name]!! - value
+            if (_urges[name]!! < 0) {
+                _urges.remove(name)
+            }
         }
     }
 

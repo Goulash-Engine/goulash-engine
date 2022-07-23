@@ -23,10 +23,14 @@ class ThinkActivity : Activity {
         return 5
     }
 
+    override fun onFinish(actor: Actor) {
+        actor.urges.stopUrge("think")
+    }
+
     override fun act(actor: Actor) {
         actor.urges.decreaseUrge("think", duration().toDouble())
-        val woodenMaterial = actor.inventory().count { it.type == ResourceType.WOODEN_MATERIAL }
-        if (woodenMaterial < 5) {
+        val food = actor.inventory().count { it.type == ResourceType.FOOD }
+        if (food < 4) {
             actor.urges.increaseUrge("work", 3.0)
         }
     }

@@ -9,6 +9,13 @@ internal class UrgesTest {
     private val urges = Urges()
 
     @Test
+    fun `should do nothing if the urge to decrease does not exist`() {
+        urges.decreaseUrge("rest", 2.0)
+
+        assertThat(urges.getUrges().containsKey("rest")).isFalse()
+    }
+
+    @Test
     fun `remove urge if under 0`() {
         urges.increaseUrge("rest", 1.0)
         urges.decreaseUrge("rest", 2.0)
