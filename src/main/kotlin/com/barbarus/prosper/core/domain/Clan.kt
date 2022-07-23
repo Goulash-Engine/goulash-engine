@@ -4,7 +4,7 @@ import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.actor.logic.ActivityLogic
 import com.barbarus.prosper.actor.logic.DeathLogic
 import com.barbarus.prosper.actor.logic.InventoryLogic
-import com.barbarus.prosper.actor.logic.StateConditionLogic
+import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.core.logic.Logic
 import com.barbarus.prosper.factories.ClanNameFactory
 import org.slf4j.LoggerFactory
@@ -25,7 +25,7 @@ class Clan(
     private val _state: State = State()
     private val actorLogics: List<Logic<Actor>> = listOf(
         ActivityLogic(),
-        StateConditionLogic(),
+        ConditionLogic(),
         InventoryLogic(),
         DeathLogic()
     )

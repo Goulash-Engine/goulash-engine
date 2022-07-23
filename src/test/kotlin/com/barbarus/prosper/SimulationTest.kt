@@ -19,10 +19,10 @@ internal class SimulationTest {
         clans.first().stash.clear()
 
         val village = Village(clans)
-        val simulation = Simulation(village)
+        val simulation = Simulation(maximumTicks = 1000, millisecondsPerTick = 1, village = village)
 
         assertThat(simulation.village.clans).hasSize(1)
-        simulation.run(700, 1)
+        simulation.run()
 
         assertThat(simulation.village.clans).hasSize(0)
     }
