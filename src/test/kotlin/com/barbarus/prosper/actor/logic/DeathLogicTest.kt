@@ -1,4 +1,4 @@
-package com.barbarus.prosper.logic.actor
+package com.barbarus.prosper.actor.logic
 
 import assertk.assertThat
 import assertk.assertions.contains

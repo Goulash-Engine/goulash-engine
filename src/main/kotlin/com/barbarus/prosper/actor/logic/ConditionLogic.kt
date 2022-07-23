@@ -9,6 +9,32 @@ import com.barbarus.prosper.core.logic.Logic
 class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         simulateMalnourishment(context)
+        simulateHealth(context)
+    }
+
+    private fun simulateHealth(context: Actor) {
+        val health = context.state.health
+        clearHealthConditions(context)
+        when {
+            health <= 0 -> context.conditions.add("dead")
+            health < 10 -> context.conditions.add("dying")
+            health < 20 -> context.conditions.add("severely sick")
+            health < 40 -> context.conditions.add("very sick")
+            health < 50 -> context.conditions.add("sick")
+            health < 70 -> context.conditions.add("dizzy")
+            health < 90 -> context.conditions.add("unwell")
+        }
+    }
+
+    private fun clearHealthConditions(context: Actor) {
+        listOf(
+            "dying",
+            "severely sick",
+            "very sick",
+            "sick",
+            "dizzy",
+            "unwell"
+        ).forEach { context.conditions.remove(it) }
     }
 
     private fun simulateMalnourishment(context: Actor) {

@@ -1,11 +1,11 @@
 package com.barbarus.prosper.factories
 
-import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.actor.activity.EatActivity
 import com.barbarus.prosper.actor.activity.RestActivity
 import com.barbarus.prosper.actor.activity.SleepActivity
 import com.barbarus.prosper.actor.activity.ThinkActivity
 import com.barbarus.prosper.actor.activity.WorkActivity
+import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType

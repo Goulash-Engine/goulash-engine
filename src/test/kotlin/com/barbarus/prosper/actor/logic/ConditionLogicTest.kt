@@ -1,9 +1,8 @@
-package com.barbarus.prosper.logic.actor
+package com.barbarus.prosper.actor.logic
 
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.doesNotContain
-import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.factories.ClanFactory
 import org.junit.jupiter.api.Test
 
@@ -20,6 +19,7 @@ internal class ConditionLogicTest {
 
         assertThat(clan.conditions).doesNotContain("malnourished")
     }
+
     @Test
     fun `should make actor malnourished if eat urge is 100`() {
         val clan = ClanFactory.poorGathererClan()

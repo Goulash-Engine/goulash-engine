@@ -1,9 +1,8 @@
-package com.barbarus.prosper.logic.actor
+package com.barbarus.prosper.actor.logic
 
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.actor.logic.ActivityLogic
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.exceptions.ActivityRedundancyException

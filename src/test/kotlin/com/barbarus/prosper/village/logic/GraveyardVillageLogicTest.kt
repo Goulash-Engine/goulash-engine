@@ -1,10 +1,9 @@
-package com.barbarus.prosper.logic.village
+package com.barbarus.prosper.village.logic
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.core.domain.Village
-import com.barbarus.prosper.village.logic.GraveyardVillageLogic
 import org.junit.jupiter.api.Test
 
 internal class GraveyardVillageLogicTest {

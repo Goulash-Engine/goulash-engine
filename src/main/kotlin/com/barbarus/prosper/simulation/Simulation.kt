@@ -87,7 +87,7 @@ class Simulation(
                     @|green Activity: ${clan.currentActivity} |@
     
                     @|green ## State ## |@
-                    health: ${clan.state.health}
+                    health: ${String.format(Locale.US, "%.2f", clan.state.health)}
                     
                     @|green ## Urges ## |@
                     ${
