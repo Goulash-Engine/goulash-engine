@@ -10,43 +10,51 @@ class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         simulateMalnourishment(context)
         simulateExhaustion(context)
+        simulatePanic(context)
         simulateHealth(context)
         simulateDeath(context)
     }
 
-    private fun simulateExhaustion(context: Actor) {
-        val urgeToRest: Double = context.urges.getUrges()["rest"] ?: return
-        clearExhaustionConditions(context)
+    private fun simulatePanic(actor: Actor) {
+        actor.conditions.remove("panic")
+        if (actor.conditions.any { panicConditions().contains(it) }) {
+            actor.conditions.add("panic")
+        }
+    }
+
+    private fun simulateExhaustion(actor: Actor) {
+        val urgeToRest: Double = actor.urges.getUrges()["rest"] ?: return
+        clearExhaustionConditions(actor)
         when {
-            urgeToRest >= 100 -> context.conditions.add("unconscious")
-            urgeToRest > 80 -> context.conditions.add("blacking out")
-            urgeToRest > 50 -> context.conditions.add("exhausted")
-            urgeToRest > 30 -> context.conditions.add("tired")
-            urgeToRest > 20 -> context.conditions.add("weary")
+            urgeToRest >= 100 -> actor.conditions.add("unconscious")
+            urgeToRest > 80 -> actor.conditions.add("blacking out")
+            urgeToRest > 50 -> actor.conditions.add("exhausted")
+            urgeToRest > 30 -> actor.conditions.add("tired")
+            urgeToRest > 20 -> actor.conditions.add("weary")
         }
     }
 
-    private fun simulateDeath(context: Actor) {
-        if (context.state.health < 0) {
-            context.conditions.add("dead")
+    private fun simulateDeath(actor: Actor) {
+        if (actor.state.health < 0) {
+            actor.conditions.add("dead")
         }
     }
 
-    private fun simulateHealth(context: Actor) {
-        val health = context.state.health
-        clearHealthConditions(context)
+    private fun simulateHealth(actor: Actor) {
+        val health = actor.state.health
+        clearHealthConditions(actor)
         when {
-            health <= 0 -> context.conditions.add("dead")
-            health < 10 -> context.conditions.add("dying")
-            health < 20 -> context.conditions.add("severely sick")
-            health < 40 -> context.conditions.add("very sick")
-            health < 50 -> context.conditions.add("sick")
-            health < 70 -> context.conditions.add("dizzy")
-            health < 90 -> context.conditions.add("unwell")
+            health <= 0 -> actor.conditions.add("dead")
+            health < 10 -> actor.conditions.add("dying")
+            health < 20 -> actor.conditions.add("severely sick")
+            health < 40 -> actor.conditions.add("very sick")
+            health < 50 -> actor.conditions.add("sick")
+            health < 70 -> actor.conditions.add("dizzy")
+            health < 90 -> actor.conditions.add("unwell")
         }
     }
 
-    private fun clearExhaustionConditions(context: Actor) {
+    private fun clearExhaustionConditions(actor: Actor) {
         listOf(
             "dying",
             "severely sick",
@@ -54,10 +62,17 @@ class ConditionLogic : Logic<Actor> {
             "sick",
             "dizzy",
             "unwell"
-        ).forEach { context.conditions.remove(it) }
+        ).forEach { actor.conditions.remove(it) }
     }
 
-    private fun clearHealthConditions(context: Actor) {
+    private fun panicConditions() = listOf(
+        "malnourished",
+        "very sick",
+        "dying",
+        "severely sick",
+    )
+
+    private fun clearHealthConditions(actor: Actor) {
         listOf(
             "dying",
             "severely sick",
@@ -65,18 +80,15 @@ class ConditionLogic : Logic<Actor> {
             "sick",
             "dizzy",
             "unwell"
-        ).forEach { context.conditions.remove(it) }
+        ).forEach { actor.conditions.remove(it) }
     }
 
-    private fun simulateMalnourishment(context: Actor) {
-        val eatUrge = context.urges.getUrges()["eat"]
-
-        if (eatUrge != null) {
-            if (eatUrge < 100.0) {
-                context.conditions.remove("malnourished")
-            } else {
-                context.conditions.add("malnourished")
-            }
+    private fun simulateMalnourishment(actor: Actor) {
+        val eatUrge = actor.urges.getUrges()["eat"] ?: return
+        if (eatUrge < 100.0) {
+            actor.conditions.remove("malnourished")
+        } else {
+            actor.conditions.add("malnourished")
         }
     }
 }

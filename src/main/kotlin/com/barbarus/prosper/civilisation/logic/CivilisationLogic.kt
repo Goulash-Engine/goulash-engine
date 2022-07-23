@@ -1,5 +1,6 @@
 package com.barbarus.prosper.civilisation.logic
 
+import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.core.logic.Logic
 
@@ -9,7 +10,12 @@ import com.barbarus.prosper.core.logic.Logic
  */
 class CivilisationLogic : Logic<Civilisation> {
     override fun process(context: Civilisation) {
-        context.actors.forEach { it.urges.increaseUrge("eat", 0.1) }
+        context.actors.forEach(::urgeRoutines)
         context.actors.removeIf { it.conditions.contains("dead") }
+    }
+
+    private fun urgeRoutines(actor: Actor) {
+        actor.urges.increaseUrge("eat", 0.1)
+        actor.urges.decreaseUrge("rest", 1.0)
     }
 }

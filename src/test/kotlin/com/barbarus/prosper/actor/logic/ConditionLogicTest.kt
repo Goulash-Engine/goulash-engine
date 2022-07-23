@@ -10,6 +10,16 @@ internal class ConditionLogicTest {
     private val conditionLogic = ConditionLogic()
 
     @Test
+    fun `should add panic condition if a trigger condition occurs`() {
+        val clan = ClanFactory.simpleGathererClan()
+        clan.conditions.add("very sick")
+
+        conditionLogic.process(clan)
+
+        assertThat(clan.conditions).contains("panic")
+    }
+
+    @Test
     fun `should give dead condition if health is below 0`() {
         val clan = ClanFactory.simpleGathererClan()
         clan.state.health = -0.1
