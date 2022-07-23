@@ -31,7 +31,7 @@ class Simulation(
         print(ansi().eraseScreen())
 
         repeat(ticks) {
-            repeat(60) { WORLD_TIME.tick() }
+            WORLD_TIME.tick(WorldDate.HOUR)
             village.act()
 
             val builder = StringBuilder()

@@ -9,6 +9,41 @@ internal class WorldDateTest {
     private val worldDate = WorldDate()
 
     @Test
+    fun `should tick on hour base`() {
+        worldDate.tick(WorldDate.HOUR)
+
+        assertThat(worldDate.toString()).isEqualTo("00-00-0000 01:00:00")
+    }
+
+    @Test
+    fun `should tick on year base`() {
+        worldDate.tick(WorldDate.YEAR)
+
+        assertThat(worldDate.toString()).isEqualTo("00-00-0001 00:00:00")
+    }
+
+    @Test
+    fun `should tick on month base`() {
+        worldDate.tick(WorldDate.MONTH)
+
+        assertThat(worldDate.toString()).isEqualTo("00-01-0000 00:00:00")
+    }
+
+    @Test
+    fun `should tick on day base`() {
+        worldDate.tick(WorldDate.DAY)
+
+        assertThat(worldDate.toString()).isEqualTo("01-00-0000 00:00:00")
+    }
+
+    @Test
+    fun `should tick on minute base`() {
+        worldDate.tick(WorldDate.MINUTE)
+
+        assertThat(worldDate.toString()).isEqualTo("00-00-0000 00:01:00")
+    }
+
+    @Test
     fun `should tell if its night or day`() {
         repeat(60 * 60 * 12) { worldDate.tick() }
 
@@ -97,9 +132,7 @@ internal class WorldDateTest {
 
     @Test
     fun `should add add 60 minutes to time that results in 1 hour 0 minutes 0 seconds`() {
-        repeat(60) {
-            repeat(60) { worldDate.tick() }
-        }
+        repeat(60 * 60) { worldDate.tick() }
         assertThat(worldDate.time.hours).isEqualTo(1)
         assertThat(worldDate.time.minutes).isEqualTo(0)
         assertThat(worldDate.time.seconds).isEqualTo(0)

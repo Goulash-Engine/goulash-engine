@@ -15,19 +15,32 @@ class WorldDate(
         return "$d-$m-$y $time"
     }
 
-    fun tick() {
-        time.tick()
-        if (time.hours == 24) {
-            time.hours = 0
+    fun tick(base: Int = 1) {
+        time.seconds += base
+
+        while (time.seconds >= 60) {
+            time.minutes++
+            time.seconds -= WorldDate.MINUTE
+        }
+
+        while (time.minutes >= 60) {
+            time.hours++
+            time.minutes -= 60
+        }
+
+        while (time.hours >= 24) {
             day++
+            time.hours -= 24
         }
-        if (day == 30) {
-            day = 0
+
+        while (day >= 30) {
             month++
+            day -= 30
         }
-        if (month == 12) {
-            month = 0
+
+        while (month >= 12) {
             year++
+            month -= 12
         }
     }
 
@@ -37,5 +50,13 @@ class WorldDate(
 
     fun isNight(): Boolean {
         return !isDay()
+    }
+
+    companion object {
+        const val MINUTE: Int = 60
+        const val HOUR: Int = MINUTE * 60
+        const val DAY: Int = HOUR * 24
+        const val MONTH: Int = DAY * 30
+        const val YEAR: Int = MONTH * 12
     }
 }
