@@ -1,6 +1,6 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.actor.activity.Activity
+import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.actor.logic.ActivityLogic
 import com.barbarus.prosper.actor.logic.DeathLogic
 import com.barbarus.prosper.actor.logic.InventoryLogic

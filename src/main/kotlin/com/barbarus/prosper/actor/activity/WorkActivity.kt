@@ -1,8 +1,11 @@
 package com.barbarus.prosper.actor.activity
 
+import com.barbarus.prosper.core.activity.Activity
+import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.ProfessionType
+import com.barbarus.prosper.core.extension.toDuration
 import com.barbarus.prosper.factories.ResourceFactory
 
 /**
@@ -21,8 +24,8 @@ class WorkActivity : Activity {
         return "working"
     }
 
-    override fun duration(): Int {
-        return 30
+    override fun duration(): Duration {
+        return 8.times(60).toDuration()
     }
 
     override fun onFinish(actor: Actor) {

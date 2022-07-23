@@ -49,7 +49,7 @@ class Simulation(
         millisecondsPerTick: Long,
         currentTick: Int?
     ) {
-        WORLD_TIME.tick(WorldDate.HOUR)
+        WORLD_TIME.tick(WorldDate.MINUTE)
         village.act()
 
         val builder = StringBuilder()

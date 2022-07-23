@@ -1,6 +1,9 @@
 package com.barbarus.prosper.actor.activity
 
+import com.barbarus.prosper.core.activity.Activity
+import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.domain.Actor
+import com.barbarus.prosper.core.extension.toDuration
 
 /**
  * This [Activity] controls the daily work of a clan.
@@ -18,8 +21,8 @@ class IdleActivity : Activity {
         return "idle"
     }
 
-    override fun duration(): Int {
-        return 0
+    override fun duration(): Duration {
+        return 0.toDuration()
     }
 
     override fun act(actor: Actor) = Unit

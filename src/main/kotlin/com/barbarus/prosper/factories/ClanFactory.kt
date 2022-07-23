@@ -1,6 +1,6 @@
 package com.barbarus.prosper.factories
 
-import com.barbarus.prosper.actor.activity.Activity
+import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.actor.activity.EatActivity
 import com.barbarus.prosper.actor.activity.RestActivity
 import com.barbarus.prosper.actor.activity.SleepActivity

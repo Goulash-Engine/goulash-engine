@@ -8,6 +8,7 @@ class WorldDate(
     var year: Int = 0,
     val time: WorldTime = WorldTime()
 ) {
+    var tickBaseline: Int = 1
     override fun toString(): String {
         val y = String.format(Locale.US, "%04d", year)
         val m = String.format(Locale.US, "%02d", month)
@@ -16,6 +17,7 @@ class WorldDate(
     }
 
     fun tick(base: Int = 1) {
+        tickBaseline = base
         time.seconds += base
 
         while (time.seconds >= 60) {
@@ -53,6 +55,7 @@ class WorldDate(
     }
 
     companion object {
+        var TICK_BASELINE: Int = 1
         const val MINUTE: Int = 60
         const val HOUR: Int = MINUTE * 60
         const val DAY: Int = HOUR * 24

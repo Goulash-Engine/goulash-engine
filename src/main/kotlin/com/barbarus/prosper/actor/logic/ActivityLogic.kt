@@ -1,7 +1,7 @@
 package com.barbarus.prosper.actor.logic
 
-import com.barbarus.prosper.actor.activity.Activity
 import com.barbarus.prosper.actor.activity.IdleActivity
+import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.core.logic.Logic
@@ -76,7 +76,7 @@ class ActivityLogic : Logic<Actor> {
 
         fun activate(activity: Activity) {
             this.activity = activity
-            duration = activity.duration()
+            duration = activity.duration().getDuration()
         }
 
         fun hasRunningActivity(): Boolean {

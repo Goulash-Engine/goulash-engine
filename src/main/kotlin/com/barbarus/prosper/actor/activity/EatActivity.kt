@@ -1,7 +1,10 @@
 package com.barbarus.prosper.actor.activity
 
+import com.barbarus.prosper.core.activity.Activity
+import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.ResourceType
+import com.barbarus.prosper.core.extension.toDuration
 
 /**
  * This [Activity] controls the daily work of a clan.
@@ -21,8 +24,8 @@ class EatActivity : Activity {
         return "eating"
     }
 
-    override fun duration(): Int {
-        return 15
+    override fun duration(): Duration {
+        return 40.toDuration()
     }
 
     override fun onFinish(actor: Actor) {

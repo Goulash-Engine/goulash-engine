@@ -1,9 +1,8 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.village.logic.HungerVillageLogic
-import com.barbarus.prosper.village.logic.NightTimeVillageLogic
 import com.barbarus.prosper.core.logic.Logic
 import com.barbarus.prosper.village.logic.GraveyardVillageLogic
+import com.barbarus.prosper.village.logic.HungerVillageLogic
 
 /**
  * The core entity of the prosper engine. Within a village multiple [Clan]s try to survive and prosper through work,
@@ -14,8 +13,7 @@ class Village(
 ) {
     private val villageLogic: List<Logic<Village>> = listOf(
         GraveyardVillageLogic(),
-        HungerVillageLogic(),
-        NightTimeVillageLogic()
+        HungerVillageLogic()
     )
 
     fun act() {

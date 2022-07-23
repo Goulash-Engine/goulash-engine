@@ -1,6 +1,6 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.actor.activity.Activity
+import com.barbarus.prosper.core.activity.Activity
 
 interface Actor {
     val id: String

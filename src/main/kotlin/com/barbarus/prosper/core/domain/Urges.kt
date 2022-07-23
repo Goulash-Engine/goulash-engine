@@ -9,6 +9,9 @@ class Urges {
 
     fun increaseUrge(name: String, value: Double) {
         _urges[name] = _urges[name]?.plus(value) ?: value
+        if (_urges[name]!! >= 100) {
+            _urges[name] = 100.0
+        }
     }
 
     fun decreaseUrge(name: String, value: Double) {

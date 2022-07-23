@@ -1,4 +1,4 @@
-package com.barbarus.prosper.actor.activity
+package com.barbarus.prosper.core.activity
 
 import com.barbarus.prosper.core.domain.Actor
 
@@ -19,9 +19,11 @@ interface Activity {
     fun activity(): String
 
     /**
-     * Duration of the activity to last in ticks
+     * Duration of the activity to last in ticks. It's dependent on
+     * what baseline [WorldDate] has been set to.
+     * So a tick can either represent a minute, an hour and so on.
      */
-    fun duration(): Int
+    fun duration(): Duration
 
     /**
      * Logic to be executed when the activity finishes hence it's duration is over
