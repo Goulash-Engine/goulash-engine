@@ -20,7 +20,6 @@ class Simulation(
         )
     )
 ) {
-    private val date = WorldDate()
 
     init {
         LOG.info("Initializing simulation")
@@ -32,7 +31,7 @@ class Simulation(
         print(ansi().eraseScreen())
 
         repeat(ticks) {
-            repeat(60) { date.tick() }
+            repeat(60) { WORLD_TIME.tick() }
             village.act()
 
             val builder = StringBuilder()
@@ -47,7 +46,7 @@ class Simulation(
 
             if (render) {
                 builder.append("Active clans: ${village.clans.size}\n\n")
-                builder.append("Date: ${date}\n\n")
+                builder.append("Date: ${WORLD_TIME}\n\n")
                 builder.append("Clan Details:\n")
 
                 if (village.clans.isNotEmpty()) {
@@ -103,5 +102,6 @@ class Simulation(
 
     companion object {
         private val LOG = LoggerFactory.getLogger("Simulation")
+        val WORLD_TIME = WorldDate()
     }
 }

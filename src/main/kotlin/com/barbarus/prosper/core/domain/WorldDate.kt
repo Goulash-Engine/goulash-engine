@@ -30,4 +30,12 @@ class WorldDate(
             year++
         }
     }
+
+    fun isDay(): Boolean {
+        return this.time.hours in 6..18
+    }
+
+    fun isNight(): Boolean {
+        return !isDay()
+    }
 }

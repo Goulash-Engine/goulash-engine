@@ -2,10 +2,18 @@ package com.barbarus.prosper.core.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isTrue
 import org.junit.jupiter.api.Test
 
 internal class WorldDateTest {
     private val worldDate = WorldDate()
+
+    @Test
+    fun `should tell if its night or day`() {
+        repeat(60 * 60 * 12) { worldDate.tick() }
+
+        assertThat(worldDate.isDay()).isTrue()
+    }
 
     @Test
     fun `should have proper time format`() {
