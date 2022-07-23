@@ -2,11 +2,6 @@ package com.barbarus.prosper.logic
 
 import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.core.domain.Clan
-import com.barbarus.prosper.core.domain.Profession
-import com.barbarus.prosper.core.domain.ProfessionType
-import com.barbarus.prosper.core.domain.Resource
-import com.barbarus.prosper.core.domain.ResourceType
-import com.barbarus.prosper.core.logic.ResourceLogic
 import com.barbarus.prosper.factories.ClanFactory
 import spock.lang.Specification
 
