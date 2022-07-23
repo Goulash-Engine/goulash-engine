@@ -17,13 +17,24 @@ class ActivityLogic : Logic<Actor> {
     override fun process(context: Actor) {
         if (hasGlobalBlockerCondition(context)) return
 
-        if (currentActivity.hasRunningActivity()) {
+        val priorityActivity = context.activities.find { activity ->
+            context.conditions.any {
+                activity.priorityConditions().contains(it)
+            }
+        }
+
+        if (priorityActivity != null) {
+            currentActivity.activate(priorityActivity)
             currentActivity.act(context)
         } else {
-            executeFreeActivities(context)
+            if (currentActivity.hasRunningActivity()) {
+                currentActivity.act(context)
+            } else {
+                executeFreeActivities(context)
 
-            if (context.urges.getUrges().isEmpty()) return
-            executeUrgentActivities(context)
+                if (context.urges.getUrges().isEmpty()) return
+                executeUrgentActivities(context)
+            }
         }
     }
 

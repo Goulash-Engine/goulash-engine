@@ -13,11 +13,37 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
 internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
+
+    @Test
+    fun `should priorize an activity if it_s priority condition has been met`() {
+        val priorizedActivity = mockk<Activity>("prio", relaxed = true)
+        every { priorizedActivity.triggerUrges() } returns listOf("think")
+        every { priorizedActivity.duration() } returns 1.toDuration()
+        every { priorizedActivity.priorityConditions() } returns listOf("panic")
+        every { priorizedActivity.act(any()) } answers { firstArg<Actor>().conditions.remove("panic") }
+
+        val normalActivity = mockk<Activity>("normal", relaxed = true)
+        every { normalActivity.triggerUrges() } returns listOf("eat")
+        every { normalActivity.duration() } returns 1.toDuration()
+
+        val clan = ClanFactory.testClan(listOf(priorizedActivity, normalActivity))
+        clan.conditions.add("panic")
+        clan.urges.increaseUrge("eat", 100.0)
+        clan.urges.increaseUrge("think", 20.0)
+
+        repeat(2) { activityLogic.process(clan) }
+
+        verifyOrder() {
+            priorizedActivity.act(any())
+            normalActivity.act(any())
+        }
+    }
 
     @Test
     fun `should not run any activity if global blocking condition is met`() {
@@ -225,7 +251,7 @@ internal class ActivityLogicTest {
 
     @Test
     fun `should not execute activity if trigger urge is the top urge but blocking condition exists`() {
-        val mockedWorkActivity = mockk<Activity>()
+        val mockedWorkActivity = mockk<Activity>(relaxed = true)
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"

@@ -21,6 +21,12 @@ interface Activity {
     fun abortConditions(): List<String> = listOf()
 
     /**
+     * If any of these conditions are met, the [Activity] will have priority in execution
+     * regardless to the urge level.
+     */
+    fun priorityConditions(): List<String> = listOf()
+
+    /**
      * The activity that should be set as current activity for the [Actor]
      */
     fun activity(): String
