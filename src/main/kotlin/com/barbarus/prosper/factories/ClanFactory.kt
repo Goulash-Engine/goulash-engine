@@ -3,6 +3,7 @@ package com.barbarus.prosper.factories
 import com.barbarus.prosper.actor.activity.Activity
 import com.barbarus.prosper.actor.activity.EatActivity
 import com.barbarus.prosper.actor.activity.RestActivity
+import com.barbarus.prosper.actor.activity.SleepActivity
 import com.barbarus.prosper.actor.activity.ThinkActivity
 import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.domain.Clan
@@ -52,6 +53,7 @@ object ClanFactory {
         WorkActivity(),
         RestActivity(),
         ThinkActivity(),
-        EatActivity()
+        EatActivity(),
+        SleepActivity()
     )
 }
