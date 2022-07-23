@@ -17,17 +17,6 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
-    fun `should set current activity of actor to idle if no activity is set`() {
-        val clan = ClanFactory.testClan(listOf())
-
-        clan.currentActivity = "working"
-
-        activityLogic.process(clan)
-
-        assertThat(clan.currentActivity).isEqualTo("idle")
-    }
-
-    @Test
     fun `should execute an activity with higher urge for duration and then the next activity`() {
         val primaryActivity = mockk<Activity>(name = "primary")
         every { primaryActivity.triggerUrges() } returns listOf("work")
@@ -142,6 +131,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.duration() } returns 5
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        clan.urges.stopUrge("think")
         justRun { mockedWorkActivity.act(clan) }
 
         activityLogic.process(clan)

@@ -1,6 +1,7 @@
 package com.barbarus.prosper.actor.logic
 
 import com.barbarus.prosper.actor.activity.Activity
+import com.barbarus.prosper.actor.activity.IdleActivity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.core.logic.Logic
@@ -20,10 +21,6 @@ class ActivityLogic : Logic<Actor> {
 
             if (context.urges.getUrges().isNotEmpty()) {
                 executeUrgentActivities(context)
-            }
-
-            if (!currentActivity.hasRunningActivity()) {
-                context.currentActivity = "idle"
             }
         }
     }
@@ -62,14 +59,14 @@ class ActivityLogic : Logic<Actor> {
     }
 
     private class RunningActivity {
-        private var activity: Activity? = null
+        private var activity: Activity = IdleActivity()
         private var duration: Int = 0
 
         fun act(context: Actor) {
             if (hasRunningActivity()) {
-                activity?.act(context)
+                activity.act(context)
                 countDown()
-                context.currentActivity = activity?.activity() ?: "idle"
+                context.currentActivity = activity.activity()
             }
         }
 
@@ -79,13 +76,13 @@ class ActivityLogic : Logic<Actor> {
         }
 
         fun hasRunningActivity(): Boolean {
-            return activity != null
+            return duration > 0
         }
 
         private fun countDown() {
             duration--
             if (duration <= 0) {
-                activity = null
+                activity = IdleActivity()
             }
         }
     }
