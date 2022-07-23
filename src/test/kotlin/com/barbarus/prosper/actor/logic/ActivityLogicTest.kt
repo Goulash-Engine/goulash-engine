@@ -20,6 +20,22 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should remove current activity if abort condition has been met`() {
+        val mockedWorkActivity = mockk<Activity>("workMock", relaxed = true)
+        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
+        every { mockedWorkActivity.duration() } returns 5.toDuration()
+        every { mockedWorkActivity.abortConditions() } returns listOf("starving")
+        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        clan.urges.increaseUrge("work", 100.0)
+
+        repeat(3) { activityLogic.process(clan) }
+        clan.conditions.add("starving")
+        repeat(2) { activityLogic.process(clan) }
+
+        verify(atMost = 3) { mockedWorkActivity.act(any()) }
+    }
+
+    @Test
     fun `should add resource to stash of actor if activity has finished`() {
         val mockedWorkActivity = mockk<Activity>("workMock")
         every { mockedWorkActivity.triggerUrges() } returns listOf("*")

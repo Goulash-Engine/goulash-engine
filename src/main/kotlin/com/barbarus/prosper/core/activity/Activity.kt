@@ -11,7 +11,14 @@ interface Activity {
     /**
      * A blacklist conditions that prevents the [Activity] from being triggered
      */
-    fun blockerConditions(): List<String>
+    fun blockerConditions(): List<String> = listOf()
+
+    /**
+     * A list of conditions that will stop the acting of this
+     * [Activity] if they are met. The abortion will take **before** the
+     * [act] function will be called.
+     */
+    fun abortConditions(): List<String> = listOf()
 
     /**
      * The activity that should be set as current activity for the [Actor]

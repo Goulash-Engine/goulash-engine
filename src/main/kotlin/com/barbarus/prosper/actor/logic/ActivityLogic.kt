@@ -62,17 +62,21 @@ class ActivityLogic : Logic<Actor> {
         private var activity: Activity = IdleActivity()
         private var duration: Int = 0
 
-        fun act(context: Actor) {
+        fun act(actor: Actor) {
             if (hasRunningActivity()) {
-                activity.act(context)
-                context.currentActivity = activity.activity()
+                if (containsAbortCondition(actor)) activity = IdleActivity()
+                activity.act(actor)
+                actor.currentActivity = activity.activity()
                 val hasFinished = countDown()
                 if (hasFinished) {
-                    activity.onFinish(context)
+                    activity.onFinish(actor)
                     activity = IdleActivity()
                 }
             }
         }
+
+        private fun containsAbortCondition(actor: Actor) =
+            actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
 
         fun activate(activity: Activity) {
             this.activity = activity

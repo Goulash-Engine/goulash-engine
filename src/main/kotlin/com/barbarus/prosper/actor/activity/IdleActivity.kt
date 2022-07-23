@@ -13,10 +13,6 @@ class IdleActivity : Activity {
         return listOf("*")
     }
 
-    override fun blockerConditions(): List<String> {
-        return listOf("")
-    }
-
     override fun activity(): String {
         return "idle"
     }

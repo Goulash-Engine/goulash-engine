@@ -4,7 +4,7 @@ import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
 
 /**
- * Changes the condition of an [Actor] depending on factors.
+ * Changes the condition of an [Actor] depending on various factors.
  */
 class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {

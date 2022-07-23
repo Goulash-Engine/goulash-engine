@@ -15,10 +15,6 @@ class ThinkActivity : Activity {
         return listOf("think")
     }
 
-    override fun blockerConditions(): List<String> {
-        return listOf()
-    }
-
     override fun activity(): String {
         return "thinking"
     }

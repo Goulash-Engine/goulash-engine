@@ -20,6 +20,10 @@ class WorkActivity : Activity {
         return listOf("tired", "sick", "exhausted")
     }
 
+    override fun abortConditions(): List<String> {
+        return blockerConditions()
+    }
+
     override fun activity(): String {
         return "working"
     }

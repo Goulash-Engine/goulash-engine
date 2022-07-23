@@ -13,10 +13,6 @@ class SleepActivity : Activity {
         return listOf("sleep")
     }
 
-    override fun blockerConditions(): List<String> {
-        return listOf()
-    }
-
     override fun activity(): String {
         return "sleeping"
     }
