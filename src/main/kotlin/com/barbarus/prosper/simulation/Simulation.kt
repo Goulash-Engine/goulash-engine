@@ -78,7 +78,7 @@ class Simulation(
                     
                     @|green ## Urges ## |@
                     ${
-                clan.urges.getUrges().map { (key, value) ->
+                clan.urges.getUrges().toList().sortedByDescending { it.second }.toMap().map { (key, value) ->
                     """${String.format(Locale.US, "%.2f", value)} | $key
                     """
                 }.joinToString("")
