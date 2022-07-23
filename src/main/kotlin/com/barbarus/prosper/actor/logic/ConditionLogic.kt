@@ -9,8 +9,21 @@ import com.barbarus.prosper.core.logic.Logic
 class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         simulateMalnourishment(context)
+        simulateExhaustion(context)
         simulateHealth(context)
         simulateDeath(context)
+    }
+
+    private fun simulateExhaustion(context: Actor) {
+        val urgeToRest: Double = context.urges.getUrges()["rest"] ?: return
+        clearExhaustionConditions(context)
+        when {
+            urgeToRest >= 100 -> context.conditions.add("unconscious")
+            urgeToRest > 80 -> context.conditions.add("blacking out")
+            urgeToRest > 50 -> context.conditions.add("exhausted")
+            urgeToRest > 30 -> context.conditions.add("tired")
+            urgeToRest > 20 -> context.conditions.add("weary")
+        }
     }
 
     private fun simulateDeath(context: Actor) {
@@ -31,6 +44,17 @@ class ConditionLogic : Logic<Actor> {
             health < 70 -> context.conditions.add("dizzy")
             health < 90 -> context.conditions.add("unwell")
         }
+    }
+
+    private fun clearExhaustionConditions(context: Actor) {
+        listOf(
+            "dying",
+            "severely sick",
+            "very sick",
+            "sick",
+            "dizzy",
+            "unwell"
+        ).forEach { context.conditions.remove(it) }
     }
 
     private fun clearHealthConditions(context: Actor) {
