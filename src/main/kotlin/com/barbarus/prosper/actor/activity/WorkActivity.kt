@@ -1,6 +1,9 @@
 package com.barbarus.prosper.actor.activity
 
 import com.barbarus.prosper.core.domain.Actor
+import com.barbarus.prosper.core.domain.Clan
+import com.barbarus.prosper.core.domain.ProfessionType
+import com.barbarus.prosper.factories.ResourceFactory
 
 /**
  * This [Activity] controls the daily work of a clan.
@@ -20,6 +23,18 @@ class WorkActivity : Activity {
 
     override fun duration(): Int {
         return 30
+    }
+
+    override fun onFinish(actor: Actor) {
+        if (actor is Clan) {
+            val resource = when (actor.primaryProfession.type) {
+                ProfessionType.GATHERER -> ResourceFactory.food()
+                ProfessionType.WOODWORKER -> ResourceFactory.woodenMaterial()
+                ProfessionType.TOOLMAKER -> TODO()
+                ProfessionType.HERBALIST -> TODO()
+            }
+            actor.stash.add(resource)
+        }
     }
 
     override fun act(actor: Actor) {

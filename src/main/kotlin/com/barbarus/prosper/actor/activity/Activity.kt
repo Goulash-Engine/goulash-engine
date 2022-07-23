@@ -22,5 +22,10 @@ interface Activity {
      * Duration of the activity to last in ticks
      */
     fun duration(): Int
+
+    /**
+     * Logic to be executed when the activity finishes hence it's duration is over
+     */
+    fun onFinish(actor: Actor) = Unit
     fun act(actor: Actor)
 }

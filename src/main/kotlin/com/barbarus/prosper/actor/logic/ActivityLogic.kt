@@ -65,8 +65,12 @@ class ActivityLogic : Logic<Actor> {
         fun act(context: Actor) {
             if (hasRunningActivity()) {
                 activity.act(context)
-                countDown()
                 context.currentActivity = activity.activity()
+                val hasFinished = countDown()
+                if (hasFinished) {
+                    activity.onFinish(context)
+                    activity = IdleActivity()
+                }
             }
         }
 
@@ -79,11 +83,13 @@ class ActivityLogic : Logic<Actor> {
             return duration > 0
         }
 
-        private fun countDown() {
+        /**
+         * Decrease duration
+         * @return true if duration has finished
+         */
+        private fun countDown(): Boolean {
             duration--
-            if (duration <= 0) {
-                activity = IdleActivity()
-            }
+            return duration <= 0
         }
     }
 }

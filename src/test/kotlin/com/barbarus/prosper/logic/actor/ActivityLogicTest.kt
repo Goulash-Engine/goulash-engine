@@ -1,11 +1,14 @@
 package com.barbarus.prosper.logic.actor
 
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.actor.activity.Activity
 import com.barbarus.prosper.actor.logic.ActivityLogic
+import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ResourceFactory
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -17,18 +20,44 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should add resource to stash of actor if activity has finished`() {
+        val mockedWorkActivity = mockk<Activity>("workMock")
+        every { mockedWorkActivity.triggerUrges() } returns listOf("*")
+        every { mockedWorkActivity.blockerConditions() } returns listOf("sick")
+        every { mockedWorkActivity.activity() } returns "working"
+        every { mockedWorkActivity.duration() } returns 1
+
+        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        val expectedResource = ResourceFactory.food()
+        every { mockedWorkActivity.onFinish(clan) } answers {
+            val actor = firstArg<Actor>()
+            actor.inventory().add(expectedResource)
+        }
+        justRun { mockedWorkActivity.act(clan) }
+
+        activityLogic.process(clan)
+
+        verify { mockedWorkActivity.triggerUrges() }
+        verify { mockedWorkActivity.blockerConditions() }
+        verify { mockedWorkActivity.act(clan) }
+        assertThat(clan.stash).contains(expectedResource)
+    }
+
+    @Test
     fun `should execute an activity with higher urge for duration and then the next activity`() {
         val primaryActivity = mockk<Activity>(name = "primary")
         every { primaryActivity.triggerUrges() } returns listOf("work")
         every { primaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { primaryActivity.activity() } returns "working"
         every { primaryActivity.duration() } returns 2
+        justRun { primaryActivity.onFinish(any()) }
 
         val secondaryActivity = mockk<Activity>(name = "secondary")
         every { secondaryActivity.triggerUrges() } returns listOf("rest")
         every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { secondaryActivity.activity() } returns "resting"
         every { secondaryActivity.duration() } returns 1
+        justRun { secondaryActivity.onFinish(any()) }
 
         val clan = ClanFactory.testClan(listOf(primaryActivity, secondaryActivity))
 
@@ -53,12 +82,14 @@ internal class ActivityLogicTest {
         every { primaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { primaryActivity.activity() } returns "working"
         every { primaryActivity.duration() } returns 4
+        justRun { primaryActivity.onFinish(any()) }
 
         val secondaryActivity = mockk<Activity>()
         every { secondaryActivity.triggerUrges() } returns listOf("rest")
         every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { secondaryActivity.activity() } returns "resting"
         every { secondaryActivity.duration() } returns 2
+        justRun { secondaryActivity.onFinish(any()) }
 
         val clan = ClanFactory.testClan(listOf(primaryActivity, secondaryActivity))
 
@@ -114,6 +145,7 @@ internal class ActivityLogicTest {
         every { mockedIdleActivity.blockerConditions() } returns listOf("sick")
         every { mockedIdleActivity.activity() } returns "idle"
         every { mockedIdleActivity.duration() } returns 1
+        justRun { mockedIdleActivity.onFinish(any()) }
         val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
         justRun { mockedIdleActivity.act(clan) }
 
