@@ -2,12 +2,12 @@ package com.barbarus.prosper.village.logic
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.factories.ClanFactory
-import com.barbarus.prosper.core.domain.Village
 import org.junit.jupiter.api.Test
 
-internal class GraveyardVillageLogicTest {
-    private val graveyardVillageLogic = GraveyardVillageLogic()
+internal class GraveyardCivilisationLogicTest {
+    private val graveyardCivilisationLogic = GraveyardCivilisationLogic()
 
     @Test
     fun `should remove clan from village if has condition dead`() {
@@ -16,10 +16,10 @@ internal class GraveyardVillageLogicTest {
             ClanFactory.simpleGathererClan().also { it.conditions.add("dead") },
             ClanFactory.simpleGathererClan()
         )
-        val village = Village(clans)
+        val civilisation = Civilisation(clans)
 
-        graveyardVillageLogic.process(village)
+        graveyardCivilisationLogic.process(civilisation)
 
-        assertThat(village.clans.size).isEqualTo(2)
+        assertThat(civilisation.clans.size).isEqualTo(2)
     }
 }

@@ -1,6 +1,6 @@
 package com.barbarus.prosper.simulation
 
-import com.barbarus.prosper.core.domain.Village
+import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.core.domain.WorldDate
 import com.barbarus.prosper.factories.ClanFactory
 import org.fusesource.jansi.Ansi
@@ -15,7 +15,7 @@ class Simulation(
     private val millisecondsPerTick: Long = 1000,
     private val render: Boolean = false,
     private val tickBase: Int = WorldDate.SECOND,
-    val village: Village = Village(
+    val civilisation: Civilisation = Civilisation(
         mutableListOf(
             ClanFactory.poorGathererClan()
             // ClanFactory.poorGathererClan(),
@@ -27,7 +27,7 @@ class Simulation(
 
     init {
         LOG.info("Initializing simulation")
-        LOG.info("${village.clans.size} clans initialized")
+        LOG.info("${civilisation.clans.size} clans initialized")
     }
 
     fun run() {
@@ -49,7 +49,7 @@ class Simulation(
 
     private fun runSimulation(currentTick: Int? = null) {
         WORLD_TIME.tick(tickBase)
-        village.act()
+        civilisation.act()
 
         val builder = StringBuilder()
 
@@ -62,11 +62,11 @@ class Simulation(
         builder.append("Tick ${currentTick?.plus(1) ?: "\u221E"}/${maximumTicks ?: "\u221E"}\n")
 
         if (render) {
-            builder.append("Active clans: ${village.clans.size}\n\n")
+            builder.append("Active clans: ${civilisation.clans.size}\n\n")
             builder.append("Date: ${WORLD_TIME}\n\n")
             builder.append("Clan Details:\n")
 
-            if (village.clans.isNotEmpty()) {
+            if (civilisation.clans.isNotEmpty()) {
                 renderClanDetails(builder)
             }
 
@@ -78,7 +78,7 @@ class Simulation(
     }
 
     private fun renderClanDetails(builder: StringBuilder) {
-        village.clans.forEach { clan ->
+        civilisation.clans.forEach { clan ->
             builder.append(
                 """
                     @|red -- ${clan.name} --|@
