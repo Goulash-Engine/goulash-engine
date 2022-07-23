@@ -1,4 +1,4 @@
-package com.barbarus.prosper.activity
+package com.barbarus.prosper.actor.activity
 
 import com.barbarus.prosper.actor.activity.RestActivity
 

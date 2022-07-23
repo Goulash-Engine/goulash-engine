@@ -1,4 +1,4 @@
-package com.barbarus.prosper.activity
+package com.barbarus.prosper.actor.activity
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
