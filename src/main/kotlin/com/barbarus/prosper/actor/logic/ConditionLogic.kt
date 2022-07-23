@@ -69,7 +69,7 @@ class ConditionLogic : Logic<Actor> {
         "malnourished",
         "very sick",
         "dying",
-        "severely sick",
+        "severely sick"
     )
 
     private fun clearHealthConditions(actor: Actor) {
@@ -90,5 +90,14 @@ class ConditionLogic : Logic<Actor> {
         } else {
             actor.conditions.add("malnourished")
         }
+    }
+
+    companion object {
+        val GOBAL_BLOCKING_CONDITION = listOf(
+            "dying",
+            "severely sick",
+            "unconscious",
+            "blacking out"
+        )
     }
 }

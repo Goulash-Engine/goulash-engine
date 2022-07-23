@@ -20,6 +20,21 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should not run any activity if global blocking condition is met`() {
+        val mockedWorkActivity = mockk<Activity>("workMock", relaxed = true)
+        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
+        every { mockedWorkActivity.duration() } returns 5.toDuration()
+        every { mockedWorkActivity.abortConditions() } returns listOf("starving")
+        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        clan.urges.increaseUrge("work", 100.0)
+        clan.conditions.add(ConditionLogic.GOBAL_BLOCKING_CONDITION.first())
+
+        activityLogic.process(clan)
+
+        verify(inverse = true) { mockedWorkActivity.act(any()) }
+    }
+
+    @Test
     fun `should remove current activity if abort condition has been met`() {
         val mockedWorkActivity = mockk<Activity>("workMock", relaxed = true)
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")

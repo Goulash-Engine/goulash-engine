@@ -15,16 +15,20 @@ class ActivityLogic : Logic<Actor> {
     private val currentActivity = RunningActivity()
 
     override fun process(context: Actor) {
+        if (hasGlobalBlockerCondition(context)) return
+
         if (currentActivity.hasRunningActivity()) {
             currentActivity.act(context)
         } else {
             executeFreeActivities(context)
 
-            if (context.urges.getUrges().isNotEmpty()) {
-                executeUrgentActivities(context)
-            }
+            if (context.urges.getUrges().isEmpty()) return
+            executeUrgentActivities(context)
         }
     }
+
+    private fun hasGlobalBlockerCondition(context: Actor) =
+        context.conditions.any { ConditionLogic.GOBAL_BLOCKING_CONDITION.contains(it) }
 
     private fun executeUrgentActivities(context: Actor) {
         val topUrge = context.urges.getUrges().maxBy { it.value }
