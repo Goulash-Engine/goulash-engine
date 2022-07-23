@@ -1,6 +1,7 @@
 package com.barbarus.prosper.simulation
 
 import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.WorldDate
 import com.barbarus.prosper.factories.ClanFactory
 import org.fusesource.jansi.Ansi
@@ -27,7 +28,7 @@ class Simulation(
 
     init {
         LOG.info("Initializing simulation")
-        LOG.info("${civilisation.clans.size} clans initialized")
+        LOG.info("${civilisation.actors.size} clans initialized")
     }
 
     fun run() {
@@ -62,11 +63,11 @@ class Simulation(
         builder.append("Tick ${currentTick?.plus(1) ?: "\u221E"}/${maximumTicks ?: "\u221E"}\n")
 
         if (render) {
-            builder.append("Active clans: ${civilisation.clans.size}\n\n")
+            builder.append("Active clans: ${civilisation.actors.size}\n\n")
             builder.append("Date: ${WORLD_TIME}\n\n")
             builder.append("Clan Details:\n")
 
-            if (civilisation.clans.isNotEmpty()) {
+            if (civilisation.actors.isNotEmpty()) {
                 renderClanDetails(builder)
             }
 
@@ -78,7 +79,7 @@ class Simulation(
     }
 
     private fun renderClanDetails(builder: StringBuilder) {
-        civilisation.clans.forEach { clan ->
+        civilisation.actors.filterIsInstance(Clan::class.java).forEach { clan ->
             builder.append(
                 """
                     @|red -- ${clan.name} --|@

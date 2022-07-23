@@ -7,7 +7,8 @@ import com.barbarus.prosper.core.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.core.logic.Logic
 
 /**
- * This logic will check all [Activity] objects if they are executed by the required urge level.
+ * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
+ * actor is the driving factor of this logic. There can be only one [Activity] running for each [Actor].
  */
 class ActivityLogic : Logic<Actor> {
 

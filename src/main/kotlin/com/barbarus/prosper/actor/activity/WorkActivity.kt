@@ -17,7 +17,7 @@ class WorkActivity : Activity {
     }
 
     override fun blockerConditions(): List<String> {
-        return listOf("tired", "sick", "exhausted")
+        return listOf("sick", "exhausted")
     }
 
     override fun abortConditions(): List<String> {

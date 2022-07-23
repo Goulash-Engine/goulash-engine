@@ -1,23 +1,18 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.core.logic.Logic
-import com.barbarus.prosper.village.logic.GraveyardCivilisationLogic
-import com.barbarus.prosper.village.logic.HungerCivilisationLogic
+import com.barbarus.prosper.civilisation.logic.CivilisationLogic
 
 /**
  * The core entity of the prosper engine. Within a village multiple [Clan]s try to survive and prosper through work,
  * trade and socialisation.
  */
 class Civilisation(
-    val clans: MutableList<Clan> = mutableListOf()
+    val actors: MutableList<Actor> = mutableListOf()
 ) {
-    private val civilisationLogic: List<Logic<Civilisation>> = listOf(
-        GraveyardCivilisationLogic(),
-        HungerCivilisationLogic()
-    )
+    private val civilisationLogic = CivilisationLogic()
 
     fun act() {
-        civilisationLogic.forEach { it.process(this) }
-        clans.forEach { it.act() }
+        civilisationLogic.process(this)
+        actors.forEach { it.act() }
     }
 }

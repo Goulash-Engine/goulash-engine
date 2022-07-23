@@ -1,4 +1,4 @@
-package com.barbarus.prosper.village.logic
+package com.barbarus.prosper.civilisation.logic
 
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.core.logic.Logic
@@ -8,6 +8,5 @@ import com.barbarus.prosper.core.logic.Logic
  */
 class GraveyardCivilisationLogic : Logic<Civilisation> {
     override fun process(context: Civilisation) {
-        context.clans.removeIf { it.conditions.contains("dead") }
     }
 }
