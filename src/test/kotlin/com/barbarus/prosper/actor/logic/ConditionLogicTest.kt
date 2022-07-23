@@ -10,6 +10,16 @@ internal class ConditionLogicTest {
     private val conditionLogic = ConditionLogic()
 
     @Test
+    fun `should give dead condition if health is below 0`() {
+        val clan = ClanFactory.simpleGathererClan()
+        clan.state.health = -0.1
+
+        conditionLogic.process(clan)
+
+        assertThat(clan.conditions).contains("dead")
+    }
+
+    @Test
     fun `should make remove malnourished condition if eat urge is below 100`() {
         val clan = ClanFactory.poorGathererClan()
         clan.urges.increaseUrge("eat", 99.0)

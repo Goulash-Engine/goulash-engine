@@ -2,7 +2,6 @@ package com.barbarus.prosper.core.domain
 
 import com.barbarus.prosper.actor.logic.ActivityLogic
 import com.barbarus.prosper.actor.logic.ConditionLogic
-import com.barbarus.prosper.actor.logic.DeathLogic
 import com.barbarus.prosper.actor.logic.InventoryLogic
 import com.barbarus.prosper.actor.logic.StateLogic
 import com.barbarus.prosper.core.activity.Activity
@@ -28,8 +27,7 @@ class Clan(
         ActivityLogic(),
         ConditionLogic(),
         StateLogic(),
-        InventoryLogic(),
-        DeathLogic()
+        InventoryLogic()
     )
     override var currentActivity: String = ""
 

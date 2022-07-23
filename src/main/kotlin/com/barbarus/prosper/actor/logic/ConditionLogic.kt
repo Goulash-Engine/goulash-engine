@@ -10,6 +10,13 @@ class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         simulateMalnourishment(context)
         simulateHealth(context)
+        simulateDeath(context)
+    }
+
+    private fun simulateDeath(context: Actor) {
+        if (context.state.health < 0) {
+            context.conditions.add("dead")
+        }
     }
 
     private fun simulateHealth(context: Actor) {
