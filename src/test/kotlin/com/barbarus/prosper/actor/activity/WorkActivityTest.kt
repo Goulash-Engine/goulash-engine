@@ -2,7 +2,6 @@ package com.barbarus.prosper.actor.activity
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.factories.ClanFactory
 import org.junit.jupiter.api.Test
 
@@ -20,15 +19,6 @@ internal class WorkActivityTest {
 
         workActivity.act(clan)
 
-        assertThat(clan.urges.getUrges()["rest"]).isEqualTo(1.0)
-    }
-
-    @Test
-    fun `should increase hunger and set current activity to working`() {
-        val clan = ClanFactory.simpleGathererClan()
-
-        workActivity.act(clan)
-
-        assertThat(clan.state.hunger).isEqualTo(0.5)
+        assertThat(clan.urges.getUrges()["rest"]).isEqualTo(1.5)
     }
 }

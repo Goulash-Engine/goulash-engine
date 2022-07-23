@@ -33,16 +33,6 @@ internal class EatActivityTest {
     }
 
     @Test
-    fun `should increase eat urge if no food is available`() {
-        val clan = ClanFactory.poorGathererClan()
-        clan.stash.clear()
-
-        eatActivity.act(clan)
-
-        assertThat(clan.urges.getUrges()["eat"]).isEqualTo(0.1)
-    }
-
-    @Test
     fun `should decrease food by 0_1 per act`() {
         val clan = ClanFactory.poorGathererClan()
         clan.stash.clear()

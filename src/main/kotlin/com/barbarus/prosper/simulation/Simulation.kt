@@ -75,7 +75,6 @@ class Simulation(
     
                     @|green ## State ## |@
                     health: ${clan.state.health}
-                    hunger: ${String.format(Locale.US, "%.2f", clan.state.hunger)}
                     
                     @|green ## Urges ## |@
                     ${

@@ -9,6 +9,5 @@ import com.barbarus.prosper.core.logic.Logic
 class StateConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         if (context.state.health < 60) context.conditions.add("tired")
-        if (context.state.hunger >= 70) context.conditions.add("hungry")
     }
 }

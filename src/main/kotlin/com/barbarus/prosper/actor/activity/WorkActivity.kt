@@ -38,7 +38,6 @@ class WorkActivity : Activity {
     }
 
     override fun act(actor: Actor) {
-        actor.state.hunger += 0.5
         actor.urges.increaseUrge("rest", 1.5)
         actor.urges.increaseUrge("eat", 0.3)
         actor.urges.decreaseUrge("work", 1.0)
