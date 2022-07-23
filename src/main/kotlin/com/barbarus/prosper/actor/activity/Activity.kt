@@ -6,12 +6,12 @@ interface Activity {
     /**
      * The urges of an [Actor] that trigger this activity
      */
-    fun triggerUrge(): List<String>
+    fun triggerUrges(): List<String>
 
     /**
      * A blacklist conditions that prevents the [Activity] from being triggered
      */
-    fun blockerCondition(): List<String>
+    fun blockerConditions(): List<String>
 
     /**
      * The activity that should be set as current activity for the [Actor]

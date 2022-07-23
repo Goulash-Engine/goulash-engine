@@ -17,16 +17,27 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should set current activity of actor to idle if no activity is set`() {
+        val clan = ClanFactory.testClan(listOf())
+
+        clan.currentActivity = "working"
+
+        activityLogic.process(clan)
+
+        assertThat(clan.currentActivity).isEqualTo("idle")
+    }
+
+    @Test
     fun `should execute an activity with higher urge for duration and then the next activity`() {
         val primaryActivity = mockk<Activity>(name = "primary")
-        every { primaryActivity.triggerUrge() } returns listOf("work")
-        every { primaryActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { primaryActivity.triggerUrges() } returns listOf("work")
+        every { primaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { primaryActivity.activity() } returns "working"
         every { primaryActivity.duration() } returns 2
 
         val secondaryActivity = mockk<Activity>(name = "secondary")
-        every { secondaryActivity.triggerUrge() } returns listOf("rest")
-        every { secondaryActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { secondaryActivity.triggerUrges() } returns listOf("rest")
+        every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { secondaryActivity.activity() } returns "resting"
         every { secondaryActivity.duration() } returns 1
 
@@ -49,14 +60,14 @@ internal class ActivityLogicTest {
     @Test
     fun `should execute an activity for it's duration value`() {
         val primaryActivity = mockk<Activity>(name = "primary")
-        every { primaryActivity.triggerUrge() } returns listOf("work")
-        every { primaryActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { primaryActivity.triggerUrges() } returns listOf("work")
+        every { primaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { primaryActivity.activity() } returns "working"
         every { primaryActivity.duration() } returns 4
 
         val secondaryActivity = mockk<Activity>()
-        every { secondaryActivity.triggerUrge() } returns listOf("rest")
-        every { secondaryActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { secondaryActivity.triggerUrges() } returns listOf("rest")
+        every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { secondaryActivity.activity() } returns "resting"
         every { secondaryActivity.duration() } returns 2
 
@@ -76,8 +87,8 @@ internal class ActivityLogicTest {
     @Test
     fun `should set current activity of a context`() {
         val firstActivity = mockk<Activity>()
-        every { firstActivity.triggerUrge() } returns listOf("work")
-        every { firstActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { firstActivity.triggerUrges() } returns listOf("work")
+        every { firstActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { firstActivity.activity() } returns "working"
         every { firstActivity.duration() } returns 2
         val clan = ClanFactory.testClan(listOf(firstActivity))
@@ -93,10 +104,10 @@ internal class ActivityLogicTest {
     fun `should throw exception if more than one activity for the same urge exist`() {
         val firstActivity = mockk<Activity>()
         val secondActivity = mockk<Activity>()
-        every { firstActivity.triggerUrge() } returns listOf("work")
-        every { firstActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
-        every { secondActivity.triggerUrge() } returns listOf("work")
-        every { secondActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { firstActivity.triggerUrges() } returns listOf("work")
+        every { firstActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
+        every { secondActivity.triggerUrges() } returns listOf("work")
+        every { secondActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         val clan = ClanFactory.testClan(listOf(firstActivity, secondActivity))
         justRun { firstActivity.act(clan) }
         justRun { secondActivity.act(clan) }
@@ -110,8 +121,8 @@ internal class ActivityLogicTest {
     @Test
     fun `should execute activities that always will be executed`() {
         val mockedIdleActivity = mockk<Activity>()
-        every { mockedIdleActivity.triggerUrge() } returns listOf("*")
-        every { mockedIdleActivity.blockerCondition() } returns listOf("sick")
+        every { mockedIdleActivity.triggerUrges() } returns listOf("*")
+        every { mockedIdleActivity.blockerConditions() } returns listOf("sick")
         every { mockedIdleActivity.activity() } returns "idle"
         every { mockedIdleActivity.duration() } returns 1
         val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
@@ -119,32 +130,32 @@ internal class ActivityLogicTest {
 
         activityLogic.process(clan)
 
-        verify { mockedIdleActivity.triggerUrge() }
-        verify { mockedIdleActivity.blockerCondition() }
+        verify { mockedIdleActivity.triggerUrges() }
+        verify { mockedIdleActivity.blockerConditions() }
         verify { mockedIdleActivity.act(clan) }
     }
 
     @Test
     fun `should do nothing is no urges exist`() {
         val mockedWorkActivity = mockk<Activity>()
-        every { mockedWorkActivity.triggerUrge() } returns listOf("work")
-        every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
+        every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.duration() } returns 5
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
         justRun { mockedWorkActivity.act(clan) }
 
         activityLogic.process(clan)
 
-        verify { mockedWorkActivity.triggerUrge() }
-        verify(inverse = true) { mockedWorkActivity.blockerCondition() }
+        verify { mockedWorkActivity.triggerUrges() }
+        verify(inverse = true) { mockedWorkActivity.blockerConditions() }
         verify(inverse = true) { mockedWorkActivity.act(clan) }
     }
 
     @Test
     fun `should chose the first of two equally urgent urges`() {
         val mockedWorkActivity = mockk<Activity>()
-        every { mockedWorkActivity.triggerUrge() } returns listOf("work")
-        every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
+        every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
@@ -154,16 +165,16 @@ internal class ActivityLogicTest {
 
         activityLogic.process(clan)
 
-        verify { mockedWorkActivity.triggerUrge() }
-        verify { mockedWorkActivity.blockerCondition() }
+        verify { mockedWorkActivity.triggerUrges() }
+        verify { mockedWorkActivity.blockerConditions() }
         verify { mockedWorkActivity.act(clan) }
     }
 
     @Test
     fun `should not execute activity if trigger urge is the top urge but blocking condition exists`() {
         val mockedWorkActivity = mockk<Activity>()
-        every { mockedWorkActivity.triggerUrge() } returns listOf("work")
-        every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
+        every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
@@ -174,16 +185,16 @@ internal class ActivityLogicTest {
 
         activityLogic.process(clan)
 
-        verify { mockedWorkActivity.triggerUrge() }
-        verify { mockedWorkActivity.blockerCondition() }
+        verify { mockedWorkActivity.triggerUrges() }
+        verify { mockedWorkActivity.blockerConditions() }
         verify(inverse = true) { mockedWorkActivity.act(clan) }
     }
 
     @Test
     fun `should execute activity if trigger urge is the top urge`() {
         val mockedWorkActivity = mockk<Activity>()
-        every { mockedWorkActivity.triggerUrge() } returns listOf("work")
-        every { mockedWorkActivity.blockerCondition() } returns listOf("tired", "sick", "exhausted")
+        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
+        every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
@@ -193,8 +204,8 @@ internal class ActivityLogicTest {
 
         activityLogic.process(clan)
 
-        verify { mockedWorkActivity.triggerUrge() }
-        verify { mockedWorkActivity.blockerCondition() }
+        verify { mockedWorkActivity.triggerUrges() }
+        verify { mockedWorkActivity.blockerConditions() }
         verify { mockedWorkActivity.act(clan) }
     }
 }

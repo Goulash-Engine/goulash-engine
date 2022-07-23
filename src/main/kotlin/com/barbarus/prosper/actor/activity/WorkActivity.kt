@@ -6,11 +6,11 @@ import com.barbarus.prosper.core.domain.Actor
  * This [Activity] controls the daily work of a clan.
  */
 class WorkActivity : Activity {
-    override fun triggerUrge(): List<String> {
+    override fun triggerUrges(): List<String> {
         return listOf("work")
     }
 
-    override fun blockerCondition(): List<String> {
+    override fun blockerConditions(): List<String> {
         return listOf("tired", "sick", "exhausted")
     }
 
@@ -19,7 +19,7 @@ class WorkActivity : Activity {
     }
 
     override fun duration(): Int {
-        return 100
+        return 30
     }
 
     override fun act(actor: Actor) {

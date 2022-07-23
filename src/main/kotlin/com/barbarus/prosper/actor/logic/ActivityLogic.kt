@@ -17,21 +17,27 @@ class ActivityLogic : Logic<Actor> {
             currentActivity.act(context)
         } else {
             executeFreeActivities(context)
-            if (context.urges.getUrges().isEmpty()) return
-            executeUrgentActivities(context)
+
+            if (context.urges.getUrges().isNotEmpty()) {
+                executeUrgentActivities(context)
+            }
+
+            if (!currentActivity.hasRunningActivity()) {
+                context.currentActivity = "idle"
+            }
         }
     }
 
     private fun executeUrgentActivities(context: Actor) {
         val topUrge = context.urges.getUrges().maxBy { it.value }
-        if (context.activities.count { it.triggerUrge().contains(topUrge.key) } > 1) {
+        if (context.activities.count { it.triggerUrges().contains(topUrge.key) } > 1) {
             throw ActivityRedundancyException("More than one activity with urge trigger found")
         }
         val urgentActivity = context.activities
             .filterNot {
-                it.blockerCondition().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
+                it.blockerConditions().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
             }
-            .find { it.triggerUrge().contains(topUrge.key) }
+            .find { it.triggerUrges().contains(topUrge.key) }
 
         urgentActivity?.let {
             currentActivity.activate(it)
@@ -44,9 +50,9 @@ class ActivityLogic : Logic<Actor> {
      */
     private fun executeFreeActivities(context: Actor) {
         val freeActivities = context.activities
-            .filter { it.triggerUrge().contains("*") }
+            .filter { it.triggerUrges().contains("*") }
             .filterNot {
-                it.blockerCondition().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
+                it.blockerConditions().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
             }
 
         freeActivities.forEach {
@@ -63,7 +69,7 @@ class ActivityLogic : Logic<Actor> {
             if (hasRunningActivity()) {
                 activity?.act(context)
                 countDown()
-                context.currentActivity = activity?.activity() ?: ""
+                context.currentActivity = activity?.activity() ?: "idle"
             }
         }
 

@@ -6,11 +6,11 @@ import com.barbarus.prosper.core.domain.Actor
  * This [Activity] controls the [Actor]'s activity has the urge to rest.
  */
 class RestActivity : Activity {
-    override fun triggerUrge(): List<String> {
+    override fun triggerUrges(): List<String> {
         return listOf("rest")
     }
 
-    override fun blockerCondition(): List<String> {
+    override fun blockerConditions(): List<String> {
         return listOf("rested")
     }
 
@@ -19,11 +19,11 @@ class RestActivity : Activity {
     }
 
     override fun duration(): Int {
-        return 30
+        return 10
     }
 
     override fun act(actor: Actor) {
-        actor.currentActivity = "resting"
-        actor.urges.decreaseUrge("rest", 0.5)
+        actor.urges.decreaseUrge("rest", duration().toDouble())
+        actor.urges.increaseUrge("think", 5.0)
     }
 }

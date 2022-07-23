@@ -2,19 +2,28 @@ package com.barbarus.prosper.core.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
 import org.junit.jupiter.api.Test
 
 internal class UrgesTest {
     private val urges = Urges()
 
     @Test
+    fun `remove urge if under 0`() {
+        urges.increaseUrge("rest", 1.0)
+        urges.decreaseUrge("rest", 2.0)
+
+        assertThat(urges.getUrges().containsKey("rest")).isFalse()
+    }
+
+    @Test
     fun `should reset urge`() {
         urges.increaseUrge("rest", 1.0)
         urges.increaseUrge("rest", 1.0)
         urges.increaseUrge("rest", 1.0)
-        urges.resetUrge("rest")
+        urges.stopUrge("rest")
 
-        assertThat(urges.getUrges()["rest"]).isEqualTo(0.0)
+        assertThat(urges.getUrges().containsKey("rest")).isFalse()
     }
 
     @Test
