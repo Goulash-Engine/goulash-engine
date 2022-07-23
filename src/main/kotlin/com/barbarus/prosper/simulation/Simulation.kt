@@ -11,6 +11,10 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class Simulation(
+    private val maximumTicks: Int? = null,
+    private val millisecondsPerTick: Long = 1000,
+    private val render: Boolean = false,
+    private val tickBase: Int = WorldDate.SECOND,
     val village: Village = Village(
         mutableListOf(
             ClanFactory.poorGathererClan()
@@ -26,29 +30,24 @@ class Simulation(
         LOG.info("${village.clans.size} clans initialized")
     }
 
-    fun run(maximumTicks: Int = -1, millisecondsPerTick: Long = 1000, render: Boolean = false) {
+    fun run() {
         AnsiConsole.systemInstall()
         print(ansi().eraseScreen())
 
-        if (maximumTicks == -1) {
-            while (true) {
-                runSimulation(render, null, millisecondsPerTick, null)
+        if (maximumTicks != null) {
+            repeat(maximumTicks) { currentTick ->
+                runSimulation(currentTick)
             }
         } else {
-            repeat(maximumTicks) { currentTick ->
-                runSimulation(render, maximumTicks, millisecondsPerTick, currentTick)
+            while (true) {
+                runSimulation()
             }
         }
 
         LOG.info("Simulation finished")
     }
 
-    private fun runSimulation(
-        render: Boolean,
-        maximumTicks: Int?,
-        millisecondsPerTick: Long,
-        currentTick: Int?
-    ) {
+    private fun runSimulation(currentTick: Int? = null) {
         WORLD_TIME.tick(WorldDate.MINUTE)
         village.act()
 

@@ -56,6 +56,7 @@ class WorldDate(
 
     companion object {
         var TICK_BASELINE: Int = 1
+        const val SECOND: Int = 1
         const val MINUTE: Int = 60
         const val HOUR: Int = MINUTE * 60
         const val DAY: Int = HOUR * 24
