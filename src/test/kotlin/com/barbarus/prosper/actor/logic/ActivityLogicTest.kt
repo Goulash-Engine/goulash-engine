@@ -76,7 +76,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.abortConditions() } returns listOf("starving")
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
         clan.urges.increaseUrge("work", 100.0)
-        clan.conditions.add(ConditionLogic.GOBAL_BLOCKING_CONDITION.first())
+        clan.conditions.add(ConditionLogic.GLOBAL_BLOCKING_CONDITION.first())
 
         activityLogic.process(clan)
 

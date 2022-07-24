@@ -37,7 +37,7 @@ class ActivityLogic : Logic<Actor> {
         }
 
     private fun hasGlobalBlockerCondition(actor: Actor) =
-        actor.conditions.any { ConditionLogic.GOBAL_BLOCKING_CONDITION.contains(it) }
+        actor.conditions.any { ConditionLogic.GLOBAL_BLOCKING_CONDITION.contains(it) }
 
     private fun executeUrgentActivities(actor: Actor) {
         val highestUrgeValue = actor.urges.getUrges().maxByOrNull { it.value }?.value ?: 0

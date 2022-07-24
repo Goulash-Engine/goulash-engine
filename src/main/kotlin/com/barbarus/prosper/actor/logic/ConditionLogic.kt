@@ -56,12 +56,11 @@ class ConditionLogic : Logic<Actor> {
 
     private fun clearExhaustionConditions(actor: Actor) {
         listOf(
-            "dying",
-            "severely sick",
-            "very sick",
-            "sick",
-            "dizzy",
-            "unwell"
+            "unconscious",
+            "blacking out",
+            "exhausted",
+            "tired",
+            "weary"
         ).forEach { actor.conditions.remove(it) }
     }
 
@@ -93,7 +92,7 @@ class ConditionLogic : Logic<Actor> {
     }
 
     companion object {
-        val GOBAL_BLOCKING_CONDITION = listOf(
+        val GLOBAL_BLOCKING_CONDITION = listOf(
             "dying",
             "severely sick",
             "unconscious",
