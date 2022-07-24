@@ -30,7 +30,7 @@ internal class ActivityLogicTest {
 
         val clan = ClanFactory.testClan(listOf(idleActivity, urgeActivity))
         clan.urges.increaseUrge("eat", 100.0)
-        clan.conditions.add("malnourished")
+        clan.conditions.add("underfed")
 
         repeat(10) { activityLogic.process(clan) }
 

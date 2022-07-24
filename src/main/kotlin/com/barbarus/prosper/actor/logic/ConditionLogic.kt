@@ -96,7 +96,7 @@ class ConditionLogic : Logic<Actor> {
             actor.conditions.add("well fed")
         } else {
             when {
-                eatUrge == 100.0 -> actor.conditions.add("malnourished")
+                eatUrge == 100.0 -> actor.conditions.add("underfed")
                 eatUrge > 80.0 -> actor.conditions.add("very hungry")
                 eatUrge > 60.0 -> actor.conditions.add("hungry")
             }
@@ -106,7 +106,7 @@ class ConditionLogic : Logic<Actor> {
     private fun cleanHungerConditions(actor: Actor) {
         listOf(
             "starving",
-            "malnourished",
+            "underfed",
             "very hungry",
             "hungry",
             "well fed",

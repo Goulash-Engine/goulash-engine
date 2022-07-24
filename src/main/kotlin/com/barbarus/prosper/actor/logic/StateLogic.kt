@@ -12,7 +12,7 @@ class StateLogic : Logic<Actor> {
 
         when {
             conditions.contains("well fed") -> context.state.nourishment += 0.1
-            conditions.contains("malnourished") -> context.state.nourishment -= 0.1
+            conditions.contains("underfed") -> context.state.nourishment -= 0.1
         }
 
         if (context.state.nourishment > 100.00) context.state.nourishment = 100.0

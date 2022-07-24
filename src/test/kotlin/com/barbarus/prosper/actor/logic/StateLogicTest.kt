@@ -19,9 +19,9 @@ internal class StateLogicTest {
         assertThat(clan.state.health).isLessThan(100.0)
     }
     @Test
-    fun `should decrease nourishment if malnourished`() {
+    fun `should decrease nourishment if underfed`() {
         val clan = ClanFactory.poorGathererClan()
-        clan.conditions.add("malnourished")
+        clan.conditions.add("underfed")
 
         stateLogic.process(clan)
 

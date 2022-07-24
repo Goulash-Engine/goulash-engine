@@ -30,23 +30,23 @@ internal class ConditionLogicTest {
     }
 
     @Test
-    fun `should make remove malnourished condition if eat urge is below 100`() {
+    fun `should make remove underfed condition if eat urge is below 100`() {
         val clan = ClanFactory.poorGathererClan()
         clan.urges.increaseUrge("eat", 99.0)
-        clan.conditions.add("malnourished")
+        clan.conditions.add("underfed")
 
         conditionLogic.process(clan)
 
-        assertThat(clan.conditions).doesNotContain("malnourished")
+        assertThat(clan.conditions).doesNotContain("underfed")
     }
 
     @Test
-    fun `should make actor malnourished if eat urge is 100`() {
+    fun `should make actor underfed if eat urge is 100`() {
         val clan = ClanFactory.poorGathererClan()
         clan.urges.increaseUrge("eat", 100.0)
 
         conditionLogic.process(clan)
 
-        assertThat(clan.conditions).contains("malnourished")
+        assertThat(clan.conditions).contains("underfed")
     }
 }
