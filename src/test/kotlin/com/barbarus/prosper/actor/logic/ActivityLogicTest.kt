@@ -18,10 +18,11 @@ import org.junit.jupiter.api.Test
 internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
+    @Test
     fun `should abort activity if has been exited within act`() {
         val exitingActivity = mockk<Activity>("foo", relaxed = true)
         every { exitingActivity.triggerUrges() } returns listOf("foo")
-        every { exitingActivity.duration() } returns 10.toDuration()
+        every { exitingActivity.duration() } returns 5.toDuration()
         every { exitingActivity.act(any()) } returnsMany listOf(true, true, true, true, false)
 
         val testClan = ClanFactory.testClan(listOf(exitingActivity))
@@ -29,7 +30,10 @@ internal class ActivityLogicTest {
 
         repeat(10) { activityLogic.process(testClan) }
 
-        verify(exactly = 4) { exitingActivity.act(any()) }
+        verifyOrder {
+            repeat(4) { exitingActivity.act(any()) }
+            exitingActivity.onAbort(any())
+        }
     }
 
     @Test
