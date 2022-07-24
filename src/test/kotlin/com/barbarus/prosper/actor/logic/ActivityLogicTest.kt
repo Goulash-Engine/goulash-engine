@@ -5,7 +5,6 @@ import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.core.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.core.extension.toDuration
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.factories.ResourceFactory
@@ -15,24 +14,48 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
-    fun `should priorize an activity if it_s priority condition has been met`() {
-        val priorizedActivity = mockk<Activity>("prio", relaxed = true)
-        every { priorizedActivity.triggerUrges() } returns listOf("think")
-        every { priorizedActivity.duration() } returns 1.toDuration()
-        every { priorizedActivity.priorityConditions() } returns listOf("panic")
-        every { priorizedActivity.act(any()) } answers { firstArg<Actor>().conditions.remove("panic") }
+    fun `should prioritize an activity depending on it_s priority value`() {
+        val prioritizedActivity = mockk<Activity>("prio", relaxed = true)
+        every { prioritizedActivity.triggerUrges() } returns listOf("sleep")
+        every { prioritizedActivity.duration() } returns 1.toDuration()
+        every { prioritizedActivity.priority() } returns 1
+        every { prioritizedActivity.act(any()) } answers { firstArg<Actor>().urges.decreaseUrge("sleep", 50.0) }
+
+        val normalActivity = mockk<Activity>("normal", relaxed = true)
+        every { normalActivity.triggerUrges() } returns listOf("eat")
+        every { normalActivity.duration() } returns 1.toDuration()
+        every { normalActivity.priority() } returns Int.MAX_VALUE
+
+        val clan = ClanFactory.testClan(listOf(prioritizedActivity, normalActivity))
+        clan.urges.increaseUrge("eat", 100.0)
+        clan.urges.increaseUrge("sleep", 100.0)
+
+        repeat(2) { activityLogic.process(clan) }
+
+        verifyOrder() {
+            prioritizedActivity.act(any())
+            // normalActivity.act(any())
+        }
+    }
+
+    @Test
+    fun `should prioritize an activity if it_s priority condition has been met`() {
+        val prioritizedActivity = mockk<Activity>("prio", relaxed = true)
+        every { prioritizedActivity.triggerUrges() } returns listOf("think")
+        every { prioritizedActivity.duration() } returns 1.toDuration()
+        every { prioritizedActivity.priorityConditions() } returns listOf("panic")
+        every { prioritizedActivity.act(any()) } answers { firstArg<Actor>().conditions.remove("panic") }
 
         val normalActivity = mockk<Activity>("normal", relaxed = true)
         every { normalActivity.triggerUrges() } returns listOf("eat")
         every { normalActivity.duration() } returns 1.toDuration()
 
-        val clan = ClanFactory.testClan(listOf(priorizedActivity, normalActivity))
+        val clan = ClanFactory.testClan(listOf(prioritizedActivity, normalActivity))
         clan.conditions.add("panic")
         clan.urges.increaseUrge("eat", 100.0)
         clan.urges.increaseUrge("think", 20.0)
@@ -40,7 +63,7 @@ internal class ActivityLogicTest {
         repeat(2) { activityLogic.process(clan) }
 
         verifyOrder() {
-            priorizedActivity.act(any())
+            prioritizedActivity.act(any())
             normalActivity.act(any())
         }
     }
@@ -178,56 +201,20 @@ internal class ActivityLogicTest {
     }
 
     @Test
-    fun `should throw exception if more than one activity for the same urge exist`() {
-        val firstActivity = mockk<Activity>()
-        val secondActivity = mockk<Activity>()
-        every { firstActivity.triggerUrges() } returns listOf("work")
-        every { firstActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
-        every { secondActivity.triggerUrges() } returns listOf("work")
-        every { secondActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
-        val clan = ClanFactory.testClan(listOf(firstActivity, secondActivity))
-        justRun { firstActivity.act(clan) }
-        justRun { secondActivity.act(clan) }
-        clan.urges.increaseUrge("work", 10.0)
-
-        assertThrows<ActivityRedundancyException> {
-            activityLogic.process(clan)
-        }
-    }
-
-    @Test
-    fun `should execute activities that always will be executed`() {
-        val mockedIdleActivity = mockk<Activity>()
+    fun `should execute wildcard activities without a matching urge`() {
+        val mockedIdleActivity = mockk<Activity>("idle")
         every { mockedIdleActivity.triggerUrges() } returns listOf("*")
-        every { mockedIdleActivity.blockerConditions() } returns listOf("sick")
+        every { mockedIdleActivity.blockerConditions() } returns listOf()
         every { mockedIdleActivity.activity() } returns "idle"
         every { mockedIdleActivity.duration() } returns 1.toDuration()
         justRun { mockedIdleActivity.onFinish(any()) }
         val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
-        justRun { mockedIdleActivity.act(clan) }
+        clan.urges.increaseUrge("work", 100.0)
+        justRun { mockedIdleActivity.act(any()) }
 
         activityLogic.process(clan)
 
-        verify { mockedIdleActivity.triggerUrges() }
-        verify { mockedIdleActivity.blockerConditions() }
-        verify { mockedIdleActivity.act(clan) }
-    }
-
-    @Test
-    fun `should do nothing is no urges exist`() {
-        val mockedWorkActivity = mockk<Activity>()
-        every { mockedWorkActivity.triggerUrges() } returns listOf("work")
-        every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
-        every { mockedWorkActivity.duration() } returns 5.toDuration()
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
-        clan.urges.stopUrge("think")
-        justRun { mockedWorkActivity.act(clan) }
-
-        activityLogic.process(clan)
-
-        verify { mockedWorkActivity.triggerUrges() }
-        verify(inverse = true) { mockedWorkActivity.blockerConditions() }
-        verify(inverse = true) { mockedWorkActivity.act(clan) }
+        verify { mockedIdleActivity.act(any()) }
     }
 
     @Test

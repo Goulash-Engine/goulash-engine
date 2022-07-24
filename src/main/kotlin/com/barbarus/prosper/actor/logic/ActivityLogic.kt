@@ -3,8 +3,8 @@ package com.barbarus.prosper.actor.logic
 import com.barbarus.prosper.actor.activity.IdleActivity
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.core.exceptions.ActivityRedundancyException
 import com.barbarus.prosper.core.logic.Logic
+import org.slf4j.LoggerFactory
 
 /**
  * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
@@ -17,61 +17,50 @@ class ActivityLogic : Logic<Actor> {
     override fun process(context: Actor) {
         if (hasGlobalBlockerCondition(context)) return
 
-        val priorityActivity = context.activities.find { activity ->
-            context.conditions.any {
-                activity.priorityConditions().contains(it)
-            }
-        }
+        val priorityActivity = context.activities.find { isPrioritizedActivity(it, context) }
 
         if (priorityActivity != null) {
-            currentActivity.activate(priorityActivity)
+            currentActivity.set(priorityActivity)
             currentActivity.act(context)
         } else {
             if (currentActivity.hasRunningActivity()) {
                 currentActivity.act(context)
             } else {
-                executeFreeActivities(context)
-
-                if (context.urges.getUrges().isEmpty()) return
                 executeUrgentActivities(context)
             }
         }
     }
 
-    private fun hasGlobalBlockerCondition(context: Actor) =
-        context.conditions.any { ConditionLogic.GOBAL_BLOCKING_CONDITION.contains(it) }
-
-    private fun executeUrgentActivities(context: Actor) {
-        val topUrge = context.urges.getUrges().maxBy { it.value }
-        if (context.activities.count { it.triggerUrges().contains(topUrge.key) } > 1) {
-            throw ActivityRedundancyException("More than one activity with urge trigger found")
+    private fun isPrioritizedActivity(activity: Activity, context: Actor) =
+        context.conditions.any {
+            activity.priorityConditions().contains(it)
         }
-        val urgentActivity = context.activities
-            .filterNot {
-                it.blockerConditions().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
-            }
-            .find { it.triggerUrges().contains(topUrge.key) }
+
+    private fun hasGlobalBlockerCondition(actor: Actor) =
+        actor.conditions.any { ConditionLogic.GOBAL_BLOCKING_CONDITION.contains(it) }
+
+    private fun executeUrgentActivities(actor: Actor) {
+        val highestUrgeValue = actor.urges.getUrges().maxByOrNull { it.value }?.value ?: 0
+        val topUrges = actor.urges.getUrges().filter { it.value == highestUrgeValue }
+
+        val urgentActivity = actor.activities
+            .filter { matchesUrge(it, topUrges) }
+            .filterNot { isBlocked(it, actor) }
+            .sortedBy { it.priority() }
+            .randomOrNull()
 
         urgentActivity?.let {
-            currentActivity.activate(it)
-            currentActivity.act(context)
+            this.currentActivity.set(it)
+            this.currentActivity.act(actor)
         }
     }
 
-    /**
-     * These [Activity] objects will be executed without any urge trigger requirements.
-     */
-    private fun executeFreeActivities(context: Actor) {
-        val freeActivities = context.activities
-            .filter { it.triggerUrges().contains("*") }
-            .filterNot {
-                it.blockerConditions().any { blockerCondition: String -> context.conditions.contains(blockerCondition) }
-            }
+    private fun matchesUrge(activity: Activity, topUrges: Map<String, Double>) =
+        activity.triggerUrges().any { triggerUrge -> topUrges.contains(triggerUrge) || triggerUrge == "*" }
 
-        freeActivities.forEach {
-            currentActivity.activate(it)
-            currentActivity.act(context)
-        }
+    private fun isBlocked(activity: Activity, actor: Actor): Boolean {
+        return activity.blockerConditions()
+            .any { blockerCondition: String -> actor.conditions.contains(blockerCondition) }
     }
 
     private class RunningActivity {
@@ -94,7 +83,7 @@ class ActivityLogic : Logic<Actor> {
         private fun containsAbortCondition(actor: Actor) =
             actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
 
-        fun activate(activity: Activity) {
+        fun set(activity: Activity) {
             this.activity = activity
             duration = activity.duration().getDuration()
         }
@@ -110,6 +99,10 @@ class ActivityLogic : Logic<Actor> {
         private fun countDown(): Boolean {
             duration--
             return duration <= 0
+        }
+
+        companion object {
+            private val LOG = LoggerFactory.getLogger(this::class.java.name)
         }
     }
 }

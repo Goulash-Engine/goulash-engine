@@ -17,7 +17,7 @@ class EatActivity : Activity {
     }
 
     override fun blockerConditions(): List<String> {
-        return listOf("sick", "sleeping")
+        return listOf("sick", "sleeping", "full")
     }
 
     override fun activity(): String {

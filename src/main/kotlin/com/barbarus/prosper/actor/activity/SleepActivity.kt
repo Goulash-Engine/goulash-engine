@@ -17,6 +17,10 @@ class SleepActivity : Activity {
         return "sleeping"
     }
 
+    override fun priority(): Int {
+        return 1
+    }
+
     override fun duration(): Duration {
         return 6.times(60).toDuration()
     }
