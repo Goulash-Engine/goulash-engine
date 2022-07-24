@@ -16,11 +16,6 @@ class PanicActivity : Activity {
         return listOf("panic")
     }
 
-    override fun onFinish(actor: Actor) {
-        actor.urges.stopUrge("sleep")
-        actor.urges.stopUrge("eat")
-    }
-
     override fun act(actor: Actor) {
         val food = actor.inventory().count { it.type == ResourceType.FOOD }
 

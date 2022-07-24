@@ -48,14 +48,22 @@ class ActivityLogic : Logic<Actor> {
             .filterNot { isBlocked(it, actor) }
             .minByOrNull { it.priority() }
 
-        urgentActivity?.let {
-            this.currentActivity.set(it)
+        val wildcardActivity = actor.activities
+            .filter { it.triggerUrges().contains("*") }
+            .filterNot { isBlocked(it, actor) }
+            .minByOrNull { it.priority() }
+
+        if (urgentActivity != null) {
+            this.currentActivity.set(urgentActivity)
+            this.currentActivity.act(actor)
+        } else if (wildcardActivity != null) {
+            this.currentActivity.set(wildcardActivity)
             this.currentActivity.act(actor)
         }
     }
 
     private fun matchesUrge(activity: Activity, topUrges: Map<String, Double>) =
-        activity.triggerUrges().any { triggerUrge -> topUrges.contains(triggerUrge) || triggerUrge == "*" }
+        activity.triggerUrges().any { triggerUrge -> topUrges.contains(triggerUrge) }
 
     private fun isBlocked(activity: Activity, actor: Actor): Boolean {
         return activity.blockerConditions()

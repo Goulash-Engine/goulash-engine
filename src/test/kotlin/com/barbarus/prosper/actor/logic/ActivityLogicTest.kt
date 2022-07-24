@@ -19,6 +19,25 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should not execute a wildcard activity if there is an urge activity present`() {
+        val wildcardActivity = mockk<Activity>("wildcard", relaxed = true)
+        every { wildcardActivity.triggerUrges() } returns listOf("*")
+        every { wildcardActivity.duration() } returns 1.toDuration()
+
+        val urgeActivity = mockk<Activity>("urge", relaxed = true)
+        every { urgeActivity.triggerUrges() } returns listOf("eat")
+        every { urgeActivity.duration() } returns 1.toDuration()
+
+        val clan = ClanFactory.testClan(listOf(wildcardActivity, urgeActivity))
+        clan.urges.increaseUrge("eat", 100.0)
+
+        repeat(2) { activityLogic.process(clan) }
+
+        verify(atMost = 2) { urgeActivity.act(any()) }
+        verify(inverse = true) { wildcardActivity.act(any()) }
+    }
+
+    @Test
     fun `should execute on abort callback if activity is being aborted`() {
         val testActivity = mockk<Activity>("prio", relaxed = true)
         every { testActivity.triggerUrges() } returns listOf("sleep")

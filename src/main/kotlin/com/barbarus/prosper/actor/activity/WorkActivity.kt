@@ -12,6 +12,7 @@ import com.barbarus.prosper.factories.ResourceFactory
  * This [Activity] controls the daily work of a clan.
  */
 class WorkActivity : Activity {
+    private var progress: Double = 0.0
     override fun triggerUrges(): List<String> {
         return listOf("work")
     }
@@ -32,9 +33,19 @@ class WorkActivity : Activity {
         return 8.times(60).toDuration()
     }
 
-    // TODO: add onAbort()
+    override fun act(actor: Actor) {
+        actor.urges.increaseUrge("rest", 1.5)
+        actor.urges.increaseUrge("eat", 0.3)
+        actor.urges.decreaseUrge("work", 1.0)
 
-    override fun onFinish(actor: Actor) {
+        this.progress += 5.0
+        if (progress >= 100.0) {
+            addResource(actor)
+            progress = 0.0
+        }
+    }
+
+    private fun addResource(actor: Actor) {
         if (actor is Clan) {
             val resource = when (actor.primaryProfession.type) {
                 ProfessionType.GATHERER -> ResourceFactory.food()
@@ -44,11 +55,5 @@ class WorkActivity : Activity {
             }
             actor.stash.add(resource)
         }
-    }
-
-    override fun act(actor: Actor) {
-        actor.urges.increaseUrge("rest", 1.5)
-        actor.urges.increaseUrge("eat", 0.3)
-        actor.urges.decreaseUrge("work", 1.0)
     }
 }
