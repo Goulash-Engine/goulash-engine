@@ -52,6 +52,8 @@ class ConditionLogic : Logic<Actor> {
 
     private fun simulateHealth(actor: Actor) {
         val health = actor.state.health
+        clearHealthConditions(actor)
+
         when {
             health <= 0 -> actor.conditions.add("dead")
             health < 10 -> actor.conditions.add("dying")
@@ -60,7 +62,6 @@ class ConditionLogic : Logic<Actor> {
             health < 50 -> actor.conditions.add("sick")
             health < 70 -> actor.conditions.add("dizzy")
             health < 90 -> actor.conditions.add("unwell")
-            else -> clearHealthConditions(actor)
         }
     }
 
@@ -84,22 +85,19 @@ class ConditionLogic : Logic<Actor> {
 
     private fun simulateStarvation(actor: Actor) {
         val eatUrge = actor.urges.getUrges()["eat"] ?: return
+        clearStarvationConditions(actor)
 
         when {
             eatUrge == 100.0 -> actor.conditions.add("malnourished")
             eatUrge > 80.0 -> actor.conditions.add("very hungry")
             eatUrge > 60.0 -> actor.conditions.add("hungry")
-            else -> clearStarvationConditions(actor)
-        }
-
-        when {
             actor.state.nourishment <= 0.0 -> actor.conditions.add("starving")
-            else -> actor.conditions.remove("starving")
         }
     }
 
     private fun clearStarvationConditions(actor: Actor) {
         listOf(
+            "starving",
             "malnourished",
             "very hungry",
             "hungry"

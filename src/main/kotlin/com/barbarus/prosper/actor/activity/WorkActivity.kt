@@ -32,6 +32,8 @@ class WorkActivity : Activity {
         return 8.times(60).toDuration()
     }
 
+    // TODO: add onAbort()
+
     override fun onFinish(actor: Actor) {
         if (actor is Clan) {
             val resource = when (actor.primaryProfession.type) {

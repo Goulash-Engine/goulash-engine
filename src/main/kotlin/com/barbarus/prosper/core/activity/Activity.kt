@@ -49,5 +49,10 @@ interface Activity {
      * Logic to be executed when the activity finishes hence it's duration is over
      */
     fun onFinish(actor: Actor) = Unit
+
+    /**
+     * Logic to be executed when the activity is being aborted.
+     */
+    fun onAbort(actor: Actor) = Unit
     fun act(actor: Actor) = Unit
 }

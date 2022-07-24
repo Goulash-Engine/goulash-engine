@@ -10,9 +10,9 @@ internal class StateLogicTest {
     private val stateLogic = StateLogic()
 
     @Test
-    fun `should decrease health if starving`() {
+    fun `should decrease health if bad nourished`() {
         val clan = ClanFactory.poorGathererClan()
-        clan.conditions.add("starving")
+        clan.state.nourishment = 50.0
 
         stateLogic.process(clan)
 

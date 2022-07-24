@@ -19,6 +19,24 @@ internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
     @Test
+    fun `should execute on abort callback if activity is being aborted`() {
+        val testActivity = mockk<Activity>("prio", relaxed = true)
+        every { testActivity.triggerUrges() } returns listOf("sleep")
+        every { testActivity.abortConditions() } returns listOf("stop")
+        every { testActivity.duration() } returns 10.toDuration()
+
+        val clan = ClanFactory.testClan(listOf(testActivity))
+        clan.urges.increaseUrge("sleep", 100.0)
+
+        repeat(2) { activityLogic.process(clan) }
+        clan.conditions.add("stop")
+        repeat(1) { activityLogic.process(clan) }
+
+        verify(atMost = 2) { testActivity.act(any()) }
+        verify(atMost = 1) { testActivity.onAbort(any()) }
+    }
+
+    @Test
     fun `should prioritize an activity depending on it_s priority value`() {
         val prioritizedActivity = mockk<Activity>("prio", relaxed = true)
         every { prioritizedActivity.triggerUrges() } returns listOf("sleep")
@@ -39,7 +57,7 @@ internal class ActivityLogicTest {
 
         verifyOrder() {
             prioritizedActivity.act(any())
-            // normalActivity.act(any())
+            normalActivity.act(any())
         }
     }
 

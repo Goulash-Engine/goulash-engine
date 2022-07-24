@@ -46,8 +46,7 @@ class ActivityLogic : Logic<Actor> {
         val urgentActivity = actor.activities
             .filter { matchesUrge(it, topUrges) }
             .filterNot { isBlocked(it, actor) }
-            .sortedBy { it.priority() }
-            .randomOrNull()
+            .minByOrNull { it.priority() }
 
         urgentActivity?.let {
             this.currentActivity.set(it)
@@ -69,7 +68,10 @@ class ActivityLogic : Logic<Actor> {
 
         fun act(actor: Actor) {
             if (hasRunningActivity()) {
-                if (containsAbortCondition(actor)) activity = IdleActivity()
+                if (containsAbortCondition(actor)) {
+                    activity.onAbort(actor)
+                    activity = IdleActivity()
+                }
                 activity.act(actor)
                 actor.currentActivity = activity.activity()
                 val hasFinished = countDown()
