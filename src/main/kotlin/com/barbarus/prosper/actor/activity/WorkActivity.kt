@@ -7,6 +7,7 @@ import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.extension.toDuration
 import com.barbarus.prosper.factories.ResourceFactory
+import kotlin.random.Random
 
 /**
  * This [Activity] controls the daily work of a clan.
@@ -38,7 +39,7 @@ class WorkActivity : Activity {
         actor.urges.increaseUrge("eat", 0.3)
         actor.urges.decreaseUrge("work", 1.0)
 
-        this.progress += 5.0
+        this.progress += Random.nextInt(1, 5)
         if (progress >= 100.0) {
             addResource(actor)
             progress = 0.0

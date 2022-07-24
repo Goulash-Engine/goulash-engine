@@ -78,14 +78,14 @@ class ActivityLogic : Logic<Actor> {
             if (hasRunningActivity()) {
                 if (containsAbortCondition(actor)) {
                     activity.onAbort(actor)
-                    activity = IdleActivity()
+                    set(IdleActivity())
                 }
                 activity.act(actor)
                 actor.currentActivity = activity.activity()
                 val hasFinished = countDown()
                 if (hasFinished) {
                     activity.onFinish(actor)
-                    activity = IdleActivity()
+                    set(IdleActivity())
                 }
             }
         }

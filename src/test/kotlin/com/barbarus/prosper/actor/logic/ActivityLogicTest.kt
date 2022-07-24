@@ -20,21 +20,21 @@ internal class ActivityLogicTest {
 
     @Test
     fun `should not execute a wildcard activity if there is an urge activity present`() {
-        val wildcardActivity = mockk<Activity>("wildcard", relaxed = true)
-        every { wildcardActivity.triggerUrges() } returns listOf("*")
-        every { wildcardActivity.duration() } returns 1.toDuration()
+        val idleActivity = mockk<Activity>("idle", relaxed = true)
+        every { idleActivity.triggerUrges() } returns listOf("*")
+        every { idleActivity.duration() } returns 1.toDuration()
 
-        val urgeActivity = mockk<Activity>("urge", relaxed = true)
+        val urgeActivity = mockk<Activity>("eat", relaxed = true)
         every { urgeActivity.triggerUrges() } returns listOf("eat")
-        every { urgeActivity.duration() } returns 1.toDuration()
+        every { urgeActivity.duration() } returns 10.toDuration()
 
-        val clan = ClanFactory.testClan(listOf(wildcardActivity, urgeActivity))
+        val clan = ClanFactory.testClan(listOf(idleActivity, urgeActivity))
         clan.urges.increaseUrge("eat", 100.0)
+        clan.conditions.add("malnourished")
 
-        repeat(2) { activityLogic.process(clan) }
+        repeat(10) { activityLogic.process(clan) }
 
-        verify(atMost = 2) { urgeActivity.act(any()) }
-        verify(inverse = true) { wildcardActivity.act(any()) }
+        verify(inverse = true) { idleActivity.act(any()) }
     }
 
     @Test

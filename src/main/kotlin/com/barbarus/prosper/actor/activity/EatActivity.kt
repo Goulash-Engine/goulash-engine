@@ -17,7 +17,7 @@ class EatActivity : Activity {
     }
 
     override fun blockerConditions(): List<String> {
-        return listOf("sick", "sleeping", "full")
+        return listOf("sick", "sleeping", "full", "well fed")
     }
 
     override fun activity(): String {
@@ -38,9 +38,10 @@ class EatActivity : Activity {
 
         if (food == null) {
             actor.urges.increaseUrge("think", 5.0)
-        } else {
+            actor.urges.stopUrge("eat")
+        } else if (actor.state.nourishment < 100.0) {
             actor.urges.increaseUrge("rest", 0.3)
-            actor.urges.decreaseUrge("eat", 1.0)
+            actor.urges.decreaseUrge("eat", 5.0)
             food.weight -= 0.1
         }
     }
