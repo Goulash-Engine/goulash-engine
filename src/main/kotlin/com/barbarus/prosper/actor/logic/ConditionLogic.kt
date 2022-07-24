@@ -8,7 +8,7 @@ import com.barbarus.prosper.core.logic.Logic
  */
 class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
-        simulateMalnourishment(context)
+        simulateStarvation(context)
         simulateExhaustion(context)
         simulatePanic(context)
         simulateHealth(context)
@@ -82,7 +82,7 @@ class ConditionLogic : Logic<Actor> {
         ).forEach { actor.conditions.remove(it) }
     }
 
-    private fun simulateMalnourishment(actor: Actor) {
+    private fun simulateStarvation(actor: Actor) {
         val eatUrge = actor.urges.getUrges()["eat"] ?: return
         if (eatUrge < 100.0) {
             actor.conditions.remove("malnourished")
