@@ -24,33 +24,13 @@ class ConditionLogic : Logic<Actor> {
 
     private fun simulateExhaustion(actor: Actor) {
         val urgeToRest: Double = actor.urges.getUrges()["rest"] ?: return
-        clearExhaustionConditions(actor)
         when {
             urgeToRest >= 100 -> actor.conditions.add("unconscious")
             urgeToRest > 80 -> actor.conditions.add("blacking out")
             urgeToRest > 50 -> actor.conditions.add("exhausted")
             urgeToRest > 30 -> actor.conditions.add("tired")
             urgeToRest > 20 -> actor.conditions.add("weary")
-        }
-    }
-
-    private fun simulateDeath(actor: Actor) {
-        if (actor.state.health < 0) {
-            actor.conditions.add("dead")
-        }
-    }
-
-    private fun simulateHealth(actor: Actor) {
-        val health = actor.state.health
-        clearHealthConditions(actor)
-        when {
-            health <= 0 -> actor.conditions.add("dead")
-            health < 10 -> actor.conditions.add("dying")
-            health < 20 -> actor.conditions.add("severely sick")
-            health < 40 -> actor.conditions.add("very sick")
-            health < 50 -> actor.conditions.add("sick")
-            health < 70 -> actor.conditions.add("dizzy")
-            health < 90 -> actor.conditions.add("unwell")
+            else -> clearExhaustionConditions(actor)
         }
     }
 
@@ -64,12 +44,25 @@ class ConditionLogic : Logic<Actor> {
         ).forEach { actor.conditions.remove(it) }
     }
 
-    private fun panicConditions() = listOf(
-        "malnourished",
-        "very sick",
-        "dying",
-        "severely sick"
-    )
+    private fun simulateDeath(actor: Actor) {
+        if (actor.state.health < 0) {
+            actor.conditions.add("dead")
+        }
+    }
+
+    private fun simulateHealth(actor: Actor) {
+        val health = actor.state.health
+        when {
+            health <= 0 -> actor.conditions.add("dead")
+            health < 10 -> actor.conditions.add("dying")
+            health < 20 -> actor.conditions.add("severely sick")
+            health < 40 -> actor.conditions.add("very sick")
+            health < 50 -> actor.conditions.add("sick")
+            health < 70 -> actor.conditions.add("dizzy")
+            health < 90 -> actor.conditions.add("unwell")
+            else -> clearHealthConditions(actor)
+        }
+    }
 
     private fun clearHealthConditions(actor: Actor) {
         listOf(
@@ -82,13 +75,35 @@ class ConditionLogic : Logic<Actor> {
         ).forEach { actor.conditions.remove(it) }
     }
 
+    private fun panicConditions() = listOf(
+        "starving",
+        "very sick",
+        "dying",
+        "severely sick"
+    )
+
     private fun simulateStarvation(actor: Actor) {
         val eatUrge = actor.urges.getUrges()["eat"] ?: return
-        if (eatUrge < 100.0) {
-            actor.conditions.remove("malnourished")
-        } else {
-            actor.conditions.add("malnourished")
+
+        when {
+            eatUrge == 100.0 -> actor.conditions.add("malnourished")
+            eatUrge > 80.0 -> actor.conditions.add("very hungry")
+            eatUrge > 60.0 -> actor.conditions.add("hungry")
+            else -> clearStarvationConditions(actor)
         }
+
+        when {
+            actor.state.nourishment <= 0.0 -> actor.conditions.add("starving")
+            else -> actor.conditions.remove("starving")
+        }
+    }
+
+    private fun clearStarvationConditions(actor: Actor) {
+        listOf(
+            "malnourished",
+            "very hungry",
+            "hungry"
+        ).forEach { actor.conditions.remove(it) }
     }
 
     companion object {

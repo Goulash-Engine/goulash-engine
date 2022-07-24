@@ -23,10 +23,6 @@ class ThinkActivity : Activity {
         return 10.toDuration()
     }
 
-    override fun priorityConditions(): List<String> {
-        return listOf("panic")
-    }
-
     override fun onFinish(actor: Actor) {
         actor.urges.stopUrge("think")
     }

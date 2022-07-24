@@ -89,6 +89,7 @@ class Simulation(
     
                     @|green ## State ## |@
                     health: ${String.format(Locale.US, "%.2f", clan.state.health)}
+                    nourishment: ${String.format(Locale.US, "%.2f", clan.state.nourishment)}
                     
                     @|green ## Urges ## |@
                     ${
