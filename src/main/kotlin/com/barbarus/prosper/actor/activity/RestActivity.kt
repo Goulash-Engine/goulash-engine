@@ -25,8 +25,9 @@ class RestActivity : Activity {
         return 30.toDuration()
     }
 
-    override fun act(actor: Actor) {
+    override fun act(actor: Actor): Boolean {
         actor.urges.decreaseUrge("rest", duration().getDuration().toDouble())
         actor.urges.increaseUrge("think", 5.0)
+        return true
     }
 }

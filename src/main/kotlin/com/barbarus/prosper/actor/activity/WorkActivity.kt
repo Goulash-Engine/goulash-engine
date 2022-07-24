@@ -34,7 +34,7 @@ class WorkActivity : Activity {
         return 8.times(60).toDuration()
     }
 
-    override fun act(actor: Actor) {
+    override fun act(actor: Actor): Boolean {
         actor.urges.increaseUrge("rest", 1.5)
         actor.urges.increaseUrge("eat", 0.3)
         actor.urges.decreaseUrge("work", 1.0)
@@ -44,6 +44,8 @@ class WorkActivity : Activity {
             addResource(actor)
             progress = 0.0
         }
+
+        return true
     }
 
     private fun addResource(actor: Actor) {

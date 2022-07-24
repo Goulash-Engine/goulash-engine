@@ -4,7 +4,6 @@ import com.barbarus.prosper.actor.activity.IdleActivity
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
-import org.slf4j.LoggerFactory
 
 /**
  * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
@@ -21,14 +20,10 @@ class ActivityLogic : Logic<Actor> {
 
         if (priorityActivity != null) {
             currentActivity.set(priorityActivity)
-            currentActivity.act(context)
-        } else {
-            if (currentActivity.hasRunningActivity()) {
-                currentActivity.act(context)
-            } else {
-                executeUrgentActivities(context)
-            }
+        } else if (!currentActivity.hasRunningActivity()) {
+            setUrgentActivities(context)
         }
+        currentActivity.act(context)
     }
 
     private fun isPrioritizedActivity(activity: Activity, context: Actor) =
@@ -39,7 +34,7 @@ class ActivityLogic : Logic<Actor> {
     private fun hasGlobalBlockerCondition(actor: Actor) =
         actor.conditions.any { ConditionLogic.GLOBAL_BLOCKING_CONDITION.contains(it) }
 
-    private fun executeUrgentActivities(actor: Actor) {
+    private fun setUrgentActivities(actor: Actor) {
         val highestUrgeValue = actor.urges.getUrges().maxByOrNull { it.value }?.value ?: 0
         val topUrges = actor.urges.getUrges().filter { it.value == highestUrgeValue }
 
@@ -55,10 +50,8 @@ class ActivityLogic : Logic<Actor> {
 
         if (urgentActivity != null) {
             this.currentActivity.set(urgentActivity)
-            this.currentActivity.act(actor)
         } else if (wildcardActivity != null) {
             this.currentActivity.set(wildcardActivity)
-            this.currentActivity.act(actor)
         }
     }
 
@@ -79,8 +72,16 @@ class ActivityLogic : Logic<Actor> {
                 if (containsAbortCondition(actor)) {
                     activity.onAbort(actor)
                     set(IdleActivity())
+                    return
                 }
-                activity.act(actor)
+
+                val shouldContinue = activity.act(actor)
+                if (!shouldContinue) {
+                    activity.onAbort(actor)
+                    set(IdleActivity())
+                    return
+                }
+
                 actor.currentActivity = activity.activity()
                 val hasFinished = countDown()
                 if (hasFinished) {
@@ -109,10 +110,6 @@ class ActivityLogic : Logic<Actor> {
         private fun countDown(): Boolean {
             duration--
             return duration <= 0
-        }
-
-        companion object {
-            private val LOG = LoggerFactory.getLogger(this::class.java.name)
         }
     }
 }

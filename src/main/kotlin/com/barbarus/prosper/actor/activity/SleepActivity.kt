@@ -25,7 +25,8 @@ class SleepActivity : Activity {
         return 6.times(60).toDuration()
     }
 
-    override fun act(actor: Actor) {
+    override fun act(actor: Actor): Boolean {
         actor.urges.decreaseUrge("sleep", duration().getDuration().toDouble())
+        return true
     }
 }

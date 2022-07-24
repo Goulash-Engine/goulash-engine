@@ -18,6 +18,20 @@ import org.junit.jupiter.api.Test
 internal class ActivityLogicTest {
     private val activityLogic = ActivityLogic()
 
+    fun `should abort activity if has been exited within act`() {
+        val exitingActivity = mockk<Activity>("foo", relaxed = true)
+        every { exitingActivity.triggerUrges() } returns listOf("foo")
+        every { exitingActivity.duration() } returns 10.toDuration()
+        every { exitingActivity.act(any()) } returnsMany listOf(true, true, true, true, false)
+
+        val testClan = ClanFactory.testClan(listOf(exitingActivity))
+        testClan.urges.increaseUrge("foo", 10.0)
+
+        repeat(10) { activityLogic.process(testClan) }
+
+        verify(exactly = 4) { exitingActivity.act(any()) }
+    }
+
     @Test
     fun `should not execute a wildcard activity if there is an urge activity present`() {
         val idleActivity = mockk<Activity>("idle", relaxed = true)
@@ -43,6 +57,7 @@ internal class ActivityLogicTest {
         every { testActivity.triggerUrges() } returns listOf("sleep")
         every { testActivity.abortConditions() } returns listOf("stop")
         every { testActivity.duration() } returns 10.toDuration()
+        every { testActivity.act(any()) } returns true
 
         val clan = ClanFactory.testClan(listOf(testActivity))
         clan.urges.increaseUrge("sleep", 100.0)
@@ -61,7 +76,10 @@ internal class ActivityLogicTest {
         every { prioritizedActivity.triggerUrges() } returns listOf("sleep")
         every { prioritizedActivity.duration() } returns 1.toDuration()
         every { prioritizedActivity.priority() } returns 1
-        every { prioritizedActivity.act(any()) } answers { firstArg<Actor>().urges.decreaseUrge("sleep", 50.0) }
+        every { prioritizedActivity.act(any()) } answers {
+            firstArg<Actor>().urges.decreaseUrge("sleep", 50.0)
+            true
+        }
 
         val normalActivity = mockk<Activity>("normal", relaxed = true)
         every { normalActivity.triggerUrges() } returns listOf("eat")
@@ -74,7 +92,7 @@ internal class ActivityLogicTest {
 
         repeat(2) { activityLogic.process(clan) }
 
-        verifyOrder() {
+        verifyOrder {
             prioritizedActivity.act(any())
             normalActivity.act(any())
         }
@@ -99,7 +117,7 @@ internal class ActivityLogicTest {
 
         repeat(2) { activityLogic.process(clan) }
 
-        verifyOrder() {
+        verifyOrder {
             prioritizedActivity.act(any())
             normalActivity.act(any())
         }
@@ -150,7 +168,7 @@ internal class ActivityLogicTest {
             val actor = firstArg<Actor>()
             actor.inventory().add(expectedResource)
         }
-        justRun { mockedWorkActivity.act(clan) }
+        every { mockedWorkActivity.act(clan) } returns true
 
         activityLogic.process(clan)
 
@@ -178,8 +196,11 @@ internal class ActivityLogicTest {
 
         val clan = ClanFactory.testClan(listOf(primaryActivity, secondaryActivity))
 
-        every { primaryActivity.act(clan) } answers { clan.urges.decreaseUrge("work", 5.0) }
-        justRun { secondaryActivity.act(clan) }
+        every { primaryActivity.act(clan) } answers {
+            clan.urges.decreaseUrge("work", 5.0)
+            true
+        }
+        every { secondaryActivity.act(clan) } returns true
 
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 9.0)
@@ -210,8 +231,8 @@ internal class ActivityLogicTest {
 
         val clan = ClanFactory.testClan(listOf(primaryActivity, secondaryActivity))
 
-        justRun { primaryActivity.act(clan) }
-        justRun { secondaryActivity.act(clan) }
+        every { primaryActivity.act(clan) } returns true
+        every { secondaryActivity.act(clan) } returns true
 
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("resting", 9.0)
@@ -229,7 +250,7 @@ internal class ActivityLogicTest {
         every { firstActivity.activity() } returns "working"
         every { firstActivity.duration() } returns 2.toDuration()
         val clan = ClanFactory.testClan(listOf(firstActivity))
-        justRun { firstActivity.act(clan) }
+        every { firstActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
 
         activityLogic.process(clan)
@@ -247,7 +268,7 @@ internal class ActivityLogicTest {
         justRun { mockedIdleActivity.onFinish(any()) }
         val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
         clan.urges.increaseUrge("work", 100.0)
-        justRun { mockedIdleActivity.act(any()) }
+        every { mockedIdleActivity.act(any()) } returns true
 
         activityLogic.process(clan)
 
@@ -262,7 +283,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.toDuration()
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
-        justRun { mockedWorkActivity.act(clan) }
+        every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 10.0)
 
@@ -281,7 +302,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.toDuration()
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
-        justRun { mockedWorkActivity.act(clan) }
+        every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)
         clan.conditions.add("sick")
@@ -301,7 +322,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.toDuration()
         val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
-        justRun { mockedWorkActivity.act(clan) }
+        every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)
 

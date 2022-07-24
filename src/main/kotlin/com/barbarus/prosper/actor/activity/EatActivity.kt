@@ -33,16 +33,18 @@ class EatActivity : Activity {
         // actor.conditions.add("full")
     }
 
-    override fun act(actor: Actor) {
+    override fun act(actor: Actor): Boolean {
         val food = actor.inventory().find { it.type == ResourceType.FOOD }
 
         if (food == null) {
             actor.urges.increaseUrge("think", 5.0)
             actor.urges.stopUrge("eat")
+            return false
         } else if (actor.state.nourishment < 100.0) {
             actor.urges.increaseUrge("rest", 0.3)
             actor.urges.decreaseUrge("eat", 5.0)
             food.weight -= 0.1
         }
+        return true
     }
 }

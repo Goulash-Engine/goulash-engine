@@ -27,18 +27,18 @@ class ThinkActivity : Activity {
         actor.urges.stopUrge("think")
     }
 
-    override fun act(actor: Actor) {
+    override fun act(actor: Actor): Boolean {
         actor.urges.decreaseUrge("think", duration().getDuration().toDouble())
 
         if (Simulation.WORLD_TIME.isNight()) {
             actor.urges.increaseUrge("sleep", 5.0)
-            return
         }
 
         val food = actor.inventory().count { it.type == ResourceType.FOOD }
         if (food < 4) {
             actor.urges.increaseUrge("work", 3.0)
-            return
         }
+
+        return true
     }
 }

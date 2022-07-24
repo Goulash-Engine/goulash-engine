@@ -54,5 +54,10 @@ interface Activity {
      * Logic to be executed when the activity is being aborted.
      */
     fun onAbort(actor: Actor) = Unit
-    fun act(actor: Actor) = Unit
+
+    /**
+     * Logic to be executed when the activity is being started.
+     * @return true if the [Activity] continues - otherwise false.
+     */
+    fun act(actor: Actor): Boolean = true
 }

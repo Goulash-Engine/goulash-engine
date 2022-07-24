@@ -16,11 +16,13 @@ class PanicActivity : Activity {
         return listOf("panic")
     }
 
-    override fun act(actor: Actor) {
+    override fun act(actor: Actor): Boolean {
         val food = actor.inventory().count { it.type == ResourceType.FOOD }
 
         when {
             food <= 0 -> actor.urges.increaseUrge("work", 10.0)
         }
+
+        return true
     }
 }
