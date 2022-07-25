@@ -20,6 +20,7 @@ internal class TokenizerTest {
             [foo]
             - bar
             - baz
+            
         """.trimIndent().lines()
 
         val actual = lines.map { tokenizer.tokenize(it) }

@@ -2,6 +2,7 @@ package com.barbarus.prosper.actor.logic
 
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
+import com.barbarus.prosper.script.loader.ScriptLoader
 
 /**
  * Changes the condition of an [Actor] depending on various factors.
@@ -97,11 +98,13 @@ class ConditionLogic : Logic<Actor> {
     }
 
     companion object {
-        val GLOBAL_BLOCKING_CONDITION = listOf(
-            "dying",
-            "severely sick",
-            "unconscious",
-            "blacking out"
+        val GLOBAL_BLOCKING_CONDITION = ScriptLoader.getGlobalConditionLogicOrDefault(
+            listOf(
+                "dying",
+                "severely sick",
+                "unconscious",
+                "blacking out"
+            )
         )
     }
 }

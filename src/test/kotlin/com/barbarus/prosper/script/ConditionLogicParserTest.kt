@@ -7,14 +7,15 @@ import com.barbarus.prosper.script.tokenizer.Tokenizer
 import org.junit.jupiter.api.Test
 
 internal class ConditionLogicParserTest {
-    private val scriptPath: String = "/scripts/global_blocking_condition"
+    private val scriptPath: String = "/logic"
 
     @Test
     fun `should parse global blocking conditions`() {
         val tokenizer = Tokenizer(listOf(sectionToken(), listValueToken()))
         val parser = ConditionLogicParser(tokenizer)
 
-        val actual: ScriptedConditionLogic = parser.parse("$scriptPath/conditionlogic_1.pros")
+        val data = javaClass.getResource("$scriptPath/conditionlogic_1.pros").readText()
+        val actual: ScriptedConditionLogic = parser.parse(data)
 
         assertThat(actual.globalBlockingConditions).containsAll("dying", "starving")
     }
