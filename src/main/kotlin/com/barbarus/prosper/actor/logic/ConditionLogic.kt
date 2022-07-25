@@ -10,27 +10,19 @@ class ConditionLogic : Logic<Actor> {
     override fun process(context: Actor) {
         simulateHunger(context)
         simulateExhaustion(context)
-        simulatePanic(context)
         simulateHealth(context)
         simulateDeath(context)
     }
 
-    private fun simulatePanic(actor: Actor) {
-        actor.conditions.remove("panic")
-        if (actor.conditions.any { panicConditions().contains(it) }) {
-            actor.conditions.add("panic")
-        }
-    }
-
     private fun simulateExhaustion(actor: Actor) {
         val urgeToRest: Double = actor.urges.getUrges()["rest"] ?: return
+        clearExhaustionConditions(actor)
         when {
             urgeToRest >= 100 -> actor.conditions.add("unconscious")
             urgeToRest > 80 -> actor.conditions.add("blacking out")
             urgeToRest > 50 -> actor.conditions.add("exhausted")
             urgeToRest > 30 -> actor.conditions.add("tired")
             urgeToRest > 20 -> actor.conditions.add("weary")
-            else -> clearExhaustionConditions(actor)
         }
     }
 
@@ -76,12 +68,7 @@ class ConditionLogic : Logic<Actor> {
         ).forEach { actor.conditions.remove(it) }
     }
 
-    private fun panicConditions() = listOf(
-        "starving",
-        "very sick",
-        "dying",
-        "severely sick"
-    )
+    private fun panicConditions() = listOf("")
 
     private fun simulateHunger(actor: Actor) {
         cleanHungerConditions(actor)
@@ -89,18 +76,13 @@ class ConditionLogic : Logic<Actor> {
         when {
             actor.state.nourishment <= 0.0 -> actor.conditions.add("starving")
             actor.state.nourishment > 80.0 -> actor.conditions.add("well nourished")
+            actor.state.nourishment > 70.0 -> actor.conditions.add("hungry")
+            actor.state.nourishment > 50.0 -> actor.conditions.add("very hungry")
+            actor.state.nourishment > 20.0 -> actor.conditions.add("extremely hungry")
         }
 
         val eatUrge = actor.urges.getUrges()["eat"]
-        if (eatUrge == null) {
-            actor.conditions.add("well fed")
-        } else {
-            when {
-                eatUrge == 100.0 -> actor.conditions.add("underfed")
-                eatUrge > 80.0 -> actor.conditions.add("very hungry")
-                eatUrge > 60.0 -> actor.conditions.add("hungry")
-            }
-        }
+        if (eatUrge == null) actor.conditions.add("well fed")
     }
 
     private fun cleanHungerConditions(actor: Actor) {
@@ -110,7 +92,7 @@ class ConditionLogic : Logic<Actor> {
             "very hungry",
             "hungry",
             "well fed",
-            "well nourished",
+            "well nourished"
         ).forEach { actor.conditions.remove(it) }
     }
 

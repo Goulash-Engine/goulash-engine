@@ -1,7 +1,6 @@
 package com.barbarus.prosper.factories
 
 import com.barbarus.prosper.actor.activity.EatActivity
-import com.barbarus.prosper.actor.activity.PanicActivity
 import com.barbarus.prosper.actor.activity.RestActivity
 import com.barbarus.prosper.actor.activity.SleepActivity
 import com.barbarus.prosper.actor.activity.ThinkActivity
@@ -55,7 +54,6 @@ object ClanFactory {
         RestActivity(),
         ThinkActivity(),
         EatActivity(),
-        SleepActivity(),
-        PanicActivity()
+        SleepActivity()
     )
 }

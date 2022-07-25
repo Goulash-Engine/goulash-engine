@@ -10,11 +10,6 @@ class StateLogic : Logic<Actor> {
     override fun process(context: Actor) {
         val conditions = context.conditions
 
-        when {
-            conditions.contains("well fed") -> context.state.nourishment += 0.1
-            conditions.contains("underfed") -> context.state.nourishment -= 0.1
-        }
-
         if (context.state.nourishment > 100.00) context.state.nourishment = 100.0
 
         val state = context.state

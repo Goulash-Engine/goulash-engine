@@ -10,14 +10,17 @@ import com.barbarus.prosper.core.extension.toDuration
  * This [Activity] controls the daily work of a clan.
  */
 class EatActivity : Activity {
-    private val foodConsumed: Double = 0.0
 
     override fun triggerUrges(): List<String> {
         return listOf("eat")
     }
 
     override fun blockerConditions(): List<String> {
-        return listOf("sick", "sleeping", "full", "well fed")
+        return listOf("very sick", "sleeping", "well fed")
+    }
+
+    override fun priorityConditions(): List<String> {
+        return listOf("very hungry", "extremely hungry", "starving")
     }
 
     override fun activity(): String {
@@ -28,21 +31,18 @@ class EatActivity : Activity {
         return 40.toDuration()
     }
 
-    override fun onFinish(actor: Actor) {
-        // TODO: add logic to track food consumed
-        // actor.conditions.add("full")
-    }
-
     override fun act(actor: Actor): Boolean {
         val food = actor.inventory().find { it.type == ResourceType.FOOD }
 
+        if (actor.state.nourishment >= 100.0) return false
+
         if (food == null) {
             actor.urges.increaseUrge("think", 5.0)
-            actor.urges.stopUrge("eat")
             return false
         } else if (actor.state.nourishment < 100.0) {
             actor.urges.increaseUrge("rest", 0.3)
             actor.urges.decreaseUrge("eat", 5.0)
+            actor.state.nourishment += 3.0
             food.weight -= 0.1
         }
         return true

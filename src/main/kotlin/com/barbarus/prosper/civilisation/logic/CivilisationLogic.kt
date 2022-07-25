@@ -10,12 +10,17 @@ import com.barbarus.prosper.core.logic.Logic
  */
 class CivilisationLogic : Logic<Civilisation> {
     override fun process(context: Civilisation) {
-        context.actors.forEach(::urgeRoutines)
+        context.actors.forEach(::actorRoutines)
         context.actors.removeIf { it.conditions.contains("dead") }
     }
 
-    private fun urgeRoutines(actor: Actor) {
-        actor.urges.increaseUrge("eat", 0.1)
-        actor.urges.decreaseUrge("rest", 1.0)
+    private fun actorRoutines(actor: Actor) {
+        actor.state.nourishment -= 0.05
+
+        when {
+            actor.state.nourishment < 70.0 -> actor.urges.increaseUrge("eat", 0.1)
+            actor.state.nourishment < 30.0 -> actor.urges.increaseUrge("eat", 0.5)
+            actor.state.nourishment < 10.0 -> actor.urges.increaseUrge("eat", 1.0)
+        }
     }
 }
