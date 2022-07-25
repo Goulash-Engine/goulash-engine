@@ -8,6 +8,6 @@ class Tokenizer(
         return token
             .mapNotNull { token -> token.matchEntire(input) }
             .map { it.groupValues[1] }
-            .first()
+            .firstOrNull() ?: ""
     }
 }
