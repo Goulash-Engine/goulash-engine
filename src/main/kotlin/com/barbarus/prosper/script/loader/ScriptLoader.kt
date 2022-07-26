@@ -2,7 +2,7 @@ package com.barbarus.prosper.script.loader
 
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
-import com.barbarus.prosper.script.parser.GlobalBlockerConditionGrammar
+import com.barbarus.prosper.script.parser.ListConfigurationParser
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
@@ -15,7 +15,7 @@ object ScriptLoader {
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     internal var globalBlockingConditions: List<String>? = null
     private val grammars: List<Grammar<ListConfiguration>> = listOf(
-        GlobalBlockerConditionGrammar()
+        ListConfigurationParser()
     )
 
     internal fun load(scriptDirectory: String = javaClass.getResource("/logic").path) {

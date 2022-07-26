@@ -17,7 +17,7 @@ internal class ScriptLoaderTest {
     fun `should execute even if script contains errors `(@TempDir tempDir: java.io.File) {
         val config = tempDir.resolve("config.pros")
         config.writeText(
-            """
+            """ 
             [WrongIdentifier]        
             - foo   
             - bar   
