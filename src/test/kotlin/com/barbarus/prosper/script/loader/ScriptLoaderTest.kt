@@ -14,6 +14,27 @@ internal class ScriptLoaderTest {
     }
 
     @Test
+    fun `should execute even if script contains errors with multiple configs `(@TempDir tempDir: java.io.File) {
+        val config = tempDir.resolve("config.pros")
+        config.writeText(
+            """ 
+            [GlobalBlocker]
+            - foo
+            - bar
+            - baz
+            ###
+            [Foo]
+            - what
+            - up
+            """.trimIndent()
+        )
+
+        ScriptLoader.load(tempDir.path)
+
+        assertThat(ScriptLoader.getGlobalBlockingConditionsOrDefault()).isEmpty()
+    }
+
+    @Test
     fun `should execute even if script contains errors `(@TempDir tempDir: java.io.File) {
         val config = tempDir.resolve("config.pros")
         config.writeText(

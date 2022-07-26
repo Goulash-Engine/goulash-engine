@@ -37,7 +37,7 @@ class ListConfigurationParserGrammar : Grammar<List<ListConfiguration>>() {
         if (section.text == "GlobalBlocker") {
             return GlobalBlockerCondition(elements.map(TokenMatch::text))
         } else {
-            throw UnknownSectionException("Unknown section: ${section.text}")
+            throw UnknownSectionException("Unknown section: [${section.text}]")
         }
     }
 }
