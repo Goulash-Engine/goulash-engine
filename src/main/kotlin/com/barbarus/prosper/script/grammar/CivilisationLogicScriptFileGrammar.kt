@@ -13,7 +13,7 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.Parser
 
-class CivilisationLogicGrammar : Grammar<List<ScriptedLogic<Civilisation>>>() {
+class CivilisationLogicScriptFileGrammar : Grammar<List<ScriptedLogic<Civilisation>>>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
     private val leftBracket by literalToken("[")

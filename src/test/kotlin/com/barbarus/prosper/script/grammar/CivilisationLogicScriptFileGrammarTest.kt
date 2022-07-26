@@ -10,8 +10,25 @@ import com.barbarus.prosper.script.domain.ScriptedLogic
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 
-internal class CivilisationLogicGrammarTest {
-    private val civilisationLogicGrammar = CivilisationLogicGrammar()
+internal class CivilisationLogicScriptFileGrammarTest {
+    private val civilisationLogicScriptFileGrammar = CivilisationLogicScriptFileGrammar()
+
+    @Test
+    fun `should parse simple logic statement`() {
+        val scriptData = """
+            [Logic:Civilisation]
+            {
+                actors.urge("eat").plus(1);
+            }
+        """.trimIndent()
+
+        val actual: List<Logic<Civilisation>> = civilisationLogicScriptFileGrammar.parseToEnd(scriptData)
+
+        assertThat(actual).isNotEmpty()
+        assertThat(actual).hasSize(2)
+        assertThat(actual[0]).isInstanceOf(ScriptedLogic::class)
+        assertThat(actual[1]).isInstanceOf(ScriptedLogic::class)
+    }
 
     @Test
     fun `should parse two sections`() {
@@ -22,7 +39,7 @@ internal class CivilisationLogicGrammarTest {
             ###
         """.trimIndent()
 
-        val actual: List<Logic<Civilisation>> = civilisationLogicGrammar.parseToEnd(scriptData)
+        val actual: List<Logic<Civilisation>> = civilisationLogicScriptFileGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual).hasSize(2)
@@ -36,7 +53,7 @@ internal class CivilisationLogicGrammarTest {
             [Logic:Civilisation]
         """.trimIndent()
 
-        val actual: List<Logic<Civilisation>> = civilisationLogicGrammar.parseToEnd(scriptData)
+        val actual: List<Logic<Civilisation>> = civilisationLogicScriptFileGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0]).isInstanceOf(ScriptedLogic::class)
