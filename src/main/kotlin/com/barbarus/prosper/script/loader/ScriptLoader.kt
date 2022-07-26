@@ -5,6 +5,7 @@ import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.parser.GlobalBlockerConditionGrammar
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
 import kotlin.io.path.Path
 import kotlin.io.path.listDirectoryEntries
@@ -20,13 +21,16 @@ object ScriptLoader {
 
     internal fun load() {
         val files = Path(javaClass.getResource("/logic").path).listDirectoryEntries("*.pros")
-        var loadingError: Int = 0
+        var loadingError = 0
         LOG.info("Loading logic scripts from: $logicScriptPath...")
-        files.map { LOG.info("Reading script file : ${it.fileName}..."); it.readText() }
+        files.asSequence().map { LOG.info("Reading script file : ${it.fileName}..."); it.readText() }
             .forEach { scriptData ->
                 grammars.map {
                     try {
                         it.parseToEnd(scriptData)
+                    } catch (e: ParseException) {
+                        LOG.error("[Parsing Error] ${e.message}")
+                        loadingError++
                     } catch (e: Exception) {
                         LOG.error("[Syntax Error] ${e.message}")
                         loadingError++
