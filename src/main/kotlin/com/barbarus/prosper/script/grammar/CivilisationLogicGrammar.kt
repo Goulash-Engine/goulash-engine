@@ -1,18 +1,19 @@
 package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.core.domain.Civilisation
-import com.barbarus.prosper.core.logic.Logic
 import com.barbarus.prosper.script.domain.ScriptedLogic
+import com.barbarus.prosper.script.exception.SyntaxException
 import com.github.h0tk3y.betterParse.combinators.and
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
 import com.github.h0tk3y.betterParse.combinators.skip
 import com.github.h0tk3y.betterParse.grammar.Grammar
+import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.Parser
 
-class CivilisationLogicGrammar : Grammar<List<Logic<Civilisation>>>() {
+class CivilisationLogicGrammar : Grammar<List<ScriptedLogic<Civilisation>>>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
     private val leftBracket by literalToken("[")
@@ -27,15 +28,22 @@ class CivilisationLogicGrammar : Grammar<List<Logic<Civilisation>>>() {
     private val logicTypeParser by (identifier and skip(identifierTypeOperator) and identifier)
     private val sectionParser by (skip(leftBracket) and logicTypeParser and skip(rightBracket))
     private val logicParser by sectionParser map { (logicIdentifier, logicType) ->
-        ScriptedLogic<Civilisation>()
-        // if (logicIdentifier.text == "Logic") {
-        //     if (logicType.text == "Civilisation") {
-        //         ScriptedLogic<Civilisation>()
-        //     }
-        // }
+        mapToScriptedLogic(logicIdentifier, logicType)
     }
-    private val final: Parser<List<Logic<Civilisation>>> by separatedTerms(logicParser, separator)
+    private val final: Parser<List<ScriptedLogic<Civilisation>>> by separatedTerms(logicParser, separator)
 
     override
-    val rootParser: Parser<List<Logic<Civilisation>>> by final
+    val rootParser: Parser<List<ScriptedLogic<Civilisation>>> by final
+
+    private fun mapToScriptedLogic(identifier: TokenMatch, logicType: TokenMatch): ScriptedLogic<Civilisation> {
+        if (identifier.text == "Logic") {
+            if (logicType.text == "Civilisation") {
+                return ScriptedLogic<Civilisation>()
+            } else {
+                throw SyntaxException("Unknown logic type: [<identifier>:${logicType.text}]")
+            }
+        } else {
+            throw SyntaxException("Unknown section: [${identifier.text}:<type>]")
+        }
+    }
 }

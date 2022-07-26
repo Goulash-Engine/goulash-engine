@@ -2,7 +2,7 @@ package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
-import com.barbarus.prosper.script.exception.UnknownSectionException
+import com.barbarus.prosper.script.exception.SyntaxException
 import com.github.h0tk3y.betterParse.combinators.and
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
@@ -37,7 +37,7 @@ class ListConfigurationGrammar : Grammar<List<ListConfiguration>>() {
         if (section.text == "GlobalBlocker") {
             return GlobalBlockerCondition(elements.map(TokenMatch::text))
         } else {
-            throw UnknownSectionException("Unknown section: [${section.text}]")
+            throw SyntaxException("Unknown section: [${section.text}]")
         }
     }
 }

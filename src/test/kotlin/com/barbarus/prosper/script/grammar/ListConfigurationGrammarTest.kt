@@ -7,7 +7,7 @@ import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
-import com.barbarus.prosper.script.exception.UnknownSectionException
+import com.barbarus.prosper.script.exception.SyntaxException
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -28,7 +28,7 @@ internal class ListConfigurationGrammarTest {
             - up
         """.trimIndent()
 
-        assertThrows<UnknownSectionException> {
+        assertThrows<SyntaxException> {
             listConfigurationGrammar.parseToEnd(scriptData)
         }
     }
@@ -93,8 +93,8 @@ internal class ListConfigurationGrammarTest {
             - bar
         """.trimIndent()
 
-        assertThrows<UnknownSectionException> {
-            val actual: List<ListConfiguration> = listConfigurationGrammar.parseToEnd(scriptData)
+        assertThrows<SyntaxException> {
+            listConfigurationGrammar.parseToEnd(scriptData)
         }
     }
 

@@ -11,5 +11,5 @@ fun main() {
         tickBase = WorldDate.MINUTE,
         render = true
     )
-    // simulation.run()
+    simulation.run()
 }

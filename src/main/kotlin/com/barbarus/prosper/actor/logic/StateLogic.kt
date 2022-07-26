@@ -8,8 +8,6 @@ import com.barbarus.prosper.core.logic.Logic
  */
 class StateLogic : Logic<Actor> {
     override fun process(context: Actor) {
-        val conditions = context.conditions
-
         if (context.state.nourishment > 100.00) context.state.nourishment = 100.0
 
         val state = context.state
