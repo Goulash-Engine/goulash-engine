@@ -13,15 +13,15 @@ import kotlin.io.path.readText
 
 object ScriptLoader {
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
-    private var globalBlockingConditions: List<String>? = null
+    internal var globalBlockingConditions: List<String>? = null
     private val grammars: List<Grammar<ListConfiguration>> = listOf(
         GlobalBlockerConditionGrammar()
     )
 
-    internal fun load(path: String = "/logic") {
-        val files = Path(javaClass.getResource(path).path).listDirectoryEntries("*.pros")
+    internal fun load(scriptDirectory: String = javaClass.getResource("/logic").path) {
+        val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
-        LOG.info("Loading logic scripts from: $path...")
+        LOG.info("Loading logic scripts from: $scriptDirectory...")
         files.asSequence().map { LOG.info("Reading script file : ${it.fileName}..."); it.readText() }
             .forEach { scriptData ->
                 grammars.map {
