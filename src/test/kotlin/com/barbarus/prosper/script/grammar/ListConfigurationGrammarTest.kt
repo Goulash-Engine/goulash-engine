@@ -1,4 +1,4 @@
-package com.barbarus.prosper.script.parser
+package com.barbarus.prosper.script.grammar
 
 import assertk.assertThat
 import assertk.assertions.containsAll
@@ -12,8 +12,8 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class ListConfigurationParserGrammarTest {
-    private val listConfigurationParserGrammar = ListConfigurationParserGrammar()
+internal class ListConfigurationGrammarTest {
+    private val listConfigurationGrammar = ListConfigurationGrammar()
 
     @Test
     fun `should throw parser error if one section name is undefined`() {
@@ -29,7 +29,7 @@ internal class ListConfigurationParserGrammarTest {
         """.trimIndent()
 
         assertThrows<UnknownSectionException> {
-            listConfigurationParserGrammar.parseToEnd(scriptData)
+            listConfigurationGrammar.parseToEnd(scriptData)
         }
     }
 
@@ -46,7 +46,7 @@ internal class ListConfigurationParserGrammarTest {
             - up
         """.trimIndent()
 
-        val actual: List<ListConfiguration> = listConfigurationParserGrammar.parseToEnd(scriptData)
+        val actual: List<ListConfiguration> = listConfigurationGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0]).isInstanceOf(GlobalBlockerCondition::class)
@@ -65,7 +65,7 @@ internal class ListConfigurationParserGrammarTest {
             ###
         """.trimIndent()
 
-        val actual: List<ListConfiguration> = listConfigurationParserGrammar.parseToEnd(scriptData)
+        val actual: List<ListConfiguration> = listConfigurationGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0]).isInstanceOf(GlobalBlockerCondition::class)
@@ -78,7 +78,7 @@ internal class ListConfigurationParserGrammarTest {
             [GlobalBlocker]
         """.trimIndent()
 
-        val actual: List<ListConfiguration> = listConfigurationParserGrammar.parseToEnd(scriptData)
+        val actual: List<ListConfiguration> = listConfigurationGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0]).isInstanceOf(GlobalBlockerCondition::class)
@@ -94,7 +94,7 @@ internal class ListConfigurationParserGrammarTest {
         """.trimIndent()
 
         assertThrows<UnknownSectionException> {
-            val actual: List<ListConfiguration> = listConfigurationParserGrammar.parseToEnd(scriptData)
+            val actual: List<ListConfiguration> = listConfigurationGrammar.parseToEnd(scriptData)
         }
     }
 
@@ -106,7 +106,7 @@ internal class ListConfigurationParserGrammarTest {
             - bar
         """.trimIndent()
 
-        val actual: List<ListConfiguration> = listConfigurationParserGrammar.parseToEnd(scriptData)
+        val actual: List<ListConfiguration> = listConfigurationGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0]).isInstanceOf(GlobalBlockerCondition::class)

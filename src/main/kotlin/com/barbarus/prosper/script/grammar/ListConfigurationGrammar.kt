@@ -1,4 +1,4 @@
-package com.barbarus.prosper.script.parser
+package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
@@ -14,7 +14,7 @@ import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.Parser
 
-class ListConfigurationParserGrammar : Grammar<List<ListConfiguration>>() {
+class ListConfigurationGrammar : Grammar<List<ListConfiguration>>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
     private val leftBracket by literalToken("[")

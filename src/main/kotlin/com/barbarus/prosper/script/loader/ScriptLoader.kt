@@ -1,7 +1,7 @@
 package com.barbarus.prosper.script.loader
 
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
-import com.barbarus.prosper.script.parser.ListConfigurationParserGrammar
+import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
@@ -12,15 +12,15 @@ import kotlin.io.path.readText
 object ScriptLoader {
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     internal var globalBlockingConditions: List<String>? = null
-    private val grammars: List<ListConfigurationParserGrammar> = listOf(
-        ListConfigurationParserGrammar()
+    private val grammars: List<ListConfigurationGrammar> = listOf(
+        ListConfigurationGrammar()
     )
 
     internal fun load(scriptDirectory: String = javaClass.getResource("/logic").path) {
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading logic scripts from: $scriptDirectory...")
-        files.asSequence().map { LOG.info("Reading script file : ${it.fileName}..."); it.readText() }
+        files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
             .forEach { scriptData ->
                 grammars.map {
                     try {
