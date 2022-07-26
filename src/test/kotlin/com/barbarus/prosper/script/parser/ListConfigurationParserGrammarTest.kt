@@ -16,6 +16,27 @@ internal class ListConfigurationParserGrammarTest {
     private val listConfigurationParserGrammar = ListConfigurationParserGrammar()
 
     @Test
+    fun `should find two global blocker configs`() {
+        val scriptData = """
+            [GlobalBlocker]
+            - foo
+            - bar
+            - baz
+            ###
+            [GlobalBlocker]
+            - what
+            - up
+        """.trimIndent()
+
+        val actual: List<ListConfiguration> = listConfigurationParserGrammar.parseToEnd(scriptData)
+
+        assertThat(actual).isNotEmpty()
+        assertThat(actual[0]).isInstanceOf(GlobalBlockerCondition::class)
+        assertThat(actual[0].configurations).containsAll("foo", "bar", "baz")
+        assertThat(actual[1]).isInstanceOf(GlobalBlockerCondition::class)
+        assertThat(actual[1].configurations).containsAll("what", "up")
+    }
+    @Test
     fun `should not break if separator occurs`() {
         val scriptData = """
             [GlobalBlocker]
