@@ -98,6 +98,6 @@ class ConditionLogic : Logic<Actor> {
     }
 
     companion object {
-        internal var GLOBAL_BLOCKING_CONDITION = ScriptLoader.getGlobalBlockingConditionsLogicOrDefault()
+        internal var GLOBAL_BLOCKING_CONDITION = ScriptLoader.getGlobalBlockingConditionsOrDefault()
     }
 }

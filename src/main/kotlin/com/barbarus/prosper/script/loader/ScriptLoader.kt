@@ -12,24 +12,23 @@ import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.readText
 
 object ScriptLoader {
-    private const val logicScriptPath = "/logic"
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
     private val grammars: List<Grammar<ListConfiguration>> = listOf(
         GlobalBlockerConditionGrammar()
     )
 
-    internal fun load() {
-        val files = Path(javaClass.getResource("/logic").path).listDirectoryEntries("*.pros")
+    internal fun load(path: String = "/logic") {
+        val files = Path(javaClass.getResource(path).path).listDirectoryEntries("*.pros")
         var loadingError = 0
-        LOG.info("Loading logic scripts from: $logicScriptPath...")
+        LOG.info("Loading logic scripts from: $path...")
         files.asSequence().map { LOG.info("Reading script file : ${it.fileName}..."); it.readText() }
             .forEach { scriptData ->
                 grammars.map {
                     try {
                         it.parseToEnd(scriptData)
                     } catch (e: ParseException) {
-                        LOG.error("[Parsing Error] ${e.message}")
+                        LOG.error("[Parser Error] ${e.message}")
                         loadingError++
                     } catch (e: Exception) {
                         LOG.error("[Syntax Error] ${e.message}")
@@ -47,6 +46,6 @@ object ScriptLoader {
         }
     }
 
-    internal fun getGlobalBlockingConditionsLogicOrDefault(default: List<String> = listOf()): List<String> =
+    internal fun getGlobalBlockingConditionsOrDefault(default: List<String> = listOf()): List<String> =
         globalBlockingConditions ?: default
 }
