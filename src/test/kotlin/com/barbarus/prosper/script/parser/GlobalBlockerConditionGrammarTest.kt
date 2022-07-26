@@ -5,11 +5,12 @@ import assertk.assertions.containsAll
 import assertk.assertions.isEmpty
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.exception.UnknownSectionException
+import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class GlobalBlockerConditionScriptParserTest {
-    private val globalBlockerConditionScriptParser = GlobalBlockerConditionScriptParser()
+internal class GlobalBlockerConditionGrammarTest {
+    private val globalBlockerConditionGrammar = GlobalBlockerConditionGrammar()
 
     @Test
     fun `should return condition with empty list`() {
@@ -17,7 +18,7 @@ internal class GlobalBlockerConditionScriptParserTest {
             [GlobalBlocker]
         """.trimIndent()
 
-        val actual: GlobalBlockerCondition = globalBlockerConditionScriptParser.parse(scriptData)
+        val actual: GlobalBlockerCondition = globalBlockerConditionGrammar.parseToEnd(scriptData)
 
         assertThat(actual.blockerConditions).isEmpty()
     }
@@ -31,19 +32,19 @@ internal class GlobalBlockerConditionScriptParserTest {
         """.trimIndent()
 
         assertThrows<UnknownSectionException> {
-            val actual: GlobalBlockerCondition = globalBlockerConditionScriptParser.parse(scriptData)
+            val actual: GlobalBlockerCondition = globalBlockerConditionGrammar.parseToEnd(scriptData)
         }
     }
 
     @Test
-    fun `should parse a globalblockercondition object from given script data`() {
+    fun `should parse with grammar`() {
         val scriptData = """
             [GlobalBlocker]
             - foo
             - bar
         """.trimIndent()
 
-        val actual: GlobalBlockerCondition = globalBlockerConditionScriptParser.parse(scriptData)
+        val actual: GlobalBlockerCondition = globalBlockerConditionGrammar.parseToEnd(scriptData)
 
         assertThat(actual.blockerConditions).containsAll("foo", "bar")
     }
