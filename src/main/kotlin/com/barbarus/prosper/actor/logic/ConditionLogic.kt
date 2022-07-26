@@ -98,13 +98,6 @@ class ConditionLogic : Logic<Actor> {
     }
 
     companion object {
-        val GLOBAL_BLOCKING_CONDITION = ScriptLoader.getGlobalConditionLogicOrDefault(
-            listOf(
-                "dying",
-                "severely sick",
-                "unconscious",
-                "blacking out"
-            )
-        )
+        internal var GLOBAL_BLOCKING_CONDITION = ScriptLoader.getGlobalBlockingConditionsLogicOrDefault()
     }
 }

@@ -20,7 +20,7 @@ internal class GlobalBlockerConditionGrammarTest {
 
         val actual: GlobalBlockerCondition = globalBlockerConditionGrammar.parseToEnd(scriptData)
 
-        assertThat(actual.blockerConditions).isEmpty()
+        assertThat(actual.configurations).isEmpty()
     }
 
     @Test
@@ -46,6 +46,6 @@ internal class GlobalBlockerConditionGrammarTest {
 
         val actual: GlobalBlockerCondition = globalBlockerConditionGrammar.parseToEnd(scriptData)
 
-        assertThat(actual.blockerConditions).containsAll("foo", "bar")
+        assertThat(actual.configurations).containsAll("foo", "bar")
     }
 }

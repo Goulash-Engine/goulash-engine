@@ -1,16 +1,15 @@
 package com.barbarus.prosper.script.loader
 
+import assertk.assertThat
+import assertk.assertions.isNotEmpty
 import org.junit.jupiter.api.Test
 
 internal class ScriptLoaderTest {
 
     @Test
-    fun `should load`() {
-        // val mockedConditionLogicParser: ConditionLogicParser = mockk(relaxed = true)
-        // ScriptLoader.conditionLogicParser = mockedConditionLogicParser
-
+    fun `should load global blocking conditions from script file`() {
         ScriptLoader.load()
 
-        // verify { mockedConditionLogicParser.parse(any()) }
+        assertThat(ScriptLoader.getGlobalBlockingConditionsLogicOrDefault(listOf())).isNotEmpty()
     }
 }
