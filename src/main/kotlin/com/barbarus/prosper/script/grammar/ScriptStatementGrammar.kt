@@ -16,25 +16,25 @@ class ScriptStatementGrammar : Grammar<List<LogicStatement>>() {
 
     private val startLogicBlock by literalToken("{")
     private val contextMutationOperator by literalToken("::")
+    private val operationOperator by literalToken(".")
+    private val digit by regexToken("^[\\d.\\d]+")
     private val identifier by regexToken("^[a-z]+")
     private val rightPar by literalToken(")")
-    private val operationOperator by literalToken(".")
     private val leftPar by literalToken("(")
     private val endLogicBlock by literalToken("}")
     private val endOfStatement by literalToken(";", ignore = true)
-    private val argument by regexToken(".*")
 
     /**
      * .plus(1)
      */
-    private val operationParser by -operationOperator * identifier * -leftPar * (argument or identifier) * -rightPar map { (name, argument) ->
+    private val operationParser by -operationOperator * identifier * -leftPar * (digit or identifier) * -rightPar map { (name, argument) ->
         Operation(name.text, argument.text)
     }
 
     /**
      * ::urge(eat)[.plus(1)]
      */
-    private val mutationParser by -contextMutationOperator * identifier * -leftPar * (argument or identifier) * -rightPar * operationParser map { (type, target, operation) ->
+    private val mutationParser by -contextMutationOperator * identifier * -leftPar * identifier * -rightPar * operationParser map { (type, target, operation) ->
         ContextMutation(type.text, target.text, operation)
     }
 

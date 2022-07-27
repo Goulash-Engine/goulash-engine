@@ -12,6 +12,23 @@ internal class ScriptStatementGrammarTest {
     private val scriptStatementGrammar = ScriptStatementGrammar()
 
     @Test
+    fun `should parse mutation with number argument`() {
+        val scriptData = """
+            {
+                actors::urge(eat).plus(1);
+                actors::urge(eat).plus(0.5);
+            }
+        """.trimIndent()
+
+        val actual: List<LogicStatement> = scriptStatementGrammar.parseToEnd(scriptData)
+
+        assertThat(actual).isNotEmpty()
+        assertThat(actual).hasSize(2)
+        assertThat(actual[0].mutationOperationArgument).isEqualTo("1")
+        assertThat(actual[1].mutationOperationArgument).isEqualTo("0.5")
+    }
+
+    @Test
     fun `should parse multiple mutation operations`() {
         val scriptData = """
             {
