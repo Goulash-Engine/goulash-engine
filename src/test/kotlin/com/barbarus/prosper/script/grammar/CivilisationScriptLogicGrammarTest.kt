@@ -14,14 +14,16 @@ internal class CivilisationScriptLogicGrammarTest {
     fun `should parse simple logic statement`() {
         val scriptData = """
             {
-                actors.urge("eat");
+                actors::urge(eat);
             }
         """.trimIndent()
 
         val actual: List<LogicStatement> = civilisationScriptLogicGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
-        assertThat(actual[0]).isEqualTo("actors")
+        assertThat(actual[0].contextId).isEqualTo("actors")
+        assertThat(actual[0].operationId).isEqualTo("urge")
+        assertThat(actual[0].operationArgument).isEqualTo("eat")
     }
     // actors.urge("eat").plus(1);
 }
