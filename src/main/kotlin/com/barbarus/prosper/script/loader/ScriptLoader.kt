@@ -46,9 +46,9 @@ object ScriptLoader {
                     loadingError++
                     null
                 }
-            }
+            }.toList()
 
-        logicScripts = scriptLogics.toList()
+        logicScripts = scriptLogics
 
         LOG.info("Finished loading ${scriptLogics.count()} scripts")
         if (loadingError > 0) {
