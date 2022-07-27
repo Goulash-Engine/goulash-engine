@@ -1,7 +1,7 @@
 package com.barbarus.prosper.script.domain
 
 data class LogicStatement(
-    val contextId: String,
-    val operationId: String,
-    val operationArgument: String
+    val context: String,
+    val mutationType: String,
+    val mutationTarget: String
 )

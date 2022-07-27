@@ -21,9 +21,9 @@ internal class CivilisationScriptLogicGrammarTest {
         val actual: List<LogicStatement> = civilisationScriptLogicGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
-        assertThat(actual[0].contextId).isEqualTo("actors")
-        assertThat(actual[0].operationId).isEqualTo("urge")
-        assertThat(actual[0].operationArgument).isEqualTo("eat")
+        assertThat(actual[0].context).isEqualTo("actors")
+        assertThat(actual[0].mutationType).isEqualTo("urge")
+        assertThat(actual[0].mutationTarget).isEqualTo("eat")
     }
     // actors.urge("eat").plus(1);
 }

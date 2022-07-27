@@ -23,14 +23,19 @@ class CivilisationScriptLogicGrammar : Grammar<List<LogicStatement>>() {
     private val endOfStatement by literalToken(";", ignore = true)
     private val operationArgument by regexToken(".*")
 
-    private val callParser by -operationLeftPar * (operationArgument or identifier) * -operationRightPar
-    private val subjectParser by -startLogicBlock * identifier * -contextMutationOperator * identifier * callParser * -endLogicBlock
-    private val statementParser by subjectParser map { (contextId, operationId, operationArgument) ->
-        mapToStatement(contextId.text, operationId.text, operationArgument.text)
+    private val mutationParser by -contextMutationOperator * identifier * -operationLeftPar * (operationArgument or identifier) * -operationRightPar map { (identifier, argument) ->
+        ContextMutation(identifier.text, argument.text)
+    }
+
+    private val subjectParser by -startLogicBlock * identifier * mutationParser * -endLogicBlock
+    private val statementParser by subjectParser map { (contextId, mutation) ->
+        LogicStatement(contextId.text, mutation.type, mutation.target)
     }
 
     override val rootParser by separatedTerms(statementParser, endOfStatement)
 
-    private fun mapToStatement(contextId: String, operationId: String, operationArgument: String) =
-        LogicStatement(contextId, operationId, operationArgument)
+    internal data class ContextMutation(
+        val type: String,
+        val target: String
+    )
 }
