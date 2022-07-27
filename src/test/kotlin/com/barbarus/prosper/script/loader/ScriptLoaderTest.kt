@@ -3,13 +3,13 @@ package com.barbarus.prosper.script.loader
 import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.isEmpty
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
 internal class ScriptLoaderTest {
-    @AfterEach
-    fun tearDown() {
+    @BeforeEach
+    fun setup() {
         ScriptLoader.globalBlockingConditions = emptyList()
     }
 

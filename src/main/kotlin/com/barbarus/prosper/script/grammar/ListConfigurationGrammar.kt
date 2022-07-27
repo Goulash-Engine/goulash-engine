@@ -29,9 +29,8 @@ class ListConfigurationGrammar : Grammar<List<ListConfiguration>>() {
     private val listConfigurationParser by sectionParser and zeroOrMore(elementParser) map { (section, elements) ->
         mapToListConfiguration(section, elements)
     }
-    private val final by separatedTerms(listConfigurationParser, separator)
 
-    override val rootParser: Parser<List<ListConfiguration>> by final
+    override val rootParser: Parser<List<ListConfiguration>> by separatedTerms(listConfigurationParser, separator)
 
     private fun mapToListConfiguration(section: TokenMatch, elements: List<TokenMatch>): ListConfiguration {
         if (section.text == "GlobalBlocker") {

@@ -1,6 +1,7 @@
 package com.barbarus.prosper.script.loader
 
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
+import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
@@ -22,19 +23,22 @@ object ScriptLoader {
         LOG.info("Loading logic scripts from: $scriptDirectory...")
         files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
             .forEach { scriptData ->
-                grammars.map {
+                grammars.flatMap {
                     try {
                         it.parseToEnd(scriptData)
                     } catch (e: ParseException) {
                         LOG.error("[Parser Error] ${e.message}")
                         loadingError++
+                        emptyList<ListConfiguration>()
                     } catch (e: Exception) {
                         LOG.error("[Syntax Error] ${e.message}")
                         loadingError++
+                        emptyList<ListConfiguration>()
                     }
                 }.forEach { listConfiguration ->
                     when (listConfiguration) {
                         is GlobalBlockerCondition -> globalBlockingConditions = listConfiguration.configurations
+                        else -> LOG.warn("List configuration not supported: $listConfiguration")
                     }
                 }
             }

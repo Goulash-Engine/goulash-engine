@@ -2,7 +2,7 @@ package com.barbarus.prosper.script.grammar
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
+import assertk.assertions.isNotEmpty
 import com.barbarus.prosper.script.domain.LogicStatement
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
@@ -14,14 +14,14 @@ internal class CivilisationScriptLogicGrammarTest {
     fun `should parse simple logic statement`() {
         val scriptData = """
             {
-                actors.urge("eat")
+                actors.urge("eat");
             }
         """.trimIndent()
 
-        val actual: LogicStatement = civilisationScriptLogicGrammar.parseToEnd(scriptData)
+        val actual: List<LogicStatement> = civilisationScriptLogicGrammar.parseToEnd(scriptData)
 
-        assertThat(actual).isNotNull()
-        assertThat(actual.subject).isEqualTo("actors")
+        assertThat(actual).isNotEmpty()
+        assertThat(actual[0]).isEqualTo("actors")
     }
     // actors.urge("eat").plus(1);
 }
