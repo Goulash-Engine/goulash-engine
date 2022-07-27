@@ -41,7 +41,7 @@ class CivilisationScriptLogicGrammar : Grammar<List<LogicStatement>>() {
     /**
      * { actors[::urge(eat)[.plus(1)]]]; }
      */
-    private val contextCommandParser by -startLogicBlock * identifier * mutationParser * -endLogicBlock
+    private val contextCommandParser by identifier * mutationParser
     private val statementParser by contextCommandParser map { (context, mutation) ->
         LogicStatement(
             context.text,
@@ -52,7 +52,7 @@ class CivilisationScriptLogicGrammar : Grammar<List<LogicStatement>>() {
         )
     }
 
-    override val rootParser by separatedTerms(statementParser, endOfStatement)
+    override val rootParser by -startLogicBlock * separatedTerms(statementParser, endOfStatement) * -endLogicBlock
 
     internal data class ContextMutation(
         val type: String,
