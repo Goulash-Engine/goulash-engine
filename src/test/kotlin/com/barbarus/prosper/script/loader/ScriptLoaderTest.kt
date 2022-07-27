@@ -1,8 +1,10 @@
 package com.barbarus.prosper.script.loader
 
+import ScriptLoader
 import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.isEmpty
+import assertk.assertions.isNotEmpty
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -10,7 +12,23 @@ import org.junit.jupiter.api.io.TempDir
 internal class ScriptLoaderTest {
     @BeforeEach
     fun setup() {
-        ScriptLoader.globalBlockingConditions = emptyList()
+        ScriptLoader.resetLoader()
+    }
+
+    @Test
+    fun `should load logic script file`(@TempDir tempDir: java.io.File) {
+        val config = tempDir.resolve("logic.pros")
+        config.writeText(
+            """ 
+            logic myfoo {
+                actors::urge(eat).plus(1);
+            }
+            """.trimIndent()
+        )
+
+        ScriptLoader.loadScripts(tempDir.path)
+
+        assertThat(ScriptLoader.getLogicScripts()).isNotEmpty()
     }
 
     @Test
@@ -29,7 +47,7 @@ internal class ScriptLoaderTest {
             """.trimIndent()
         )
 
-        ScriptLoader.load(tempDir.path)
+        ScriptLoader.loadConfigurations(tempDir.path)
 
         assertThat(ScriptLoader.getGlobalBlockingConditionsOrDefault()).isEmpty()
     }
@@ -45,7 +63,7 @@ internal class ScriptLoaderTest {
             """.trimIndent()
         )
 
-        ScriptLoader.load(tempDir.path)
+        ScriptLoader.loadConfigurations(tempDir.path)
 
         assertThat(ScriptLoader.getGlobalBlockingConditionsOrDefault()).isEmpty()
     }
@@ -61,7 +79,7 @@ internal class ScriptLoaderTest {
             """.trimIndent()
         )
 
-        ScriptLoader.load(tempDir.path)
+        ScriptLoader.loadConfigurations(tempDir.path)
 
         assertThat(ScriptLoader.getGlobalBlockingConditionsOrDefault()).containsAll("dying", "starving")
     }

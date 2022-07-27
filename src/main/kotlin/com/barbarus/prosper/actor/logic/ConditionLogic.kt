@@ -2,7 +2,6 @@ package com.barbarus.prosper.actor.logic
 
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
-import com.barbarus.prosper.script.loader.ScriptLoader
 
 /**
  * Changes the condition of an [Actor] depending on various factors.
