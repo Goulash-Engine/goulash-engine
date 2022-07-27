@@ -11,10 +11,10 @@ internal class CivilisationScriptLogicGrammarTest {
     private val civilisationScriptLogicGrammar = CivilisationScriptLogicGrammar()
 
     @Test
-    fun `should parse simple logic statement`() {
+    fun `should parse simple mutation logic statement`() {
         val scriptData = """
             {
-                actors::urge(eat);
+                actors::urge(eat).plus(brot);
             }
         """.trimIndent()
 
@@ -24,6 +24,7 @@ internal class CivilisationScriptLogicGrammarTest {
         assertThat(actual[0].context).isEqualTo("actors")
         assertThat(actual[0].mutationType).isEqualTo("urge")
         assertThat(actual[0].mutationTarget).isEqualTo("eat")
+        assertThat(actual[0].mutationOperation).isEqualTo("plus")
+        assertThat(actual[0].mutationOperationArgument).isEqualTo("brot")
     }
-    // actors.urge("eat").plus(1);
 }

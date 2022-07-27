@@ -17,25 +17,51 @@ class CivilisationScriptLogicGrammar : Grammar<List<LogicStatement>>() {
     private val startLogicBlock by literalToken("{")
     private val contextMutationOperator by literalToken("::")
     private val identifier by regexToken("^[a-z]+")
-    private val operationLeftPar by literalToken("(")
-    private val operationRightPar by literalToken(")")
+    private val rightPar by literalToken(")")
+    private val operationOperator by literalToken(".")
+    private val leftPar by literalToken("(")
     private val endLogicBlock by literalToken("}")
     private val endOfStatement by literalToken(";", ignore = true)
-    private val operationArgument by regexToken(".*")
+    private val argument by regexToken(".*")
 
-    private val mutationParser by -contextMutationOperator * identifier * -operationLeftPar * (operationArgument or identifier) * -operationRightPar map { (identifier, argument) ->
-        ContextMutation(identifier.text, argument.text)
+    /**
+     * .plus(1)
+     */
+    private val operationParser by -operationOperator * identifier * -leftPar * (argument or identifier) * -rightPar map { (name, argument) ->
+        Operation(name.text, argument.text)
     }
 
-    private val subjectParser by -startLogicBlock * identifier * mutationParser * -endLogicBlock
-    private val statementParser by subjectParser map { (contextId, mutation) ->
-        LogicStatement(contextId.text, mutation.type, mutation.target)
+    /**
+     * ::urge(eat)[.plus(1)]
+     */
+    private val mutationParser by -contextMutationOperator * identifier * -leftPar * (argument or identifier) * -rightPar * operationParser map { (type, target, operation) ->
+        ContextMutation(type.text, target.text, operation)
+    }
+
+    /**
+     * { actors[::urge(eat)[.plus(1)]]]; }
+     */
+    private val contextCommandParser by -startLogicBlock * identifier * mutationParser * -endLogicBlock
+    private val statementParser by contextCommandParser map { (context, mutation) ->
+        LogicStatement(
+            context.text,
+            mutation.type,
+            mutation.target,
+            mutation.operation.name,
+            mutation.operation.argument
+        )
     }
 
     override val rootParser by separatedTerms(statementParser, endOfStatement)
 
     internal data class ContextMutation(
         val type: String,
-        val target: String
+        val target: String,
+        val operation: Operation
+    )
+
+    internal data class Operation(
+        val name: String,
+        val argument: String
     )
 }
