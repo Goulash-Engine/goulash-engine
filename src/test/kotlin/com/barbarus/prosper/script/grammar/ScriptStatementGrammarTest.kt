@@ -8,8 +8,8 @@ import com.barbarus.prosper.script.domain.LogicStatement
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 
-internal class CivilisationScriptLogicGrammarTest {
-    private val civilisationScriptLogicGrammar = CivilisationScriptLogicGrammar()
+internal class ScriptStatementGrammarTest {
+    private val scriptStatementGrammar = ScriptStatementGrammar()
 
     @Test
     fun `should parse multiple mutation operations`() {
@@ -20,7 +20,7 @@ internal class CivilisationScriptLogicGrammarTest {
             }
         """.trimIndent()
 
-        val actual: List<LogicStatement> = civilisationScriptLogicGrammar.parseToEnd(scriptData)
+        val actual: List<LogicStatement> = scriptStatementGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual).hasSize(2)
@@ -46,7 +46,7 @@ internal class CivilisationScriptLogicGrammarTest {
             }
         """.trimIndent()
 
-        val actual: List<LogicStatement> = civilisationScriptLogicGrammar.parseToEnd(scriptData)
+        val actual: List<LogicStatement> = scriptStatementGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0].context).isEqualTo("actors")
