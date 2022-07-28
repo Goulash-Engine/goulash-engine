@@ -16,10 +16,33 @@ internal class LogicScriptFileGrammarTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
     @Test
+    fun `should parse statement with filter and no filter mutation operation`() {
+        val scriptData = """
+            logic myfoo {
+                actors[state.health > 1]::urge(eat).plus(1);
+                actors::urge(eat).plus(2);
+            }
+        """.trimIndent()
+
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+
+        assertThat(actual.head.name).isEqualTo("myfoo")
+        assertThat(actual.statements[0].mutationType).isEqualTo("urge")
+        assertThat(actual.statements[0].filter).isEqualTo("state.health > 1")
+        assertThat(actual.statements[0].mutationTarget).isEqualTo("eat")
+        assertThat(actual.statements[0].mutationOperation).isEqualTo("plus")
+        assertThat(actual.statements[0].mutationOperationArgument).isEqualTo("1")
+        assertThat(actual.statements[1].mutationType).isEqualTo("urge")
+        assertThat(actual.statements[1].filter).isEqualTo("")
+        assertThat(actual.statements[1].mutationTarget).isEqualTo("eat")
+        assertThat(actual.statements[1].mutationOperation).isEqualTo("plus")
+        assertThat(actual.statements[1].mutationOperationArgument).isEqualTo("2")
+    }
+    @Test
     fun `should parse statement with filter`() {
         val scriptData = """
             logic myfoo {
-                actors[state.health>1]::urge(eat).plus(1);
+                actors[state.health > 1]::urge(eat).plus(1);
             }
         """.trimIndent()
 
@@ -29,7 +52,7 @@ internal class LogicScriptFileGrammarTest {
         assertAll {
             actual.statements.forEach {
                 assertThat(it.mutationType).isEqualTo("urge")
-                assertThat(it.filter).isEqualTo("state.health>1")
+                assertThat(it.filter).isEqualTo("state.health > 1")
                 assertThat(it.mutationTarget).isEqualTo("eat")
                 assertThat(it.mutationOperation).isEqualTo("plus")
                 assertThat(it.mutationOperationArgument).isEqualTo("1")
