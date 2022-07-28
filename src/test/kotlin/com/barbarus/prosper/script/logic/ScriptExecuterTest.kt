@@ -8,6 +8,10 @@ import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.domain.ScriptStatement
 import org.junit.jupiter.api.Test
 
+/**
+ * Tests if the [ScriptExecuter] can properly map operations of the [ScriptContext]
+ * to internal logic.
+ */
 internal class ScriptExecuterTest {
     private val scriptExecuter = ScriptExecuter()
 
@@ -19,6 +23,7 @@ internal class ScriptExecuterTest {
         val statements = listOf(
             ScriptStatement(
                 "actors",
+                "",
                 "urge",
                 "eat",
                 "set",
@@ -45,6 +50,7 @@ internal class ScriptExecuterTest {
         val statements = listOf(
             ScriptStatement(
                 "actors",
+                "",
                 "urge",
                 "eat",
                 "minus",
@@ -66,6 +72,7 @@ internal class ScriptExecuterTest {
         val statements = listOf(
             ScriptStatement(
                 "actors",
+                "",
                 "urge",
                 "eat",
                 "plus",

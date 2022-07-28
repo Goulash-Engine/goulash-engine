@@ -15,7 +15,16 @@ internal class ScriptTranspilerTest {
         val scriptTranspiler = ScriptTranspiler()
         val scriptContext = ScriptContext(
             LogicScriptFileGrammar.ScriptHead("foo"),
-            listOf(ScriptStatement("actors", "urge", "eat", "plus", "1"))
+            listOf(
+                ScriptStatement(
+                    "actors",
+                    "",
+                    "urge",
+                    "eat",
+                    "plus",
+                    "1"
+                )
+            )
         )
 
         val scriptedLogic = scriptTranspiler.transpile(scriptContext)

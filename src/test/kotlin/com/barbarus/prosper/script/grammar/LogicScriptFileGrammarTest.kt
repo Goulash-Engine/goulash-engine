@@ -9,6 +9,9 @@ import com.github.h0tk3y.betterParse.parser.ParseException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
+/**
+ * Tests the grammatical parsing ability for given script data.
+ */
 internal class LogicScriptFileGrammarTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
@@ -16,8 +19,7 @@ internal class LogicScriptFileGrammarTest {
     fun `should parse statement with filter`() {
         val scriptData = """
             logic myfoo {
-                actors::urge(eat).plus(1);
-                actors::urge(eat).plus(1);
+                actors[state.health>1]::urge(eat).plus(1);
             }
         """.trimIndent()
 
@@ -27,6 +29,7 @@ internal class LogicScriptFileGrammarTest {
         assertAll {
             actual.statements.forEach {
                 assertThat(it.mutationType).isEqualTo("urge")
+                assertThat(it.filter).isEqualTo("state.health>1")
                 assertThat(it.mutationTarget).isEqualTo("eat")
                 assertThat(it.mutationOperation).isEqualTo("plus")
                 assertThat(it.mutationOperationArgument).isEqualTo("1")

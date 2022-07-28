@@ -9,6 +9,10 @@ import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 
+/**
+ * This test is a whitebox test that asserts functionality from script data to the
+ * effects on the context.
+ */
 internal class ScriptSyntaxTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
