@@ -12,10 +12,19 @@ class ScriptExecuter {
                     when (statement.mutationOperation) {
                         "plus" -> context.actors.forEach { increaseUrge(it, statement) }
                         "minus" -> context.actors.forEach { decreaseUrge(it, statement) }
+                        "set" -> context.actors.forEach { setUrge(it, statement) }
                     }
                 }
             }
         }
+    }
+
+    private fun setUrge(actor: Actor, statement: ScriptStatement) {
+        actor.urges.stopUrge("eat")
+        actor.urges.increaseUrge(
+            statement.mutationTarget,
+            statement.mutationOperationArgument.toDouble()
+        )
     }
 
     private fun increaseUrge(actor: Actor, statement: ScriptStatement) {

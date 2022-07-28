@@ -12,6 +12,30 @@ internal class ScriptExecuterTest {
     private val scriptExecuter = ScriptExecuter()
 
     @Test
+    fun `should set eat urge for all actors to 50`() {
+        val one = ClanFactory.testClan()
+        val two = ClanFactory.testClan()
+        val civilisation = Civilisation(mutableListOf(one, two))
+        val statements = listOf(
+            ScriptStatement(
+                "actors",
+                "urge",
+                "eat",
+                "set",
+                "50"
+            )
+        )
+
+        scriptExecuter.execute(civilisation, statements)
+
+        assertAll {
+            civilisation.actors.forEach {
+                assertThat(it.urges.getUrges()["eat"]).isEqualTo(50.0)
+            }
+        }
+    }
+
+    @Test
     fun `should decrease eat urge for all actors by 1_0`() {
         val one = ClanFactory.testClan()
         val two = ClanFactory.testClan()
