@@ -2,6 +2,7 @@ package com.barbarus.prosper.script.grammar
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.logic.ScriptContext
@@ -15,6 +16,29 @@ import org.junit.jupiter.api.Test
  */
 internal class ScriptSyntaxTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
+
+    @Test
+    fun `should set eat urge of actors where health is equal 30 to 20`() {
+        val scriptData = """
+            logic myfoo {
+                actors[state.health = 50]::urge(foo).set(20);
+            }
+        """.trimIndent()
+
+        val one = ClanFactory.testClan()
+        one.state.health = 30.0
+        val two = ClanFactory.testClan()
+        two.state.health = 50.0
+        val civilisation = Civilisation(mutableListOf(one, two))
+
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val transpiler = ScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(civilisation)
+
+        assertThat(one.urges.getUrgeOrNull("foo")).isNull()
+        assertThat(two.urges.getUrgeOrNull("foo")).isEqualTo(20.0)
+    }
 
     @Test
     fun `should increase urge of all actors where health is greater than 50`() {
@@ -34,6 +58,7 @@ internal class ScriptSyntaxTest {
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(civilisation)
 
+        assertThat(one.urges.getUrgeOrNull("foo")).isNull()
         assertThat(two.urges.getUrgeOrNull("foo")).isEqualTo(1.0)
     }
 

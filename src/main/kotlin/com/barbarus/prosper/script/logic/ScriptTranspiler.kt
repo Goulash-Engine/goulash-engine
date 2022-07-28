@@ -34,9 +34,11 @@ class ScriptTranspiler {
         if (filterStatement.isEmpty()) return this
         val contextFilter = filterGrammar.parseToEnd(filterStatement)
         if (contextFilter.type == "state") {
-            if (contextFilter.attribute == "urge") {
-                if (contextFilter.operator == ">") {
-                    return this.filter { it.state.health > contextFilter.argument.toDouble() }
+            if (contextFilter.attribute == "health") {
+                when (contextFilter.operator) {
+                    "=" -> return this.filter { it.state.health == contextFilter.argument.toDouble() }
+                    ">" -> return this.filter { it.state.health > contextFilter.argument.toDouble() }
+                    "<" -> return this.filter { it.state.health < contextFilter.argument.toDouble() }
                 }
             }
         }
