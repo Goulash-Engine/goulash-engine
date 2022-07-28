@@ -8,6 +8,7 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
 import kotlin.io.path.Path
+import kotlin.io.path.exists
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.readText
 
@@ -19,8 +20,10 @@ object ScriptLoader {
     private val scriptGrammar: LogicScriptFileGrammar = LogicScriptFileGrammar()
 
     internal fun load() {
-        loadConfigurations()
-        loadScripts()
+        require(Path("config").exists()) { "Config directory does not exist" }
+        require(Path("logic").exists()) { "Logic directory does not exist" }
+        loadConfigurations("config")
+        loadScripts("logic")
     }
 
     fun resetLoader() {
@@ -28,7 +31,7 @@ object ScriptLoader {
         logicScripts = listOf()
     }
 
-    internal fun loadScripts(scriptDirectory: String = javaClass.getResource("/logic").path) {
+    internal fun loadScripts(scriptDirectory: String) {
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
@@ -56,7 +59,7 @@ object ScriptLoader {
         }
     }
 
-    internal fun loadConfigurations(configDirectory: String = javaClass.getResource("/config").path) {
+    internal fun loadConfigurations(configDirectory: String) {
         val files = Path(configDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         var loadingCount = 0
