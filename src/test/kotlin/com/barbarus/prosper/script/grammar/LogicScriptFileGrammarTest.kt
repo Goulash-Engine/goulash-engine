@@ -13,6 +13,28 @@ internal class LogicScriptFileGrammarTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
     @Test
+    fun `should parse statement with filter`() {
+        val scriptData = """
+            logic myfoo {
+                actors::urge(eat).plus(1);
+                actors::urge(eat).plus(1);
+            }
+        """.trimIndent()
+
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+
+        assertThat(actual.head.name).isEqualTo("myfoo")
+        assertAll {
+            actual.statements.forEach {
+                assertThat(it.mutationType).isEqualTo("urge")
+                assertThat(it.mutationTarget).isEqualTo("eat")
+                assertThat(it.mutationOperation).isEqualTo("plus")
+                assertThat(it.mutationOperationArgument).isEqualTo("1")
+            }
+        }
+    }
+
+    @Test
     fun `should parse multiple script statements`() {
         val scriptData = """
             logic myfoo {
