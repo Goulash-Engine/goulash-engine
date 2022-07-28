@@ -1,8 +1,9 @@
 package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.core.domain.Civilisation
-import com.barbarus.prosper.script.domain.LogicStatement
+import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.domain.ScriptedLogic
+import com.barbarus.prosper.script.logic.ScriptExecuter
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.or
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
@@ -53,7 +54,7 @@ class LogicScriptFileGrammar : Grammar<ScriptedLogic<Civilisation>>() {
      */
     private val contextCommandParser by identifier * mutationParser
     private val statementParser by contextCommandParser map { (context, mutation) ->
-        LogicStatement(
+        ScriptStatement(
             context.text,
             mutation.type,
             mutation.target,
@@ -64,21 +65,9 @@ class LogicScriptFileGrammar : Grammar<ScriptedLogic<Civilisation>>() {
 
     private val statementsParser by -startLogicBlock * separatedTerms(statementParser, endOfStatement) * -endLogicBlock
     override val rootParser by (scriptHeadParser * statementsParser) map { (scriptHead, statements) ->
+        val scriptExecuter = ScriptExecuter()
         ScriptedLogic<Civilisation>(scriptHead.name) { context ->
-            statements.forEach { statement ->
-                if (statement.context == "actors") {
-                    if (statement.mutationType == "urge") {
-                        if (statement.mutationOperation == "plus") {
-                            context.actors.forEach {
-                                it.urges.increaseUrge(
-                                    statement.mutationTarget,
-                                    statement.mutationOperationArgument.toDouble()
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            scriptExecuter.execute(context, statements)
         }
     }
 

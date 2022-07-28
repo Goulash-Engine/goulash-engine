@@ -1,6 +1,6 @@
 package com.barbarus.prosper.script.domain
 
-data class LogicStatement(
+data class ScriptStatement(
     val context: String,
     val mutationType: String,
     val mutationTarget: String,

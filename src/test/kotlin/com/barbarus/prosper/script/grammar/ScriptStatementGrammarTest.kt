@@ -4,7 +4,7 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNotEmpty
-import com.barbarus.prosper.script.domain.LogicStatement
+import com.barbarus.prosper.script.domain.ScriptStatement
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -27,7 +27,7 @@ internal class ScriptStatementGrammarTest {
             }
         """.trimIndent()
 
-        val actual: List<LogicStatement> = scriptStatementGrammar.parseToEnd(scriptData)
+        val actual: List<ScriptStatement> = scriptStatementGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual).hasSize(2)
@@ -44,7 +44,7 @@ internal class ScriptStatementGrammarTest {
             }
         """.trimIndent()
 
-        val actual: List<LogicStatement> = scriptStatementGrammar.parseToEnd(scriptData)
+        val actual: List<ScriptStatement> = scriptStatementGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual).hasSize(2)
@@ -70,7 +70,7 @@ internal class ScriptStatementGrammarTest {
             }
         """.trimIndent()
 
-        val actual: List<LogicStatement> = scriptStatementGrammar.parseToEnd(scriptData)
+        val actual: List<ScriptStatement> = scriptStatementGrammar.parseToEnd(scriptData)
 
         assertThat(actual).isNotEmpty()
         assertThat(actual[0].context).isEqualTo("actors")

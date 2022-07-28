@@ -1,6 +1,6 @@
 package com.barbarus.prosper.script.grammar
 
-import com.barbarus.prosper.script.domain.LogicStatement
+import com.barbarus.prosper.script.domain.ScriptStatement
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.or
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
@@ -10,7 +10,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
-class ScriptStatementGrammar : Grammar<List<LogicStatement>>() {
+class ScriptStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
@@ -43,7 +43,7 @@ class ScriptStatementGrammar : Grammar<List<LogicStatement>>() {
      */
     private val contextCommandParser by identifier * mutationParser
     private val statementParser by contextCommandParser map { (context, mutation) ->
-        LogicStatement(
+        ScriptStatement(
             context.text,
             mutation.type,
             mutation.target,
