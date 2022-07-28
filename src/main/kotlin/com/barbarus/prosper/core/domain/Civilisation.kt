@@ -1,5 +1,6 @@
 package com.barbarus.prosper.core.domain
 
+import ScriptLoader
 import com.barbarus.prosper.civilisation.logic.CivilisationLogic
 
 /**
@@ -12,6 +13,7 @@ class Civilisation(
     private val civilisationLogic = CivilisationLogic()
 
     fun act() {
+        ScriptLoader.getLogicScripts().forEach { it.process(this) }
         civilisationLogic.process(this)
         actors.forEach { it.act() }
     }

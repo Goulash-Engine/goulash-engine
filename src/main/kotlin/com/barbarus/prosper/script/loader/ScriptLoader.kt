@@ -1,4 +1,3 @@
-
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
@@ -18,6 +17,7 @@ object ScriptLoader {
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
     private var logicScripts: List<ScriptedLogic<Civilisation>> = listOf()
+
     private val configGrammars: List<ListConfigurationGrammar> = listOf(ListConfigurationGrammar())
     private val scriptGrammar: LogicScriptFileGrammar = LogicScriptFileGrammar()
 
@@ -46,7 +46,7 @@ object ScriptLoader {
         val scriptLogics = files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
             .mapNotNull { scriptData ->
                 try {
-                    scriptGrammar.parseToEnd(scriptData) as ScriptedLogic<Civilisation>
+                    scriptGrammar.parseToEnd(scriptData)
                 } catch (e: ParseException) {
                     LOG.error("[Parser Error] ${e.message}")
                     loadingError++
