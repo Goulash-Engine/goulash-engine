@@ -9,7 +9,6 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
 import java.nio.file.Files
-import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.listDirectoryEntries
 import kotlin.io.path.notExists
@@ -41,15 +40,7 @@ object ScriptLoader {
     }
 
     internal fun loadScripts(scriptDirectory: String) {
-        val files: List<Path>
-
-        try {
-            files = Path(scriptDirectory).listDirectoryEntries("*.pros")
-        } catch (e: NoSuchFileException) {
-            LOG.error("No files found in $scriptDirectory")
-            return
-        }
-
+        val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
         val scriptLogics = files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
