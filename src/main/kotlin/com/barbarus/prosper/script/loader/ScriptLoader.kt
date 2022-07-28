@@ -4,6 +4,7 @@ import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.domain.ScriptedLogic
 import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
 import com.barbarus.prosper.script.grammar.LogicScriptFileGrammar
+import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
@@ -40,6 +41,7 @@ object ScriptLoader {
     }
 
     internal fun loadScripts(scriptDirectory: String) {
+        val scriptTranspiler = ScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
@@ -56,7 +58,8 @@ object ScriptLoader {
                     loadingError++
                     null
                 }
-            }.toList()
+            }.map(scriptTranspiler::transpile)
+            .toList()
 
         logicScripts = scriptLogics
 

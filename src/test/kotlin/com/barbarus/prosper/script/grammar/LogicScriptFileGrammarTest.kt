@@ -1,10 +1,9 @@
 package com.barbarus.prosper.script.grammar
 
+import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.core.domain.Civilisation
-import com.barbarus.prosper.factories.ClanFactory
-import com.barbarus.prosper.script.domain.ScriptedLogic
+import com.barbarus.prosper.script.logic.ScriptContext
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.junit.jupiter.api.Test
@@ -22,15 +21,17 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
-        val two = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(one, two))
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
 
-        val actual: ScriptedLogic<Civilisation> = logicScriptFileGrammar.parseToEnd(scriptData)
-        actual.process(civilisation)
-
-        assertThat(one.urges.getUrges()["eat"]).isEqualTo(2.0)
-        assertThat(two.urges.getUrges()["eat"]).isEqualTo(2.0)
+        assertThat(actual.head.name).isEqualTo("myfoo")
+        assertAll {
+            actual.statements.forEach {
+                assertThat(it.mutationType).isEqualTo("urge")
+                assertThat(it.mutationTarget).isEqualTo("eat")
+                assertThat(it.mutationOperation).isEqualTo("plus")
+                assertThat(it.mutationOperationArgument).isEqualTo("1")
+            }
+        }
     }
 
     @Test
@@ -41,15 +42,17 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
-        val two = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(one, two))
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
 
-        val actual: ScriptedLogic<Civilisation> = logicScriptFileGrammar.parseToEnd(scriptData)
-        actual.process(civilisation)
-
-        assertThat(one.urges.getUrges()["eat"]).isEqualTo(1.0)
-        assertThat(two.urges.getUrges()["eat"]).isEqualTo(1.0)
+        assertThat(actual.head.name).isEqualTo("myfoo")
+        assertAll {
+            actual.statements.forEach {
+                assertThat(it.mutationType).isEqualTo("urge")
+                assertThat(it.mutationTarget).isEqualTo("eat")
+                assertThat(it.mutationOperation).isEqualTo("plus")
+                assertThat(it.mutationOperationArgument).isEqualTo("1")
+            }
+        }
     }
 
     @Test
@@ -72,8 +75,6 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ScriptedLogic<Civilisation> = logicScriptFileGrammar.parseToEnd(scriptData)
-
-        assertThat(actual.name).isEqualTo("myfoo")
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
     }
 }
