@@ -68,14 +68,12 @@ class LogicScriptFileGrammar : Grammar<ScriptedLogic<Civilisation>>() {
             statements.forEach { statement ->
                 if (statement.context == "actors") {
                     if (statement.mutationType == "urge") {
-                        if (statement.mutationTarget == "eat") {
-                            if (statement.mutationOperation == "plus") {
-                                context.actors.forEach {
-                                    it.urges.increaseUrge(
-                                        statement.mutationTarget,
-                                        statement.mutationOperationArgument.toDouble()
-                                    )
-                                }
+                        if (statement.mutationOperation == "plus") {
+                            context.actors.forEach {
+                                it.urges.increaseUrge(
+                                    statement.mutationTarget,
+                                    statement.mutationOperationArgument.toDouble()
+                                )
                             }
                         }
                     }
