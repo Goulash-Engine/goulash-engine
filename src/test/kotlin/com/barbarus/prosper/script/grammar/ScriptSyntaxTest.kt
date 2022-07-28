@@ -29,6 +29,8 @@ internal class ScriptSyntaxTest {
         actual.process(civilisation)
 
         assertThat(one.urges.getUrges()["foo"]).isEqualTo(3.0)
+        assertThat(one.urges.getUrges()["bar"]).isEqualTo(0.5)
+        assertThat(two.urges.getUrges()["foo"]).isEqualTo(3.0)
         assertThat(two.urges.getUrges()["bar"]).isEqualTo(0.5)
     }
 }
