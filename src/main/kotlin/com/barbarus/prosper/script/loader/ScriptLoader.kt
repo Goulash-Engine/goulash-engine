@@ -1,3 +1,4 @@
+
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
@@ -7,9 +8,11 @@ import com.barbarus.prosper.script.grammar.LogicScriptFileGrammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
+import java.nio.file.Files
+import java.nio.file.Path
 import kotlin.io.path.Path
-import kotlin.io.path.exists
 import kotlin.io.path.listDirectoryEntries
+import kotlin.io.path.notExists
 import kotlin.io.path.readText
 
 object ScriptLoader {
@@ -20,10 +23,16 @@ object ScriptLoader {
     private val scriptGrammar: LogicScriptFileGrammar = LogicScriptFileGrammar()
 
     internal fun load() {
-        require(Path("config").exists()) { "Config directory does not exist" }
-        require(Path("logic").exists()) { "Logic directory does not exist" }
-        loadConfigurations("config")
-        loadScripts("logic")
+        val logicDir = "logic"
+        val configDir = "$logicDir/config"
+        if (Path(logicDir).notExists()) {
+            Files.createDirectory(Path(logicDir))
+        }
+        if (Path(configDir).notExists()) {
+            Files.createDirectory(Path(configDir))
+        }
+        loadScripts(logicDir)
+        loadConfigurations(configDir)
     }
 
     fun resetLoader() {
@@ -32,11 +41,18 @@ object ScriptLoader {
     }
 
     internal fun loadScripts(scriptDirectory: String) {
-        val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
+        val files: List<Path>
+
+        try {
+            files = Path(scriptDirectory).listDirectoryEntries("*.pros")
+        } catch (e: NoSuchFileException) {
+            LOG.error("No files found in $scriptDirectory")
+            return
+        }
+
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
-        val scriptLogics = files.asSequence()
-            .map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
+        val scriptLogics = files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
             .mapNotNull { scriptData ->
                 try {
                     scriptGrammar.parseToEnd(scriptData) as ScriptedLogic<Civilisation>
@@ -64,8 +80,7 @@ object ScriptLoader {
         var loadingError = 0
         var loadingCount = 0
         LOG.info("Loading configurations from: $configDirectory...")
-        files.asSequence()
-            .map { LOG.info("Reading config file: ${it.fileName}..."); it.readText() }
+        files.asSequence().map { LOG.info("Reading config file: ${it.fileName}..."); it.readText() }
             .forEach { configData ->
                 configGrammars.flatMap {
                     try {
