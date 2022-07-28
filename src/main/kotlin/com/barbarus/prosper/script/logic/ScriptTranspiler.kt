@@ -27,6 +27,9 @@ class ScriptTranspiler {
         }
     }
 
+    private fun buildFilter(filterStatement: String) {
+    }
+
     private fun setUrge(actor: Actor, statement: ScriptStatement) {
         actor.urges.stopUrge("eat")
         actor.urges.increaseUrge(

@@ -34,7 +34,6 @@ internal class ScriptSyntaxTest {
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(civilisation)
 
-        assertThat(one.urges.getUrgeOrNull("foo")).isEqualTo(0.0)
         assertThat(two.urges.getUrgeOrNull("foo")).isEqualTo(1.0)
     }
 

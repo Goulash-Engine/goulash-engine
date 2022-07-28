@@ -2,7 +2,6 @@ package com.barbarus.prosper.script.logic
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.domain.ScriptStatement
@@ -19,7 +18,7 @@ internal class ScriptTranspilerTest {
             listOf(
                 ScriptStatement(
                     "actors",
-                    "state.health > 50",
+                    "state.health < 20",
                     "urge",
                     "eat",
                     "plus",
@@ -38,7 +37,7 @@ internal class ScriptTranspilerTest {
 
         scriptedLogic.process(civilisation)
 
-        assertThat(testClan.urges.getUrgeOrNull("eat")).isNull()
+        assertThat(testClan.urges.getUrgeOrNull("eat")).isEqualTo(1.0)
     }
 
     @Test
