@@ -3,8 +3,11 @@ package com.barbarus.prosper.core.domain
 class Urges {
     private val _urges: MutableMap<String, Double> = mutableMapOf()
 
-    fun getUrges(): Map<String, Double> {
-        return _urges
+    fun getAllUrges(): Map<String, Double> {
+        return _urges.toMap()
+    }
+    fun getUrgeOrNull(name: String): Double? {
+        return _urges[name]
     }
 
     fun increaseUrge(name: String, value: Double) {
@@ -14,10 +17,10 @@ class Urges {
         }
     }
 
-    fun decreaseUrge(name: String, value: Double) {
+    fun decreaseUrge(name: String, value: Double, remove: Boolean = true) {
         if (_urges.containsKey(name)) {
             _urges[name] = _urges[name]!! - value
-            if (_urges[name]!! < 0) {
+            if (_urges[name]!! < 0 && remove) {
                 _urges.remove(name)
             }
         }

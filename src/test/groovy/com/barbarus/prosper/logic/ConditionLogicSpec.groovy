@@ -10,7 +10,7 @@ class ConditionLogicSpec extends Specification {
         given:
         ConditionLogic conditionLogic = new ConditionLogic()
         Clan clan = new ClanFactory().poorGathererClan()
-        clan.urges.getUrges().put("rest", urgeToRest.doubleValue())
+        clan.urges.getUrgeOrNull().put("rest", urgeToRest.doubleValue())
         conditionLogic.process(clan)
 
         expect:

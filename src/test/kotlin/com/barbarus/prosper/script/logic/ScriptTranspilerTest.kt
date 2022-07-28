@@ -2,6 +2,7 @@ package com.barbarus.prosper.script.logic
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.domain.ScriptStatement
@@ -9,6 +10,36 @@ import com.barbarus.prosper.script.grammar.LogicScriptFileGrammar
 import org.junit.jupiter.api.Test
 
 internal class ScriptTranspilerTest {
+
+    @Test
+    fun `should transpile filter`() {
+        val scriptTranspiler = ScriptTranspiler()
+        val scriptContext = ScriptContext(
+            LogicScriptFileGrammar.ScriptHead("foo"),
+            listOf(
+                ScriptStatement(
+                    "actors",
+                    "state.health > 50",
+                    "urge",
+                    "eat",
+                    "plus",
+                    "1"
+                )
+            )
+        )
+
+        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+
+        val testClan = ClanFactory.testClan()
+        testClan.state.health = 30.0
+        val civilisation = Civilisation(mutableListOf(testClan))
+
+        assertThat(scriptedLogic.name).isEqualTo("foo")
+
+        scriptedLogic.process(civilisation)
+
+        assertThat(testClan.urges.getUrgeOrNull("eat")).isNull()
+    }
 
     @Test
     fun `should transpile script context`() {
@@ -36,6 +67,6 @@ internal class ScriptTranspilerTest {
 
         scriptedLogic.process(civilisation)
 
-        assertThat(testClan.urges.getUrges()["eat"]).isEqualTo(1.0)
+        assertThat(testClan.urges.getUrgeOrNull("eat")).isEqualTo(1.0)
     }
 }

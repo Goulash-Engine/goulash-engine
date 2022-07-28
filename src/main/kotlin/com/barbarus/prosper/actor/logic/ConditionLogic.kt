@@ -1,5 +1,6 @@
 package com.barbarus.prosper.actor.logic
 
+import ScriptLoader
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
 
@@ -15,7 +16,7 @@ class ConditionLogic : Logic<Actor> {
     }
 
     private fun simulateExhaustion(actor: Actor) {
-        val urgeToRest: Double = actor.urges.getUrges()["rest"] ?: return
+        val urgeToRest: Double = actor.urges.getUrgeOrNull("rest") ?: return
         clearExhaustionConditions(actor)
         when {
             urgeToRest >= 100 -> actor.conditions.add("unconscious")
@@ -81,8 +82,7 @@ class ConditionLogic : Logic<Actor> {
             actor.state.nourishment > 20.0 -> actor.conditions.add("extremely hungry")
         }
 
-        val eatUrge = actor.urges.getUrges()["eat"]
-        if (eatUrge == null) actor.conditions.add("well fed")
+        actor.urges.getUrgeOrNull("eat") ?: actor.conditions.add("well fed")
     }
 
     private fun cleanHungerConditions(actor: Actor) {

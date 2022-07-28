@@ -31,6 +31,6 @@ internal class CivilisationTest {
 
         civilisation.act()
 
-        assertThat(actors.first().urges.getUrges()["eat"]).isEqualTo(1.0)
+        assertThat(actors.first().urges.getUrgeOrNull("eat")).isEqualTo(1.0)
     }
 }

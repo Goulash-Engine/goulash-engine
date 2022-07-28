@@ -2,7 +2,7 @@ package com.barbarus.prosper.core.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isFalse
+import assertk.assertions.isNull
 import org.junit.jupiter.api.Test
 
 internal class UrgesTest {
@@ -12,7 +12,7 @@ internal class UrgesTest {
     fun `should do nothing if the urge to decrease does not exist`() {
         urges.decreaseUrge("rest", 2.0)
 
-        assertThat(urges.getUrges().containsKey("rest")).isFalse()
+        assertThat(urges.getUrgeOrNull("rest")).isNull()
     }
 
     @Test
@@ -20,7 +20,7 @@ internal class UrgesTest {
         urges.increaseUrge("rest", 1.0)
         urges.decreaseUrge("rest", 2.0)
 
-        assertThat(urges.getUrges().containsKey("rest")).isFalse()
+        assertThat(urges.getUrgeOrNull("rest")).isNull()
     }
 
     @Test
@@ -30,7 +30,7 @@ internal class UrgesTest {
         urges.increaseUrge("rest", 1.0)
         urges.stopUrge("rest")
 
-        assertThat(urges.getUrges().containsKey("rest")).isFalse()
+        assertThat(urges.getUrgeOrNull("rest")).isNull()
     }
 
     @Test
@@ -39,7 +39,7 @@ internal class UrgesTest {
         urges.increaseUrge("rest", 1.0)
         urges.decreaseUrge("rest", 1.0)
 
-        assertThat(urges.getUrges()["rest"]).isEqualTo(1.0)
+        assertThat(urges.getUrgeOrNull("rest")).isEqualTo(1.0)
     }
 
     @Test
@@ -47,13 +47,13 @@ internal class UrgesTest {
         urges.increaseUrge("rest", 1.0)
         urges.increaseUrge("rest", 1.0)
 
-        assertThat(urges.getUrges()["rest"]).isEqualTo(2.0)
+        assertThat(urges.getUrgeOrNull("rest")).isEqualTo(2.0)
     }
 
     @Test
     fun `should increase urge by 1_0`() {
         urges.increaseUrge("rest", 1.0)
 
-        assertThat(urges.getUrges()["rest"]).isEqualTo(1.0)
+        assertThat(urges.getUrgeOrNull("rest")).isEqualTo(1.0)
     }
 }

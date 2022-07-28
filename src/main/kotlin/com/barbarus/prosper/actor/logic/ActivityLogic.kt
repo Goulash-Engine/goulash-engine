@@ -35,8 +35,8 @@ class ActivityLogic : Logic<Actor> {
         actor.conditions.any { ConditionLogic.GLOBAL_BLOCKING_CONDITION.contains(it) }
 
     private fun setUrgentActivities(actor: Actor) {
-        val highestUrgeValue = actor.urges.getUrges().maxByOrNull { it.value }?.value ?: 0
-        val topUrges = actor.urges.getUrges().filter { it.value == highestUrgeValue }
+        val highestUrgeValue = actor.urges.getAllUrges().maxByOrNull { it.value }?.value ?: 0
+        val topUrges = actor.urges.getAllUrges().filter { it.value == highestUrgeValue }
 
         val urgentActivity = actor.activities
             .filter { matchesUrge(it, topUrges) }
