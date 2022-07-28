@@ -13,7 +13,7 @@ internal class LogicScriptFileGrammarTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
     @Test
-    fun `should increase the urge two times to eat for every actor`() {
+    fun `should parse multiple script statements`() {
         val scriptData = """
             logic myfoo {
                 actors::urge(eat).plus(1);
@@ -35,7 +35,7 @@ internal class LogicScriptFileGrammarTest {
     }
 
     @Test
-    fun `should increase the urge to eat for every actor`() {
+    fun `should parse simple script statement`() {
         val scriptData = """
             logic myfoo {
                 actors::urge(eat).plus(1);
@@ -64,17 +64,5 @@ internal class LogicScriptFileGrammarTest {
         assertThrows<ParseException> {
             logicScriptFileGrammar.parseToEnd(scriptData)
         }
-    }
-
-    @Test
-    fun `should parse simple logic statement`() {
-        val scriptData = """
-            logic myfoo {
-                actors::urge(eat).plus(1);
-                actors::urge(eat).plus(0.5);
-            }
-        """.trimIndent()
-
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
     }
 }
