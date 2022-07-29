@@ -2,10 +2,15 @@ package com.barbarus.prosper.script.logic
 
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.State
 import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.domain.ScriptedLogic
+import com.barbarus.prosper.script.extension.ReflectionExtensions.callSetter
 import com.barbarus.prosper.script.grammar.FilterGrammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.declaredMembers
 
 /**
  * Transpiles [ScriptContext] to [ScriptedLogic]
@@ -17,6 +22,13 @@ class ScriptTranspiler {
             val statements = scriptContext.statements
             statements.forEach { statement ->
                 if (statement.context == "actors") {
+                    if (statement.mutationType == "state") {
+                        context.actors.forEach { actor ->
+                            if (statement.mutationOperation == "set") {
+                                mutate(actor, statement.mutationTarget, statement.mutationOperationArgument)
+                            }
+                        }
+                    }
                     if (statement.mutationType == "urge") {
                         val actors = context.actors.tryScriptFilter(statement.filter)
                         when (statement.mutationOperation) {
@@ -30,6 +42,12 @@ class ScriptTranspiler {
         }
     }
 
+    private fun mutate(actor: Actor, property: String, value: Any) {
+        val state: State = Actor::class.declaredMemberProperties.find { it.name == "state" }!!.get(actor) as State
+        val stateProperty = State::class.declaredMembers.find { it.name == property } as KMutableProperty
+        stateProperty.setter.callSetter(value, state)
+    }
+
     private fun <T : Actor> List<T>.tryScriptFilter(filterStatement: String): List<T> {
         if (filterStatement.isEmpty()) return this
         val contextFilter = filterGrammar.parseToEnd(filterStatement)
@@ -40,6 +58,7 @@ class ScriptTranspiler {
                         val actorClass = Actor::class
                         it.state.health == contextFilter.argument.toDouble()
                     }
+
                     ">" -> return this.filter { it.state.health > contextFilter.argument.toDouble() }
                     "<" -> return this.filter { it.state.health < contextFilter.argument.toDouble() }
                 }

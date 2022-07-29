@@ -12,6 +12,32 @@ import org.junit.jupiter.api.Test
 internal class ScriptTranspilerTest {
 
     @Test
+    fun `should transpile health set to 50_0`() {
+        val scriptTranspiler = ScriptTranspiler()
+        val scriptContext = ScriptContext(
+            LogicScriptFileGrammar.ScriptHead("foo"),
+            listOf(
+                ScriptStatement(
+                    "actors",
+                    "",
+                    "state",
+                    "health",
+                    "set",
+                    "50"
+                )
+            )
+        )
+
+        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+
+        val testClan = ClanFactory.testClan()
+        val civilisation = Civilisation(mutableListOf(testClan))
+
+        scriptedLogic.process(civilisation)
+
+        assertThat(testClan.state.health).isEqualTo(50.0)
+    }
+    @Test
     fun `should transpile filter for greater than`() {
         val scriptTranspiler = ScriptTranspiler()
         val scriptContext = ScriptContext(
