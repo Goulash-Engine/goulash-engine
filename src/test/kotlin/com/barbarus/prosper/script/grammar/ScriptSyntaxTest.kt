@@ -4,11 +4,14 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Clan
+import com.barbarus.prosper.core.domain.State
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.logic.ScriptContext
 import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
+import kotlin.reflect.full.declaredMemberProperties
 
 /**
  * This test is a whitebox test that asserts functionality from script data to the
@@ -16,6 +19,15 @@ import org.junit.jupiter.api.Test
  */
 internal class ScriptSyntaxTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
+
+    @Test
+    fun test() {
+        val clan = ClanFactory.testClan()
+
+        (Clan::class.declaredMemberProperties.find { it.name == "state" }!!.get(clan) as State).health = 10.0
+
+        assertThat(clan.state.health).isEqualTo(10.0)
+    }
 
     @Test
     fun `should set eat urge of actors where health is equal 30 to 20`() {

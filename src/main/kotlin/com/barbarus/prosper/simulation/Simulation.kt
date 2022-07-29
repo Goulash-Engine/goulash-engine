@@ -65,7 +65,7 @@ class Simulation(
         if (render) {
             builder.append("Active clans: ${civilisation.actors.size}\n\n")
             builder.append("Date: ${WORLD_TIME}\n\n")
-            builder.append("Clan Details:\n")
+            builder.append("Actor Monitor:\n")
 
             if (civilisation.actors.isNotEmpty()) {
                 renderClanDetails(builder)

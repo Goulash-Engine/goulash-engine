@@ -36,7 +36,10 @@ class ScriptTranspiler {
         if (contextFilter.type == "state") {
             if (contextFilter.attribute == "health") {
                 when (contextFilter.operator) {
-                    "=" -> return this.filter { it.state.health == contextFilter.argument.toDouble() }
+                    "=" -> return this.filter {
+                        val actorClass = Actor::class
+                        it.state.health == contextFilter.argument.toDouble()
+                    }
                     ">" -> return this.filter { it.state.health > contextFilter.argument.toDouble() }
                     "<" -> return this.filter { it.state.health < contextFilter.argument.toDouble() }
                 }
