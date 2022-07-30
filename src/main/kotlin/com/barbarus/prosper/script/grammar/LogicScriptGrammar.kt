@@ -1,9 +1,7 @@
 package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.domain.ScriptStatement
-import com.barbarus.prosper.script.logic.ContextMutation
 import com.barbarus.prosper.script.logic.LogicScriptContext
-import com.barbarus.prosper.script.logic.Operation
 import com.barbarus.prosper.script.logic.ScriptHead
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.optional
@@ -42,14 +40,14 @@ internal class LogicScriptGrammar : Grammar<LogicScriptContext>() {
      * .plus(1)
      */
     private val operationParser by -operationOperator * identifier * -leftPar * (digit or identifier) * -rightPar map { (name, argument) ->
-        Operation(name.text, argument.text)
+        LogicScriptContext.Operation(name.text, argument.text)
     }
 
     /**
      * ::urge(eat)[.plus(1)]
      */
     private val mutationParser by -contextMutationOperator * identifier * -leftPar * identifier * -rightPar * operationParser map { (type, target, operation) ->
-        ContextMutation(type.text, target.text, operation)
+        LogicScriptContext.ContextMutation(type.text, target.text, operation)
     }
 
     private val filterParser by filter use { text.removeSurrounding("[", "]") }
