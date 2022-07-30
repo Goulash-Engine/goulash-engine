@@ -6,7 +6,7 @@ import assertk.assertions.isEqualTo
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.extension.toDuration
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import com.barbarus.prosper.factories.ResourceFactory
 import io.mockk.every
 import io.mockk.justRun
@@ -25,10 +25,10 @@ internal class ActivityLogicTest {
         every { exitingActivity.duration() } returns 5.toDuration()
         every { exitingActivity.act(any()) } returnsMany listOf(true, true, true, true, false)
 
-        val testClan = ClanFactory.testClan(listOf(exitingActivity))
-        testClan.urges.increaseUrge("foo", 10.0)
+        val testActor = ActorFactory.testActor(listOf(exitingActivity))
+        testActor.urges.increaseUrge("foo", 10.0)
 
-        repeat(10) { activityLogic.process(testClan) }
+        repeat(10) { activityLogic.process(testActor) }
 
         verifyOrder {
             repeat(4) { exitingActivity.act(any()) }
@@ -46,11 +46,11 @@ internal class ActivityLogicTest {
         every { urgeActivity.triggerUrges() } returns listOf("eat")
         every { urgeActivity.duration() } returns 10.toDuration()
 
-        val clan = ClanFactory.testClan(listOf(idleActivity, urgeActivity))
-        clan.urges.increaseUrge("eat", 100.0)
-        clan.conditions.add("underfed")
+        val actor = ActorFactory.testActor(listOf(idleActivity, urgeActivity))
+        actor.urges.increaseUrge("eat", 100.0)
+        actor.conditions.add("underfed")
 
-        repeat(10) { activityLogic.process(clan) }
+        repeat(10) { activityLogic.process(actor) }
 
         verify(inverse = true) { idleActivity.act(any()) }
     }
@@ -63,12 +63,12 @@ internal class ActivityLogicTest {
         every { testActivity.duration() } returns 10.toDuration()
         every { testActivity.act(any()) } returns true
 
-        val clan = ClanFactory.testClan(listOf(testActivity))
-        clan.urges.increaseUrge("sleep", 100.0)
+        val actor = ActorFactory.testActor(listOf(testActivity))
+        actor.urges.increaseUrge("sleep", 100.0)
 
-        repeat(2) { activityLogic.process(clan) }
-        clan.conditions.add("stop")
-        repeat(1) { activityLogic.process(clan) }
+        repeat(2) { activityLogic.process(actor) }
+        actor.conditions.add("stop")
+        repeat(1) { activityLogic.process(actor) }
 
         verify(atMost = 2) { testActivity.act(any()) }
         verify(atMost = 1) { testActivity.onAbort(any()) }
@@ -90,11 +90,11 @@ internal class ActivityLogicTest {
         every { normalActivity.duration() } returns 1.toDuration()
         every { normalActivity.priority() } returns Int.MAX_VALUE
 
-        val clan = ClanFactory.testClan(listOf(prioritizedActivity, normalActivity))
-        clan.urges.increaseUrge("eat", 100.0)
-        clan.urges.increaseUrge("sleep", 100.0)
+        val actor = ActorFactory.testActor(listOf(prioritizedActivity, normalActivity))
+        actor.urges.increaseUrge("eat", 100.0)
+        actor.urges.increaseUrge("sleep", 100.0)
 
-        repeat(2) { activityLogic.process(clan) }
+        repeat(2) { activityLogic.process(actor) }
 
         verifyOrder {
             prioritizedActivity.act(any())
@@ -114,12 +114,12 @@ internal class ActivityLogicTest {
         every { normalActivity.triggerUrges() } returns listOf("eat")
         every { normalActivity.duration() } returns 1.toDuration()
 
-        val clan = ClanFactory.testClan(listOf(prioritizedActivity, normalActivity))
-        clan.conditions.add("panic")
-        clan.urges.increaseUrge("eat", 100.0)
-        clan.urges.increaseUrge("think", 20.0)
+        val actor = ActorFactory.testActor(listOf(prioritizedActivity, normalActivity))
+        actor.conditions.add("panic")
+        actor.urges.increaseUrge("eat", 100.0)
+        actor.urges.increaseUrge("think", 20.0)
 
-        repeat(2) { activityLogic.process(clan) }
+        repeat(2) { activityLogic.process(actor) }
 
         verifyOrder {
             prioritizedActivity.act(any())
@@ -133,12 +133,12 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.duration() } returns 5.toDuration()
         every { mockedWorkActivity.abortConditions() } returns listOf("starving")
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
-        clan.urges.increaseUrge("work", 100.0)
+        val actor = ActorFactory.testActor(listOf(mockedWorkActivity))
+        actor.urges.increaseUrge("work", 100.0)
         ConditionLogic.GLOBAL_BLOCKING_CONDITION = listOf("starving")
-        clan.conditions.add(ConditionLogic.GLOBAL_BLOCKING_CONDITION.first())
+        actor.conditions.add(ConditionLogic.GLOBAL_BLOCKING_CONDITION.first())
 
-        activityLogic.process(clan)
+        activityLogic.process(actor)
 
         verify(inverse = true) { mockedWorkActivity.act(any()) }
     }
@@ -149,7 +149,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.duration() } returns 5.toDuration()
         every { mockedWorkActivity.abortConditions() } returns listOf("starving")
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         clan.urges.increaseUrge("work", 100.0)
 
         repeat(3) { activityLogic.process(clan) }
@@ -167,7 +167,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.activity() } returns "working"
         every { mockedWorkActivity.duration() } returns 1.toDuration()
 
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         val expectedResource = ResourceFactory.food()
         every { mockedWorkActivity.onFinish(clan) } answers {
             val actor = firstArg<Actor>()
@@ -199,7 +199,7 @@ internal class ActivityLogicTest {
         every { secondaryActivity.duration() } returns 1.toDuration()
         justRun { secondaryActivity.onFinish(any()) }
 
-        val clan = ClanFactory.testClan(listOf(primaryActivity, secondaryActivity))
+        val clan = ActorFactory.testActor(listOf(primaryActivity, secondaryActivity))
 
         every { primaryActivity.act(clan) } answers {
             clan.urges.decreaseUrge("work", 5.0)
@@ -234,7 +234,7 @@ internal class ActivityLogicTest {
         every { secondaryActivity.duration() } returns 2.toDuration()
         justRun { secondaryActivity.onFinish(any()) }
 
-        val clan = ClanFactory.testClan(listOf(primaryActivity, secondaryActivity))
+        val clan = ActorFactory.testActor(listOf(primaryActivity, secondaryActivity))
 
         every { primaryActivity.act(clan) } returns true
         every { secondaryActivity.act(clan) } returns true
@@ -254,7 +254,7 @@ internal class ActivityLogicTest {
         every { firstActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { firstActivity.activity() } returns "working"
         every { firstActivity.duration() } returns 2.toDuration()
-        val clan = ClanFactory.testClan(listOf(firstActivity))
+        val clan = ActorFactory.testActor(listOf(firstActivity))
         every { firstActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
 
@@ -271,7 +271,7 @@ internal class ActivityLogicTest {
         every { mockedIdleActivity.activity() } returns "idle"
         every { mockedIdleActivity.duration() } returns 1.toDuration()
         justRun { mockedIdleActivity.onFinish(any()) }
-        val clan = ClanFactory.testClan(listOf(mockedIdleActivity))
+        val clan = ActorFactory.testActor(listOf(mockedIdleActivity))
         clan.urges.increaseUrge("work", 100.0)
         every { mockedIdleActivity.act(any()) } returns true
 
@@ -287,7 +287,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.toDuration()
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 10.0)
@@ -306,7 +306,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.toDuration()
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)
@@ -326,7 +326,7 @@ internal class ActivityLogicTest {
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.toDuration()
-        val clan = ClanFactory.testClan(listOf(mockedWorkActivity))
+        val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)

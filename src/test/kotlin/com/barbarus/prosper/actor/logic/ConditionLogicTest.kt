@@ -3,7 +3,7 @@ package com.barbarus.prosper.actor.logic
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.doesNotContain
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import org.junit.jupiter.api.Test
 
 internal class ConditionLogicTest {
@@ -11,22 +11,22 @@ internal class ConditionLogicTest {
 
     @Test
     fun `should give dead condition if health is below 0`() {
-        val clan = ClanFactory.simpleGathererClan()
-        clan.state.health = -0.1
+        val actor = ActorFactory.simpleGathererActor()
+        actor.state.health = -0.1
 
-        conditionLogic.process(clan)
+        conditionLogic.process(actor)
 
-        assertThat(clan.conditions).contains("dead")
+        assertThat(actor.conditions).contains("dead")
     }
 
     @Test
     fun `should make remove underfed condition if eat urge is below 100`() {
-        val clan = ClanFactory.poorGathererClan()
-        clan.urges.increaseUrge("eat", 99.0)
-        clan.conditions.add("underfed")
+        val actor = ActorFactory.poorActor()
+        actor.urges.increaseUrge("eat", 99.0)
+        actor.conditions.add("underfed")
 
-        conditionLogic.process(clan)
+        conditionLogic.process(actor)
 
-        assertThat(clan.conditions).doesNotContain("underfed")
+        assertThat(actor.conditions).doesNotContain("underfed")
     }
 }

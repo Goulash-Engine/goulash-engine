@@ -1,21 +1,21 @@
 package com.barbarus.prosper.logic
 
 import com.barbarus.prosper.actor.logic.ConditionLogic
-import com.barbarus.prosper.core.domain.Clan
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.core.domain.DemoActor
+import com.barbarus.prosper.factories.ActorFactory
 import spock.lang.Specification
 
 class ConditionLogicSpec extends Specification {
     def "should simulate exhaustion conditions by the rest urge"() {
         given:
         ConditionLogic conditionLogic = new ConditionLogic()
-        Clan clan = new ClanFactory().poorGathererClan()
-        clan.urges.stopUrge("rest")
-        clan.urges.increaseUrge("rest", urgeToRest.doubleValue())
-        conditionLogic.process(clan)
+        DemoActor actor = new ActorFactory().poorActor()
+        actor.urges.stopUrge("rest")
+        actor.urges.increaseUrge("rest", urgeToRest.doubleValue())
+        conditionLogic.process(actor)
 
         expect:
-        clan.conditions.contains(expectedCondition)
+        actor.conditions.contains(expectedCondition)
 
         where:
         urgeToRest || expectedCondition
@@ -29,12 +29,12 @@ class ConditionLogicSpec extends Specification {
     def "should simulate health conditions impairment by health state"() {
         given:
         ConditionLogic conditionLogic = new ConditionLogic()
-        Clan clan = new ClanFactory().poorGathererClan()
-        clan.state.health = givenHealth
-        conditionLogic.process(clan)
+        DemoActor actor = new ActorFactory().poorActor()
+        actor.state.health = givenHealth
+        conditionLogic.process(actor)
 
         expect:
-        clan.conditions.contains(expectedCondition)
+        actor.conditions.contains(expectedCondition)
 
         where:
         givenHealth || expectedCondition

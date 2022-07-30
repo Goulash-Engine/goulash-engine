@@ -4,7 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Container
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import com.barbarus.prosper.script.logic.ScriptContext
 import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
@@ -26,9 +26,9 @@ internal class ScriptSyntaxTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
+        val one = ActorFactory.testActor()
         one.state.health = 100.0
-        val two = ClanFactory.testClan()
+        val two = ActorFactory.testActor()
         two.state.health = 300.0
         val container = Container(mutableListOf(one, two))
 
@@ -51,7 +51,7 @@ internal class ScriptSyntaxTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
+        val one = ActorFactory.testActor()
         one.state.health = 100.0
         val container = Container(mutableListOf(one))
 
@@ -72,7 +72,7 @@ internal class ScriptSyntaxTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
+        val one = ActorFactory.testActor()
         val container = Container(mutableListOf(one))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
@@ -91,9 +91,9 @@ internal class ScriptSyntaxTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
+        val one = ActorFactory.testActor()
         one.state.health = 30.0
-        val two = ClanFactory.testClan()
+        val two = ActorFactory.testActor()
         two.state.health = 50.0
         val container = Container(mutableListOf(one, two))
 
@@ -114,9 +114,9 @@ internal class ScriptSyntaxTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
+        val one = ActorFactory.testActor()
         one.state.health = 30.0
-        val two = ClanFactory.testClan()
+        val two = ActorFactory.testActor()
         val container = Container(mutableListOf(one, two))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
@@ -138,8 +138,8 @@ internal class ScriptSyntaxTest {
             }
         """.trimIndent()
 
-        val one = ClanFactory.testClan()
-        val two = ClanFactory.testClan()
+        val one = ActorFactory.testActor()
+        val two = ActorFactory.testActor()
         val container = Container(mutableListOf(one, two))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)

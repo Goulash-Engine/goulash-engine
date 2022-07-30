@@ -10,7 +10,7 @@ import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.WorldDate
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import com.barbarus.prosper.simulation.Simulation
 import io.mockk.mockk
 import org.junit.jupiter.api.Disabled
@@ -20,10 +20,10 @@ internal class SimulationTest {
 
     @Disabled
     @Test
-    fun `clan should survive`() {
+    fun `actor should survive`() {
         val mockedRestActivity = mockk<RestActivity>(relaxed = true)
-        val clans: MutableList<Actor> = mutableListOf(
-            ClanFactory.testClan(
+        val actors: MutableList<Actor> = mutableListOf(
+            ActorFactory.testActor(
                 mutableListOf(
                     WorkActivity(),
                     mockedRestActivity,
@@ -33,9 +33,9 @@ internal class SimulationTest {
                 )
             )
         )
-        clans.first().inventory().clear()
+        actors.first().inventory().clear()
 
-        val container = Container(clans)
+        val container = Container(actors)
         val simulation = Simulation(
             maximumTicks = 60 * 24 * 30,
             millisecondsPerTick = 1,

@@ -2,7 +2,7 @@ package com.barbarus.prosper.actor.logic
 
 import assertk.assertThat
 import assertk.assertions.isLessThan
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import org.junit.jupiter.api.Test
 
 internal class StateLogicTest {
@@ -11,11 +11,11 @@ internal class StateLogicTest {
 
     @Test
     fun `should decrease health if bad nourished`() {
-        val clan = ClanFactory.poorGathererClan()
-        clan.state.nourishment = 50.0
+        val actor = ActorFactory.poorActor()
+        actor.state.nourishment = 50.0
 
-        stateLogic.process(clan)
+        stateLogic.process(actor)
 
-        assertThat(clan.state.health).isLessThan(100.0)
+        assertThat(actor.state.health).isLessThan(100.0)
     }
 }

@@ -3,14 +3,14 @@ package com.barbarus.prosper.actor.activity
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.core.domain.Clan
+import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.extension.toDuration
 import com.barbarus.prosper.factories.ResourceFactory
 import kotlin.random.Random
 
 /**
- * This [Activity] controls the daily work of a clan.
+ * This [Activity] controls the daily work of a actor.
  */
 class WorkActivity : Activity {
     private var progress: Double = 0.0
@@ -49,7 +49,7 @@ class WorkActivity : Activity {
     }
 
     private fun addResource(actor: Actor) {
-        if (actor is Clan) {
+        if (actor is DemoActor) {
             val resource = when (actor.primaryProfession.type) {
                 ProfessionType.GATHERER -> ResourceFactory.food()
                 ProfessionType.WOODWORKER -> ResourceFactory.woodenMaterial()

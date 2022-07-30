@@ -1,6 +1,6 @@
 package com.barbarus.prosper.factories
 
-object ClanNameFactory {
+object ActorNameFactory {
 
     fun randomName(): String = listOf(
         "Ulfreng",

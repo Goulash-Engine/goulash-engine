@@ -1,9 +1,9 @@
 package com.barbarus.prosper.simulation
 
-import com.barbarus.prosper.core.domain.Clan
 import com.barbarus.prosper.core.domain.Container
+import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.WorldDate
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole
@@ -18,17 +18,17 @@ class Simulation(
     private val tickBase: Int = WorldDate.SECOND,
     val container: Container = Container(
         mutableListOf(
-            ClanFactory.poorGathererClan()
-            // ClanFactory.poorGathererClan(),
-            // ClanFactory.poorGathererClan(),
-            // ClanFactory.simpleGathererClan()
+            ActorFactory.poorActor()
+            // ActorFactory.poorGathererActor(),
+            // ActorFactory.poorGathererActor(),
+            // ActorFactory.simpleGathererActor()
         )
     )
 ) {
 
     init {
         LOG.info("Initializing simulation")
-        LOG.info("${container.actors.size} clans initialized")
+        LOG.info("${container.actors.size} actors initialized")
     }
 
     fun run() {
@@ -63,12 +63,12 @@ class Simulation(
         builder.append("Tick ${currentTick?.plus(1) ?: "\u221E"}/${maximumTicks ?: "\u221E"}\n")
 
         if (render) {
-            builder.append("Active clans: ${container.actors.size}\n\n")
+            builder.append("Active actors: ${container.actors.size}\n\n")
             builder.append("Date: ${WORLD_TIME}\n\n")
             builder.append("Actor Monitor:\n")
 
             if (container.actors.isNotEmpty()) {
-                renderClanDetails(builder)
+                renderActorDetails(builder)
             }
 
             print(ansi().cursor(1, 1).eraseScreen(Ansi.Erase.FORWARD))
@@ -78,39 +78,39 @@ class Simulation(
         TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
     }
 
-    private fun renderClanDetails(builder: StringBuilder) {
-        container.actors.filterIsInstance(Clan::class.java).forEach { clan ->
+    private fun renderActorDetails(builder: StringBuilder) {
+        container.actors.filterIsInstance(DemoActor::class.java).forEach { actor ->
             builder.append(
                 """
-                    @|red -- ${clan.name} --|@
-                    @|yellow id: ${clan.id}|@
+                    @|red -- ${actor.name} --|@
+                    @|yellow id: ${actor.id}|@
                     
-                    @|green Activity: ${clan.currentActivity} |@
+                    @|green Activity: ${actor.currentActivity} |@
     
                     @|green ## State ## |@
-                    health: ${String.format(Locale.US, "%.2f", clan.state.health)}
-                    nourishment: ${String.format(Locale.US, "%.2f", clan.state.nourishment)}
+                    health: ${String.format(Locale.US, "%.2f", actor.state.health)}
+                    nourishment: ${String.format(Locale.US, "%.2f", actor.state.nourishment)}
                     
                     @|green ## Urges ## |@
                     ${
-                clan.urges.getAllUrges().toList().sortedByDescending { it.second }.toMap().map { (key, value) ->
+                actor.urges.getAllUrges().toList().sortedByDescending { it.second }.toMap().map { (key, value) ->
                     """${String.format(Locale.US, "%.2f", value)} | $key
                     """
                 }.joinToString("")
                 }
                     @|green ## Stash ## |@
                     ${
-                clan.stash.joinToString("") {
+                actor.stash.joinToString("") {
                     """${String.format(Locale.US, "%.2f", it.weight)} | ${it.type}
                     """
                 }
                 }
                     @|green ## Conditions ## |@
-                    ${clan.conditions}
+                    ${actor.conditions}
                 """.trimIndent()
             )
             builder.append("\n---")
-            repeat(clan.name.length) { builder.append("-") }
+            repeat(actor.name.length) { builder.append("-") }
             builder.append("---")
             builder.append("\n\n")
         }

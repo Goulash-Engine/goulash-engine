@@ -7,7 +7,7 @@ import com.barbarus.prosper.core.domain.ResourceType
 import com.barbarus.prosper.core.extension.toDuration
 
 /**
- * This [Activity] controls the daily work of a clan.
+ * This [Activity] controls the daily work of a actor.
  */
 class EatActivity : Activity {
 

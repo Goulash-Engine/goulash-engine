@@ -3,14 +3,13 @@ package com.barbarus.prosper.core.domain
 import ScriptLoader
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.factories.ClanFactory
+import com.barbarus.prosper.factories.ActorFactory
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
 internal class ContainerTest {
-    private val actors: MutableList<Actor> = mutableListOf(ClanFactory.testClan())
-    private val container = Container(actors)
+    private val actors: MutableList<Actor> = mutableListOf(ActorFactory.testActor())
 
     @BeforeEach
     fun setup() {
@@ -28,6 +27,7 @@ internal class ContainerTest {
             """.trimIndent()
         )
         ScriptLoader.loadScripts(tempDir.path)
+        val container = Container(actors)
 
         container.act()
 

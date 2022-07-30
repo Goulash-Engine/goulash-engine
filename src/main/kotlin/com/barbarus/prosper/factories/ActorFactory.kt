@@ -6,14 +6,14 @@ import com.barbarus.prosper.actor.activity.SleepActivity
 import com.barbarus.prosper.actor.activity.ThinkActivity
 import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.activity.Activity
-import com.barbarus.prosper.core.domain.Clan
+import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
 import kotlin.random.Random
 
-object ClanFactory {
+object ActorFactory {
 
-    fun testClan(mockedActivities: List<Activity> = listOf()) = Clan(
+    fun testActor(mockedActivities: List<Activity> = listOf()) = DemoActor(
         primaryProfession = Profession(ProfessionType.GATHERER, experience = 1.0),
         stash = mutableListOf(
             ResourceFactory.woodenMaterial()
@@ -25,7 +25,7 @@ object ClanFactory {
         activities = mockedActivities
     )
 
-    fun poorGathererClan() = Clan(
+    fun poorActor() = DemoActor(
         primaryProfession = Profession(ProfessionType.GATHERER, experience = 1.0),
         stash = mutableListOf(
             ResourceFactory.woodenMaterial()
@@ -34,10 +34,10 @@ object ClanFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
-        activities = clanActivity()
+        activities = actorActivities()
     )
 
-    fun simpleGathererClan() = Clan(
+    fun simpleGathererActor() = DemoActor(
         primaryProfession = Profession(ProfessionType.GATHERER, experience = 1.0),
         stash = mutableListOf(
             ResourceFactory.woodenMaterial(),
@@ -46,10 +46,10 @@ object ClanFactory {
             ResourceFactory.food(),
             ResourceFactory.food()
         ),
-        activities = clanActivity()
+        activities = actorActivities()
     )
 
-    private fun clanActivity() = mutableListOf(
+    private fun actorActivities() = mutableListOf(
         WorkActivity(),
         RestActivity(),
         ThinkActivity(),
