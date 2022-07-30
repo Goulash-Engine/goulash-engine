@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
-internal class CivilisationTest {
+internal class ContainerTest {
     private val actors: MutableList<Actor> = mutableListOf(ClanFactory.testClan())
-    private val civilisation = Civilisation(actors)
+    private val container = Container(actors)
 
     @BeforeEach
     fun setup() {
@@ -29,7 +29,7 @@ internal class CivilisationTest {
         )
         ScriptLoader.loadScripts(tempDir.path)
 
-        civilisation.act()
+        container.act()
 
         assertThat(actors.first().urges.getUrgeOrNull("eat")).isEqualTo(1.0)
     }

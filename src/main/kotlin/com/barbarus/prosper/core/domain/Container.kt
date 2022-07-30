@@ -5,12 +5,12 @@ import com.barbarus.prosper.core.logic.Logic
 import org.slf4j.LoggerFactory
 
 /**
- * The core entity of the prosper engine. Within a village multiple [Clan]s try to survive and prosper through work,
- * trade and socialisation.
+ * The [Container] represents a logic execution context that holds a number of [Actor]s within.
+ * The children [Actor]s of a [Container] all are target by the logic applied to this [Container].
  */
-class Civilisation(
+class Container(
     val actors: MutableList<Actor> = mutableListOf(),
-    var loadedLogicScripts: List<Logic<Civilisation>> = listOf()
+    var loadedLogicScripts: List<Logic<Container>> = listOf()
 ) {
     init {
         LOG.info("Initialize logic scripts")

@@ -1,7 +1,7 @@
 package com.barbarus.prosper.script.logic
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.State
 import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.domain.ScriptedLogic
@@ -15,8 +15,8 @@ import kotlin.reflect.full.declaredMembers
  * Transpiles [ScriptContext] to [ScriptedLogic]
  */
 class ScriptTranspiler {
-    fun transpile(scriptContext: ScriptContext): ScriptedLogic<Civilisation> {
-        return ScriptedLogic<Civilisation>(scriptContext.head.name) { context ->
+    fun transpile(scriptContext: ScriptContext): ScriptedLogic<Container> {
+        return ScriptedLogic<Container>(scriptContext.head.name) { context ->
             val statements = scriptContext.statements
             statements.forEach { statement ->
                 if (statement.context == "actors") {

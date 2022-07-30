@@ -1,4 +1,4 @@
-import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.domain.ScriptedLogic
@@ -17,7 +17,7 @@ import kotlin.io.path.readText
 object ScriptLoader {
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
-    private var logicScripts: List<ScriptedLogic<Civilisation>> = listOf()
+    private var logicScripts: List<ScriptedLogic<Container>> = listOf()
 
     private val configGrammars: List<ListConfigurationGrammar> = listOf(ListConfigurationGrammar())
     private val scriptGrammar: LogicScriptFileGrammar = LogicScriptFileGrammar()
@@ -106,7 +106,7 @@ object ScriptLoader {
     internal fun getGlobalBlockingConditionsOrDefault(default: List<String> = listOf()): List<String> =
         globalBlockingConditions ?: default
 
-    internal fun getLogicScripts(): List<ScriptedLogic<Civilisation>> {
+    internal fun getLogicScripts(): List<ScriptedLogic<Container>> {
         return logicScripts
     }
 }

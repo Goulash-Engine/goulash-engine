@@ -8,7 +8,7 @@ import com.barbarus.prosper.actor.activity.SleepActivity
 import com.barbarus.prosper.actor.activity.ThinkActivity
 import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.WorldDate
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.simulation.Simulation
@@ -35,16 +35,16 @@ internal class SimulationTest {
         )
         clans.first().inventory().clear()
 
-        val civilisation = Civilisation(clans)
+        val container = Container(clans)
         val simulation = Simulation(
             maximumTicks = 60 * 24 * 30,
             millisecondsPerTick = 1,
-            civilisation = civilisation,
+            container = container,
             tickBase = WorldDate.MINUTE
         )
 
-        assertThat(simulation.civilisation.actors).hasSize(1)
+        assertThat(simulation.container.actors).hasSize(1)
         simulation.run()
-        assertThat(simulation.civilisation.actors).hasSize(1)
+        assertThat(simulation.container.actors).hasSize(1)
     }
 }

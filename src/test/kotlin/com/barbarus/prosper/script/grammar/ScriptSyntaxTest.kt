@@ -3,7 +3,7 @@ package com.barbarus.prosper.script.grammar
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.logic.ScriptContext
 import com.barbarus.prosper.script.logic.ScriptTranspiler
@@ -30,12 +30,12 @@ internal class ScriptSyntaxTest {
         one.state.health = 100.0
         val two = ClanFactory.testClan()
         two.state.health = 300.0
-        val civilisation = Civilisation(mutableListOf(one, two))
+        val container = Container(mutableListOf(one, two))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(one.state.health).isEqualTo(0.0)
         assertThat(two.state.health).isEqualTo(100.0)
@@ -53,12 +53,12 @@ internal class ScriptSyntaxTest {
 
         val one = ClanFactory.testClan()
         one.state.health = 100.0
-        val civilisation = Civilisation(mutableListOf(one))
+        val container = Container(mutableListOf(one))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(one.state.health).isEqualTo(70.0)
     }
@@ -73,12 +73,12 @@ internal class ScriptSyntaxTest {
         """.trimIndent()
 
         val one = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(one))
+        val container = Container(mutableListOf(one))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(one.state.health).isEqualTo(100.0)
     }
@@ -95,12 +95,12 @@ internal class ScriptSyntaxTest {
         one.state.health = 30.0
         val two = ClanFactory.testClan()
         two.state.health = 50.0
-        val civilisation = Civilisation(mutableListOf(one, two))
+        val container = Container(mutableListOf(one, two))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(one.urges.getUrgeOrNull("foo")).isNull()
         assertThat(two.urges.getUrgeOrNull("foo")).isEqualTo(20.0)
@@ -117,12 +117,12 @@ internal class ScriptSyntaxTest {
         val one = ClanFactory.testClan()
         one.state.health = 30.0
         val two = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(one, two))
+        val container = Container(mutableListOf(one, two))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(one.urges.getUrgeOrNull("foo")).isNull()
         assertThat(two.urges.getUrgeOrNull("foo")).isEqualTo(1.0)
@@ -140,12 +140,12 @@ internal class ScriptSyntaxTest {
 
         val one = ClanFactory.testClan()
         val two = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(one, two))
+        val container = Container(mutableListOf(one, two))
 
         val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(one.urges.getUrgeOrNull("foo")).isEqualTo(3.0)
         assertThat(one.urges.getUrgeOrNull("bar")).isEqualTo(0.5)

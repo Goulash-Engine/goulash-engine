@@ -3,7 +3,7 @@ package com.barbarus.prosper.script.logic
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
-import com.barbarus.prosper.core.domain.Civilisation
+import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.factories.ClanFactory
 import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.grammar.LogicScriptFileGrammar
@@ -32,9 +32,9 @@ internal class ScriptTranspilerTest {
 
         val testClan = ClanFactory.testClan()
         testClan.state.health = 50.0
-        val civilisation = Civilisation(mutableListOf(testClan))
+        val container = Container(mutableListOf(testClan))
 
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(testClan.state.health).isEqualTo(40.0)
     }
@@ -60,9 +60,9 @@ internal class ScriptTranspilerTest {
 
         val testClan = ClanFactory.testClan()
         testClan.state.health = 50.0
-        val civilisation = Civilisation(mutableListOf(testClan))
+        val container = Container(mutableListOf(testClan))
 
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(testClan.state.health).isEqualTo(60.0)
     }
@@ -87,9 +87,9 @@ internal class ScriptTranspilerTest {
         val scriptedLogic = scriptTranspiler.transpile(scriptContext)
 
         val testClan = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(testClan))
+        val container = Container(mutableListOf(testClan))
 
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(testClan.state.health).isEqualTo(50.0)
     }
@@ -115,11 +115,11 @@ internal class ScriptTranspilerTest {
 
         val testClan = ClanFactory.testClan()
         testClan.state.health = 61.0
-        val civilisation = Civilisation(mutableListOf(testClan))
+        val container = Container(mutableListOf(testClan))
 
         assertThat(scriptedLogic.name).isEqualTo("foo")
 
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(testClan.urges.getUrgeOrNull("eat")).isEqualTo(1.0)
     }
@@ -145,11 +145,11 @@ internal class ScriptTranspilerTest {
 
         val testClan = ClanFactory.testClan()
         testClan.state.health = 30.0
-        val civilisation = Civilisation(mutableListOf(testClan))
+        val container = Container(mutableListOf(testClan))
 
         assertThat(scriptedLogic.name).isEqualTo("foo")
 
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(testClan.urges.getUrgeOrNull("eat")).isNull()
     }
@@ -174,11 +174,11 @@ internal class ScriptTranspilerTest {
         val scriptedLogic = scriptTranspiler.transpile(scriptContext)
 
         val testClan = ClanFactory.testClan()
-        val civilisation = Civilisation(mutableListOf(testClan))
+        val container = Container(mutableListOf(testClan))
 
         assertThat(scriptedLogic.name).isEqualTo("foo")
 
-        scriptedLogic.process(civilisation)
+        scriptedLogic.process(container)
 
         assertThat(testClan.urges.getUrgeOrNull("eat")).isEqualTo(1.0)
     }

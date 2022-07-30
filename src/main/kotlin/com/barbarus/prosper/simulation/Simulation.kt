@@ -1,7 +1,7 @@
 package com.barbarus.prosper.simulation
 
-import com.barbarus.prosper.core.domain.Civilisation
 import com.barbarus.prosper.core.domain.Clan
+import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.WorldDate
 import com.barbarus.prosper.factories.ClanFactory
 import org.fusesource.jansi.Ansi
@@ -16,7 +16,7 @@ class Simulation(
     private val millisecondsPerTick: Long = 1000,
     private val render: Boolean = false,
     private val tickBase: Int = WorldDate.SECOND,
-    val civilisation: Civilisation = Civilisation(
+    val container: Container = Container(
         mutableListOf(
             ClanFactory.poorGathererClan()
             // ClanFactory.poorGathererClan(),
@@ -28,7 +28,7 @@ class Simulation(
 
     init {
         LOG.info("Initializing simulation")
-        LOG.info("${civilisation.actors.size} clans initialized")
+        LOG.info("${container.actors.size} clans initialized")
     }
 
     fun run() {
@@ -50,7 +50,7 @@ class Simulation(
 
     private fun runSimulation(currentTick: Int? = null) {
         WORLD_TIME.tick(tickBase)
-        civilisation.act()
+        container.act()
 
         val builder = StringBuilder()
 
@@ -63,11 +63,11 @@ class Simulation(
         builder.append("Tick ${currentTick?.plus(1) ?: "\u221E"}/${maximumTicks ?: "\u221E"}\n")
 
         if (render) {
-            builder.append("Active clans: ${civilisation.actors.size}\n\n")
+            builder.append("Active clans: ${container.actors.size}\n\n")
             builder.append("Date: ${WORLD_TIME}\n\n")
             builder.append("Actor Monitor:\n")
 
-            if (civilisation.actors.isNotEmpty()) {
+            if (container.actors.isNotEmpty()) {
                 renderClanDetails(builder)
             }
 
@@ -79,7 +79,7 @@ class Simulation(
     }
 
     private fun renderClanDetails(builder: StringBuilder) {
-        civilisation.actors.filterIsInstance(Clan::class.java).forEach { clan ->
+        container.actors.filterIsInstance(Clan::class.java).forEach { clan ->
             builder.append(
                 """
                     @|red -- ${clan.name} --|@
