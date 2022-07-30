@@ -3,6 +3,7 @@ package com.barbarus.prosper.actor.logic
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
+import com.barbarus.prosper.core.DecisionEngine
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.extension.toDuration
@@ -15,8 +16,8 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 
-internal class ActivityLogicTest {
-    private val activityLogic = ActivityLogic()
+internal class DecisionEngineTest {
+    private val decisionEngine = DecisionEngine()
 
     @Test
     fun `should abort activity if has been exited within act`() {
@@ -28,7 +29,7 @@ internal class ActivityLogicTest {
         val testActor = ActorFactory.testActor(listOf(exitingActivity))
         testActor.urges.increaseUrge("foo", 10.0)
 
-        repeat(10) { activityLogic.process(testActor) }
+        repeat(10) { decisionEngine.process(testActor) }
 
         verifyOrder {
             repeat(4) { exitingActivity.act(any()) }
@@ -50,7 +51,7 @@ internal class ActivityLogicTest {
         actor.urges.increaseUrge("eat", 100.0)
         actor.conditions.add("underfed")
 
-        repeat(10) { activityLogic.process(actor) }
+        repeat(10) { decisionEngine.process(actor) }
 
         verify(inverse = true) { idleActivity.act(any()) }
     }
@@ -66,9 +67,9 @@ internal class ActivityLogicTest {
         val actor = ActorFactory.testActor(listOf(testActivity))
         actor.urges.increaseUrge("sleep", 100.0)
 
-        repeat(2) { activityLogic.process(actor) }
+        repeat(2) { decisionEngine.process(actor) }
         actor.conditions.add("stop")
-        repeat(1) { activityLogic.process(actor) }
+        repeat(1) { decisionEngine.process(actor) }
 
         verify(atMost = 2) { testActivity.act(any()) }
         verify(atMost = 1) { testActivity.onAbort(any()) }
@@ -94,7 +95,7 @@ internal class ActivityLogicTest {
         actor.urges.increaseUrge("eat", 100.0)
         actor.urges.increaseUrge("sleep", 100.0)
 
-        repeat(2) { activityLogic.process(actor) }
+        repeat(2) { decisionEngine.process(actor) }
 
         verifyOrder {
             prioritizedActivity.act(any())
@@ -119,7 +120,7 @@ internal class ActivityLogicTest {
         actor.urges.increaseUrge("eat", 100.0)
         actor.urges.increaseUrge("think", 20.0)
 
-        repeat(2) { activityLogic.process(actor) }
+        repeat(2) { decisionEngine.process(actor) }
 
         verifyOrder {
             prioritizedActivity.act(any())
@@ -138,7 +139,7 @@ internal class ActivityLogicTest {
         ConditionLogic.GLOBAL_BLOCKING_CONDITION = listOf("starving")
         actor.conditions.add(ConditionLogic.GLOBAL_BLOCKING_CONDITION.first())
 
-        activityLogic.process(actor)
+        decisionEngine.process(actor)
 
         verify(inverse = true) { mockedWorkActivity.act(any()) }
     }
@@ -152,9 +153,9 @@ internal class ActivityLogicTest {
         val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         clan.urges.increaseUrge("work", 100.0)
 
-        repeat(3) { activityLogic.process(clan) }
+        repeat(3) { decisionEngine.process(clan) }
         clan.conditions.add("starving")
-        repeat(2) { activityLogic.process(clan) }
+        repeat(2) { decisionEngine.process(clan) }
 
         verify(atMost = 3) { mockedWorkActivity.act(any()) }
     }
@@ -175,7 +176,7 @@ internal class ActivityLogicTest {
         }
         every { mockedWorkActivity.act(clan) } returns true
 
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }
@@ -210,9 +211,9 @@ internal class ActivityLogicTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 9.0)
 
-        activityLogic.process(clan)
-        activityLogic.process(clan)
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
+        decisionEngine.process(clan)
+        decisionEngine.process(clan)
 
         verify(exactly = 2) { primaryActivity.act(clan) }
         verify(exactly = 1) { secondaryActivity.act(clan) }
@@ -242,7 +243,7 @@ internal class ActivityLogicTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("resting", 9.0)
 
-        repeat(4) { activityLogic.process(clan) }
+        repeat(4) { decisionEngine.process(clan) }
 
         verify(exactly = 4) { primaryActivity.act(clan) }
     }
@@ -258,7 +259,7 @@ internal class ActivityLogicTest {
         every { firstActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
 
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
 
         assertThat(clan.currentActivity).isEqualTo(firstActivity.activity())
     }
@@ -275,7 +276,7 @@ internal class ActivityLogicTest {
         clan.urges.increaseUrge("work", 100.0)
         every { mockedIdleActivity.act(any()) } returns true
 
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
 
         verify { mockedIdleActivity.act(any()) }
     }
@@ -292,7 +293,7 @@ internal class ActivityLogicTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 10.0)
 
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }
@@ -312,7 +313,7 @@ internal class ActivityLogicTest {
         clan.urges.increaseUrge("rest", 5.0)
         clan.conditions.add("sick")
 
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }
@@ -331,7 +332,7 @@ internal class ActivityLogicTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)
 
-        activityLogic.process(clan)
+        decisionEngine.process(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }

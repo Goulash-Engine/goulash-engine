@@ -1,6 +1,7 @@
-package com.barbarus.prosper.actor.logic
+package com.barbarus.prosper.core
 
 import com.barbarus.prosper.actor.activity.IdleActivity
+import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
@@ -9,7 +10,7 @@ import com.barbarus.prosper.core.logic.Logic
  * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
  * actor is the driving factor of this logic. There can be only one [Activity] running for each [Actor].
  */
-class ActivityLogic : Logic<Actor> {
+class DecisionEngine : Logic<Actor> {
 
     private val currentActivity = RunningActivity()
 

@@ -1,6 +1,6 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.actor.logic.ActivityLogic
+import com.barbarus.prosper.core.DecisionEngine
 import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.actor.logic.InventoryLogic
 import com.barbarus.prosper.actor.logic.StateLogic
@@ -24,7 +24,7 @@ class DemoActor(
     override val urges: Urges = Urges().also { it.increaseUrge("think", 1.0) }
     private val _state: State = State()
     private val actorLogics: List<Logic<Actor>> = listOf(
-        ActivityLogic(),
+        DecisionEngine(),
         ConditionLogic(),
         StateLogic(),
         InventoryLogic()
