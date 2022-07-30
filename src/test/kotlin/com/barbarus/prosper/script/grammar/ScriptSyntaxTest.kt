@@ -40,6 +40,7 @@ internal class ScriptSyntaxTest {
         assertThat(one.state.health).isEqualTo(0.0)
         assertThat(two.state.health).isEqualTo(100.0)
     }
+
     @Test
     fun `should decrease actors health down three times by 10`() {
         val scriptData = """

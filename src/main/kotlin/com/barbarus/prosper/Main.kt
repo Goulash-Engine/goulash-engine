@@ -7,7 +7,7 @@ import com.barbarus.prosper.simulation.Simulation
 fun main() {
     ScriptLoader.load()
     val simulation = Simulation(
-        millisecondsPerTick = 10,
+        millisecondsPerTick = 100,
         tickBase = WorldDate.MINUTE,
         render = true
     )
