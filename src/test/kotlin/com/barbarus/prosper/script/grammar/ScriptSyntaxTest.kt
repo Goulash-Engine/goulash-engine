@@ -18,6 +18,48 @@ internal class ScriptSyntaxTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
     @Test
+    fun `should decrease actors health down three times by 10`() {
+        val scriptData = """
+            logic myfoo {
+                actors::state(health).minus(10);
+                actors::state(health).minus(10);
+                actors::state(health).minus(10);
+            }
+        """.trimIndent()
+
+        val one = ClanFactory.testClan()
+        one.state.health = 100.0
+        val civilisation = Civilisation(mutableListOf(one))
+
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val transpiler = ScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(civilisation)
+
+        assertThat(one.state.health).isEqualTo(70.0)
+    }
+
+    @Test
+    fun `should set health to 100 if over 100`() {
+        val scriptData = """
+            logic myfoo {
+                actors::state(health).plus(50);
+                actors[state.health > 100]::state(health).set(100);
+            }
+        """.trimIndent()
+
+        val one = ClanFactory.testClan()
+        val civilisation = Civilisation(mutableListOf(one))
+
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val transpiler = ScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(civilisation)
+
+        assertThat(one.state.health).isEqualTo(100.0)
+    }
+
+    @Test
     fun `should set eat urge of actors where health is equal 30 to 20`() {
         val scriptData = """
             logic myfoo {
