@@ -22,21 +22,12 @@ object ReflectionExtensions {
         return callBy(map.toMap())
     }
 
-    fun <R> KFunction<R>.callSetter(value: Any, self: Any? = null, extSelf: Any? = null): R {
+    fun <R> KFunction<R>.callSetter(value: Double, self: Any? = null, extSelf: Any? = null): R {
         val map = ArrayList<Pair<KParameter, Any?>>()
-        val setterParameter = this.parameters[1]
-        val convertedValue = when (setterParameter.type.toString()) {
-            "kotlin.Double" -> (value as String).toDouble()
-            else -> value as Any
-        }
-        val setterArgument = this.parameters[1] to convertedValue
+        val setterArgument = this.parameters[1] to value
         map += setterArgument
         if (self != null) map += instanceParameter!! to self
         if (extSelf != null) map += extensionReceiverParameter!! to extSelf
         return callBy(map.toMap())
-    }
-
-    private fun <T> convertArg(arg: Any): T {
-        return arg as T
     }
 }

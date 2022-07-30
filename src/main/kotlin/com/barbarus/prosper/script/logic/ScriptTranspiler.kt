@@ -24,8 +24,9 @@ class ScriptTranspiler {
                 if (statement.context == "actors") {
                     if (statement.mutationType == "state") {
                         context.actors.forEach { actor ->
-                            if (statement.mutationOperation == "set") {
-                                mutate(actor, statement.mutationTarget, statement.mutationOperationArgument)
+                            when (statement.mutationOperation) {
+                                "set" -> set(actor, statement.mutationTarget, statement.mutationOperationArgument)
+                                "plus" -> plus(actor, statement.mutationTarget, statement.mutationOperationArgument)
                             }
                         }
                     }
@@ -42,10 +43,32 @@ class ScriptTranspiler {
         }
     }
 
-    private fun mutate(actor: Actor, property: String, value: Any) {
+    private fun plus(actor: Actor, property: String, value: Any) {
+        val state: State = Actor::class.declaredMemberProperties.find { it.name == "state" }!!.get(actor) as State
+        val currentValue =
+            (State::class.declaredMembers.find { it.name == property } as KMutableProperty).getter.call(state)
+        val stateProperty = State::class.declaredMembers.find { it.name == property } as KMutableProperty
+        val setter = stateProperty.setter
+        val setterParameter = setter.parameters[1]
+        when (setterParameter.type.toString()) {
+            "kotlin.Double" -> {
+                val valueDouble = (value as String).toDouble()
+                setter.callSetter(currentValue as Double + valueDouble, state)
+            }
+        }
+    }
+
+    private fun set(actor: Actor, property: String, value: Any) {
         val state: State = Actor::class.declaredMemberProperties.find { it.name == "state" }!!.get(actor) as State
         val stateProperty = State::class.declaredMembers.find { it.name == property } as KMutableProperty
-        stateProperty.setter.callSetter(value, state)
+        val setter = stateProperty.setter
+        val setterParameter = setter.parameters[1]
+        when (setterParameter.type.toString()) {
+            "kotlin.Double" -> {
+                val valueDouble = (value as String).toDouble()
+                setter.callSetter(valueDouble, state)
+            }
+        }
     }
 
     private fun <T : Actor> List<T>.tryScriptFilter(filterStatement: String): List<T> {
