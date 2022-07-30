@@ -18,6 +18,29 @@ internal class ScriptSyntaxTest {
     private val logicScriptFileGrammar = LogicScriptFileGrammar()
 
     @Test
+    fun `should reset only reset actors health to 0 who are below 0`() {
+        val scriptData = """
+            logic myfoo {
+                actors::state(health).minus(200);
+                actors[state.health < 0]::state(health).set(0);
+            }
+        """.trimIndent()
+
+        val one = ClanFactory.testClan()
+        one.state.health = 100.0
+        val two = ClanFactory.testClan()
+        two.state.health = 300.0
+        val civilisation = Civilisation(mutableListOf(one, two))
+
+        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val transpiler = ScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(civilisation)
+
+        assertThat(one.state.health).isEqualTo(0.0)
+        assertThat(two.state.health).isEqualTo(100.0)
+    }
+    @Test
     fun `should decrease actors health down three times by 10`() {
         val scriptData = """
             logic myfoo {

@@ -29,5 +29,4 @@ internal class ConditionLogicTest {
 
         assertThat(clan.conditions).doesNotContain("underfed")
     }
-
 }

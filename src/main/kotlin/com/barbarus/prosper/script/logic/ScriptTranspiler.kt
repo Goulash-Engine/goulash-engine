@@ -21,12 +21,11 @@ class ScriptTranspiler {
             statements.forEach { statement ->
                 if (statement.context == "actors") {
                     if (statement.mutationType == "state") {
-                        context.actors.forEach { actor ->
-                            when (statement.mutationOperation) {
-                                "set" -> set(actor, statement.mutationTarget, statement.mutationOperationArgument)
-                                "plus" -> plus(actor, statement.mutationTarget, statement.mutationOperationArgument)
-                                "minus" -> minus(actor, statement.mutationTarget, statement.mutationOperationArgument)
-                            }
+                        val actors = context.actors.tryScriptFilter(statement.filter)
+                        when (statement.mutationOperation) {
+                            "set" -> actors.forEach { set(it, statement.mutationTarget, statement.mutationOperationArgument) }
+                            "plus" -> actors.forEach { plus(it, statement.mutationTarget, statement.mutationOperationArgument) }
+                            "minus" -> actors.forEach { minus(it, statement.mutationTarget, statement.mutationOperationArgument) }
                         }
                     }
                     if (statement.mutationType == "urge") {
