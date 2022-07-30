@@ -6,8 +6,7 @@ import com.barbarus.prosper.core.domain.State
 import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.domain.ScriptedLogic
 import com.barbarus.prosper.script.extension.ReflectionExtensions.callSetter
-import com.barbarus.prosper.script.grammar.FilterGrammar
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import com.barbarus.prosper.script.extension.TranspilerExtensions.tryScriptFilter
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.declaredMembers
@@ -16,7 +15,6 @@ import kotlin.reflect.full.declaredMembers
  * Transpiles [ScriptContext] to [ScriptedLogic]
  */
 class ScriptTranspiler {
-    private val filterGrammar = FilterGrammar()
     fun transpile(scriptContext: ScriptContext): ScriptedLogic<Civilisation> {
         return ScriptedLogic<Civilisation>(scriptContext.head.name) { context ->
             val statements = scriptContext.statements
@@ -91,25 +89,6 @@ class ScriptTranspiler {
                 setter.callSetter(valueDouble, state)
             }
         }
-    }
-
-    private fun <T : Actor> List<T>.tryScriptFilter(filterStatement: String): List<T> {
-        if (filterStatement.isEmpty()) return this
-        val contextFilter = filterGrammar.parseToEnd(filterStatement)
-        if (contextFilter.type == "state") {
-            if (contextFilter.attribute == "health") {
-                when (contextFilter.operator) {
-                    "=" -> return this.filter {
-                        val actorClass = Actor::class
-                        it.state.health == contextFilter.argument.toDouble()
-                    }
-
-                    ">" -> return this.filter { it.state.health > contextFilter.argument.toDouble() }
-                    "<" -> return this.filter { it.state.health < contextFilter.argument.toDouble() }
-                }
-            }
-        }
-        return this
     }
 
     private fun setUrge(actor: Actor, statement: ScriptStatement) {
