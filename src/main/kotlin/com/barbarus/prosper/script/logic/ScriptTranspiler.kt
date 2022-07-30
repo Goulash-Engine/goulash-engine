@@ -27,6 +27,7 @@ class ScriptTranspiler {
                             when (statement.mutationOperation) {
                                 "set" -> set(actor, statement.mutationTarget, statement.mutationOperationArgument)
                                 "plus" -> plus(actor, statement.mutationTarget, statement.mutationOperationArgument)
+                                "minus" -> minus(actor, statement.mutationTarget, statement.mutationOperationArgument)
                             }
                         }
                     }
@@ -43,27 +44,48 @@ class ScriptTranspiler {
         }
     }
 
-    private fun plus(actor: Actor, property: String, value: Any) {
-        val state: State = Actor::class.declaredMemberProperties.find { it.name == "state" }!!.get(actor) as State
-        val currentValue =
-            (State::class.declaredMembers.find { it.name == property } as KMutableProperty).getter.call(state)
-        val stateProperty = State::class.declaredMembers.find { it.name == property } as KMutableProperty
-        val setter = stateProperty.setter
-        val setterParameter = setter.parameters[1]
-        when (setterParameter.type.toString()) {
+    private fun minus(actor: Actor, property: String, value: Any) {
+        val state: State = getActorState(actor)
+        val setter = getStateSetter(property)
+        val currentValue = getCurrentValue(state, property)
+        when (setter.parameters[SETTER_PARAM].type.toString()) {
             "kotlin.Double" -> {
                 val valueDouble = (value as String).toDouble()
-                setter.callSetter(currentValue as Double + valueDouble, state)
+                setter.callSetter((currentValue as Double).minus(valueDouble), state)
             }
         }
+    }
+
+    private fun plus(actor: Actor, property: String, value: Any) {
+        val state: State = getActorState(actor)
+        val setter = getStateSetter(property)
+        val currentValue = getCurrentValue(state, property)
+        when (setter.parameters[SETTER_PARAM].type.toString()) {
+            "kotlin.Double" -> {
+                val valueDouble = (value as String).toDouble()
+                setter.callSetter((currentValue as Double).plus(valueDouble), state)
+            }
+        }
+    }
+
+    private fun getCurrentValue(state: State, property: String): Any? {
+        return (State::class.declaredMembers.find { it.name == property } as KMutableProperty).getter.call(state)
+    }
+
+    private fun getActorState(actor: Actor): State {
+        return Actor::class.declaredMemberProperties.find { it.name == "state" }!!.get(actor) as State
+    }
+
+    private fun getStateSetter(property: String): KMutableProperty.Setter<out Any?> {
+        val stateProperty = State::class.declaredMembers.find { it.name == property } as KMutableProperty
+        return stateProperty.setter
     }
 
     private fun set(actor: Actor, property: String, value: Any) {
         val state: State = Actor::class.declaredMemberProperties.find { it.name == "state" }!!.get(actor) as State
         val stateProperty = State::class.declaredMembers.find { it.name == property } as KMutableProperty
         val setter = stateProperty.setter
-        val setterParameter = setter.parameters[1]
-        when (setterParameter.type.toString()) {
+        when (setter.parameters[SETTER_PARAM].type.toString()) {
             "kotlin.Double" -> {
                 val valueDouble = (value as String).toDouble()
                 setter.callSetter(valueDouble, state)
@@ -110,5 +132,9 @@ class ScriptTranspiler {
             statement.mutationTarget,
             statement.mutationOperationArgument.toDouble()
         )
+    }
+
+    companion object {
+        private const val SETTER_PARAM = 1
     }
 }
