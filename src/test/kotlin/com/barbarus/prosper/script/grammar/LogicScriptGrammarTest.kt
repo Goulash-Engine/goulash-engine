@@ -3,7 +3,7 @@ package com.barbarus.prosper.script.grammar
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.script.logic.ScriptContext
+import com.barbarus.prosper.script.logic.LogicScriptContext
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.junit.jupiter.api.Test
@@ -12,8 +12,8 @@ import org.junit.jupiter.api.assertThrows
 /**
  * Tests the grammatical parsing ability for given script data.
  */
-internal class LogicScriptFileGrammarTest {
-    private val logicScriptFileGrammar = LogicScriptFileGrammar()
+internal class LogicScriptGrammarTest {
+    private val logicScriptGrammar = LogicScriptGrammar()
 
     @Test
     fun `should parse statement with filter and no filter mutation operation`() {
@@ -24,7 +24,7 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertThat(actual.statements[0].mutationType).isEqualTo("urge")
@@ -46,7 +46,7 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -69,7 +69,7 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -90,7 +90,7 @@ internal class LogicScriptFileGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -110,7 +110,7 @@ internal class LogicScriptFileGrammarTest {
         """.trimIndent()
 
         assertThrows<ParseException> {
-            logicScriptFileGrammar.parseToEnd(scriptData)
+            logicScriptGrammar.parseToEnd(scriptData)
         }
     }
 }

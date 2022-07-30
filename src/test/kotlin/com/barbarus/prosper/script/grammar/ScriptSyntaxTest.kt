@@ -5,7 +5,7 @@ import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.factories.ActorFactory
-import com.barbarus.prosper.script.logic.ScriptContext
+import com.barbarus.prosper.script.logic.LogicScriptContext
 import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
  * effects on the context.
  */
 internal class ScriptSyntaxTest {
-    private val logicScriptFileGrammar = LogicScriptFileGrammar()
+    private val logicScriptGrammar = LogicScriptGrammar()
 
     @Test
     fun `should reset only reset actors health to 0 who are below 0`() {
@@ -32,7 +32,7 @@ internal class ScriptSyntaxTest {
         two.state.health = 300.0
         val container = Container(mutableListOf(one, two))
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
@@ -55,7 +55,7 @@ internal class ScriptSyntaxTest {
         one.state.health = 100.0
         val container = Container(mutableListOf(one))
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
@@ -75,7 +75,7 @@ internal class ScriptSyntaxTest {
         val one = ActorFactory.testActor()
         val container = Container(mutableListOf(one))
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
@@ -97,7 +97,7 @@ internal class ScriptSyntaxTest {
         two.state.health = 50.0
         val container = Container(mutableListOf(one, two))
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
@@ -119,7 +119,7 @@ internal class ScriptSyntaxTest {
         val two = ActorFactory.testActor()
         val container = Container(mutableListOf(one, two))
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
@@ -142,7 +142,7 @@ internal class ScriptSyntaxTest {
         val two = ActorFactory.testActor()
         val container = Container(mutableListOf(one, two))
 
-        val actual: ScriptContext = logicScriptFileGrammar.parseToEnd(scriptData)
+        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
         val transpiler = ScriptTranspiler()
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)

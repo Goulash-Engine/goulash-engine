@@ -12,12 +12,12 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.declaredMembers
 
 /**
- * Transpiles [ScriptContext] to [ScriptedLogic]
+ * Transpiles [LogicScriptContext] to [ScriptedLogic]
  */
-class ScriptTranspiler {
-    fun transpile(scriptContext: ScriptContext): ScriptedLogic<Container> {
-        return ScriptedLogic<Container>(scriptContext.head.name) { context ->
-            val statements = scriptContext.statements
+internal class ScriptTranspiler {
+    fun transpile(logicScriptContext: LogicScriptContext): ScriptedLogic<Container> {
+        return ScriptedLogic<Container>(logicScriptContext.head.name) { context ->
+            val statements = logicScriptContext.statements
             statements.forEach { statement ->
                 if (statement.context == "actors") {
                     if (statement.mutationType == "state") {

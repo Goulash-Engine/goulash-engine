@@ -1,7 +1,10 @@
 package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.domain.ScriptStatement
-import com.barbarus.prosper.script.logic.ScriptContext
+import com.barbarus.prosper.script.logic.ContextMutation
+import com.barbarus.prosper.script.logic.LogicScriptContext
+import com.barbarus.prosper.script.logic.Operation
+import com.barbarus.prosper.script.logic.ScriptHead
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.optional
 import com.github.h0tk3y.betterParse.combinators.or
@@ -13,7 +16,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
-class LogicScriptFileGrammar : Grammar<ScriptContext>() {
+internal class LogicScriptGrammar : Grammar<LogicScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
@@ -68,21 +71,6 @@ class LogicScriptFileGrammar : Grammar<ScriptContext>() {
 
     private val statementsParser by -startLogicBlock * separatedTerms(statementParser, endOfStatement) * -endLogicBlock
     override val rootParser by (scriptHeadParser * statementsParser) map { (scriptHead, statements) ->
-        ScriptContext(scriptHead, statements)
+        LogicScriptContext(scriptHead, statements)
     }
-
-    data class ScriptHead(
-        val name: String
-    )
-
-    internal data class ContextMutation(
-        val type: String,
-        val target: String,
-        val operation: Operation
-    )
-
-    internal data class Operation(
-        val name: String,
-        val argument: String
-    )
 }

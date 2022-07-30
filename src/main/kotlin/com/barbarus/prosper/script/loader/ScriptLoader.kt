@@ -3,7 +3,7 @@ import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.domain.ScriptedLogic
 import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
-import com.barbarus.prosper.script.grammar.LogicScriptFileGrammar
+import com.barbarus.prosper.script.grammar.LogicScriptGrammar
 import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
@@ -20,7 +20,7 @@ object ScriptLoader {
     private var logicScripts: List<ScriptedLogic<Container>> = listOf()
 
     private val configGrammars: List<ListConfigurationGrammar> = listOf(ListConfigurationGrammar())
-    private val scriptGrammar: LogicScriptFileGrammar = LogicScriptFileGrammar()
+    private val scriptGrammar: LogicScriptGrammar = LogicScriptGrammar()
 
     internal fun load() {
         val logicDir = "logic"

@@ -6,7 +6,6 @@ import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.factories.ActorFactory
 import com.barbarus.prosper.script.domain.ScriptStatement
-import com.barbarus.prosper.script.grammar.LogicScriptFileGrammar
 import org.junit.jupiter.api.Test
 
 internal class ScriptTranspilerTest {
@@ -14,8 +13,8 @@ internal class ScriptTranspilerTest {
     @Test
     fun `should transpile health decrease by 10`() {
         val scriptTranspiler = ScriptTranspiler()
-        val scriptContext = ScriptContext(
-            LogicScriptFileGrammar.ScriptHead("foo"),
+        val logicScriptContext = LogicScriptContext(
+            ScriptHead("foo"),
             listOf(
                 ScriptStatement(
                     "actors",
@@ -28,7 +27,7 @@ internal class ScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+        val scriptedLogic = scriptTranspiler.transpile(logicScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 50.0
@@ -42,8 +41,8 @@ internal class ScriptTranspilerTest {
     @Test
     fun `should transpile health increase by 10`() {
         val scriptTranspiler = ScriptTranspiler()
-        val scriptContext = ScriptContext(
-            LogicScriptFileGrammar.ScriptHead("foo"),
+        val logicScriptContext = LogicScriptContext(
+            ScriptHead("foo"),
             listOf(
                 ScriptStatement(
                     "actors",
@@ -56,7 +55,7 @@ internal class ScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+        val scriptedLogic = scriptTranspiler.transpile(logicScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 50.0
@@ -70,8 +69,8 @@ internal class ScriptTranspilerTest {
     @Test
     fun `should transpile health set to 50_0`() {
         val scriptTranspiler = ScriptTranspiler()
-        val scriptContext = ScriptContext(
-            LogicScriptFileGrammar.ScriptHead("foo"),
+        val logicScriptContext = LogicScriptContext(
+            ScriptHead("foo"),
             listOf(
                 ScriptStatement(
                     "actors",
@@ -84,7 +83,7 @@ internal class ScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+        val scriptedLogic = scriptTranspiler.transpile(logicScriptContext)
 
         val testActor = ActorFactory.testActor()
         val container = Container(mutableListOf(testActor))
@@ -97,8 +96,8 @@ internal class ScriptTranspilerTest {
     @Test
     fun `should transpile filter for greater than`() {
         val scriptTranspiler = ScriptTranspiler()
-        val scriptContext = ScriptContext(
-            LogicScriptFileGrammar.ScriptHead("foo"),
+        val logicScriptContext = LogicScriptContext(
+            ScriptHead("foo"),
             listOf(
                 ScriptStatement(
                     "actors",
@@ -111,7 +110,7 @@ internal class ScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+        val scriptedLogic = scriptTranspiler.transpile(logicScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 61.0
@@ -127,8 +126,8 @@ internal class ScriptTranspilerTest {
     @Test
     fun `should transpile filter for less than`() {
         val scriptTranspiler = ScriptTranspiler()
-        val scriptContext = ScriptContext(
-            LogicScriptFileGrammar.ScriptHead("foo"),
+        val logicScriptContext = LogicScriptContext(
+            ScriptHead("foo"),
             listOf(
                 ScriptStatement(
                     "actors",
@@ -141,7 +140,7 @@ internal class ScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+        val scriptedLogic = scriptTranspiler.transpile(logicScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 30.0
@@ -157,8 +156,8 @@ internal class ScriptTranspilerTest {
     @Test
     fun `should transpile script context`() {
         val scriptTranspiler = ScriptTranspiler()
-        val scriptContext = ScriptContext(
-            LogicScriptFileGrammar.ScriptHead("foo"),
+        val logicScriptContext = LogicScriptContext(
+            ScriptHead("foo"),
             listOf(
                 ScriptStatement(
                     "actors",
@@ -171,7 +170,7 @@ internal class ScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = scriptTranspiler.transpile(scriptContext)
+        val scriptedLogic = scriptTranspiler.transpile(logicScriptContext)
 
         val testClan = ActorFactory.testActor()
         val container = Container(mutableListOf(testClan))
