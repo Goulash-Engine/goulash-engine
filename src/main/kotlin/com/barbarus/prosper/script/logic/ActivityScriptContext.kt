@@ -8,4 +8,7 @@ internal data class ActivityScriptContext(
         get() = options["trigger"] ?: emptyList()
     val blockerConditions: List<String>
         get() = options["blocker"] ?: emptyList()
+
+    val priorityConditions: List<String>
+        get() = options["priority"] ?: emptyList()
 }
