@@ -1,7 +1,6 @@
 package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.logic.ActivityScriptContext
-import com.barbarus.prosper.script.logic.ScriptHead
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
 import com.github.h0tk3y.betterParse.combinators.times
@@ -21,7 +20,7 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val comma by literalToken(",")
     private val identifier by regexToken("^[a-z]+")
 
-    private val activityNameParser by -identifier * identifier use { ScriptHead(text) }
+    private val activityNameParser by -identifier * identifier use { text }
     private val listConfigurationParser by identifier * -openBraces * separatedTerms(
         identifier,
         comma
@@ -30,7 +29,7 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     }
     private val activityBodyParser by -openBraces * zeroOrMore(listConfigurationParser) * -closeBraces
 
-    override val rootParser by activityNameParser * activityBodyParser map { (scriptHead, options) ->
-        ActivityScriptContext(scriptHead, options.toMap())
+    override val rootParser by activityNameParser * activityBodyParser map { (activity, options) ->
+        ActivityScriptContext(activity, options.toMap())
     }
 }
