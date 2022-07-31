@@ -67,12 +67,14 @@ internal class ActivityScriptGrammarTest {
     }
 
     @Test
-    fun `should parse all list options incl duration`() {
+    fun `should parse all list options incl duration & priority in any order`() {
         val scriptData = """
             activity eating {
                 duration { 40.0 }
                 blocker_conditions { sick, dead }
                 trigger_urges { eat, enjoy }
+                abort_conditions { stuff }
+                priority { 3 }
                 priority_conditions { starving, crazy }
             }
         """.trimIndent()
@@ -83,7 +85,9 @@ internal class ActivityScriptGrammarTest {
         assertThat(scriptContext.priorityConditions).containsAll("starving", "crazy")
         assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
         assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
+        assertThat(scriptContext.abortConditions).containsAll("stuff")
         assertThat(scriptContext.duration.asDouble()).isEqualTo(40.0)
+        assertThat(scriptContext.priority).isEqualTo(3)
     }
 
     @Test
