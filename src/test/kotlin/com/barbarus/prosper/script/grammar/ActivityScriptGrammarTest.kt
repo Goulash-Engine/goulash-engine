@@ -13,6 +13,22 @@ internal class ActivityScriptGrammarTest {
     private val activityGrammar = ActivityScriptGrammar()
 
     @Test
+    fun `should parse activity with triggers and blockers declared (reversed)`() {
+        val scriptData = """
+            activity eat {
+                blocker { sick, dead }
+                trigger { eat, enjoy }
+            }
+        """.trimIndent()
+
+        val scriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(scriptContext.head.name).isEqualTo("eat")
+        assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
+        assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
+    }
+
+    @Test
     fun `should parse activity with triggers and blockers declared`() {
         val scriptData = """
             activity eat {
