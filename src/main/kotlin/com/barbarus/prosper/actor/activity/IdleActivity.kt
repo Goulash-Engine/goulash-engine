@@ -13,6 +13,6 @@ class IdleActivity : Activity {
     }
 
     override fun duration(): Duration {
-        return 0.toDuration()
+        return 0.0.toDuration()
     }
 }

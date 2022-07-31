@@ -28,7 +28,7 @@ class EatActivity : Activity {
     }
 
     override fun duration(): Duration {
-        return 40.toDuration()
+        return 40.0.toDuration()
     }
 
     override fun act(actor: Actor): Boolean {

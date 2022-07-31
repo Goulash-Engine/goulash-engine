@@ -2,6 +2,7 @@ package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.logic.ActivityScriptContext
 import com.github.h0tk3y.betterParse.combinators.map
+import com.github.h0tk3y.betterParse.combinators.optional
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
@@ -17,19 +18,23 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
 
     private val openBraces by literalToken("{")
     private val closeBraces by literalToken("}")
+    private val durationKeyword by literalToken("duration")
     private val comma by literalToken(",")
+    private val digit by regexToken("^[\\d.\\d]+")
     private val identifier by regexToken("^[a-z]+")
 
     private val activityNameParser by -identifier * identifier use { text }
+    private val durationParser by -durationKeyword * -openBraces * digit * -closeBraces use { text }
     private val listConfigurationParser by identifier * -openBraces * separatedTerms(
         identifier,
         comma
     ) * -closeBraces map { (identifier, terms) ->
         identifier.text to terms.map { it.text }
     }
-    private val activityBodyParser by -openBraces * zeroOrMore(listConfigurationParser) * -closeBraces
+    private val activityBodyParser by optional(durationParser) * zeroOrMore(listConfigurationParser)
 
-    override val rootParser by activityNameParser * activityBodyParser map { (activity, options) ->
-        ActivityScriptContext(activity, options.toMap())
+    override val rootParser by activityNameParser * -openBraces * activityBodyParser * -closeBraces map { (activity, body) ->
+        val (duration, options) = body
+        ActivityScriptContext(activity, duration ?: "", options.toMap())
     }
 }

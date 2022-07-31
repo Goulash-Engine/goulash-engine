@@ -43,7 +43,7 @@ interface Activity {
      * what baseline [WorldDate] has been set to.
      * So a tick can either represent a minute, an hour and so on.
      */
-    fun duration(): Duration = 1.toDuration()
+    fun duration(): Duration = 1.0.toDuration()
 
     /**
      * Logic to be executed when the activity finishes hence it's duration is over

@@ -97,7 +97,7 @@ class DecisionEngine : Logic<Actor> {
 
         fun set(activity: Activity) {
             this.activity = activity
-            duration = activity.duration().getDuration()
+            duration = activity.duration().asDouble().toInt()
         }
 
         fun hasRunningActivity(): Boolean {

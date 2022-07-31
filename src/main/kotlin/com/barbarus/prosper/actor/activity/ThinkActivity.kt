@@ -20,7 +20,7 @@ class ThinkActivity : Activity {
     }
 
     override fun duration(): Duration {
-        return 10.toDuration()
+        return 10.0.toDuration()
     }
 
     override fun onFinish(actor: Actor) {
@@ -28,7 +28,7 @@ class ThinkActivity : Activity {
     }
 
     override fun act(actor: Actor): Boolean {
-        actor.urges.decreaseUrge("think", duration().getDuration().toDouble())
+        actor.urges.decreaseUrge("think", duration().asDouble())
 
         if (Simulation.WORLD_TIME.isNight()) {
             actor.urges.increaseUrge("sleep", 5.0)

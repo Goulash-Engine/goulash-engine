@@ -3,9 +3,9 @@ package com.barbarus.prosper.core.activity
 import com.barbarus.prosper.core.domain.WorldDate
 
 class Duration(
-    private val ticks: Int
+    private val ticks: Double
 ) {
-    fun getDuration(): Int {
+    fun asDouble(): Double {
         return ticks * WorldDate.TICK_BASELINE
     }
 }

@@ -31,7 +31,7 @@ class WorkActivity : Activity {
     }
 
     override fun duration(): Duration {
-        return 8.times(60).toDuration()
+        return 8.0.times(60).toDuration()
     }
 
     override fun act(actor: Actor): Boolean {

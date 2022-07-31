@@ -13,6 +13,18 @@ internal class ActivityScriptGrammarTest {
     private val activityGrammar = ActivityScriptGrammar()
 
     @Test
+    fun `should parse duration for activity`() {
+        val scriptData = """
+            activity eating {
+                duration { 40.0 }
+            }
+        """.trimIndent()
+
+        val scriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(scriptContext.duration.asDouble()).isEqualTo(40.0)
+    }
+    @Test
     fun `should parse all list options`() {
         val scriptData = """
             activity eating {
@@ -102,5 +114,19 @@ internal class ActivityScriptGrammarTest {
 
         assertThat(scriptContext.activity).isEqualTo("eating")
         assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
+    }
+
+    @Test
+    fun `should parse simple activity script with name and one trigger`() {
+        val scriptData = """
+            activity eating {
+                trigger { eat }
+            }
+        """.trimIndent()
+
+        val scriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(scriptContext.activity).isEqualTo("eating")
+        assertThat(scriptContext.triggerUrges).containsAll("eat")
     }
 }

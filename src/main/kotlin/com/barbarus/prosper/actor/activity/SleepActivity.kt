@@ -22,11 +22,11 @@ class SleepActivity : Activity {
     }
 
     override fun duration(): Duration {
-        return 6.times(60).toDuration()
+        return 6.0.times(60).toDuration()
     }
 
     override fun act(actor: Actor): Boolean {
-        actor.urges.decreaseUrge("sleep", duration().getDuration().toDouble())
+        actor.urges.decreaseUrge("sleep", duration().asDouble())
         return true
     }
 }
