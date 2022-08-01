@@ -3,7 +3,6 @@ package com.barbarus.prosper.script.grammar
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 /**
@@ -13,12 +12,22 @@ internal class GrammarPlayground {
     private val playground = PlaygroundGrammar()
 
     @Test
-    @Disabled
-    fun `foo my bar`() {
-        val scriptData = "[state.health>1]::urge(eat).plus(1);"
+    fun `should parse logic for on finished`() {
+        val scriptData = """
+            activity foo { 
+                logic act { 
+                    actor::urges(eat).plus(1);
+                    actor[state.health > 10]::urges(eat).plus(10);
+                 } 
+            }
+        """.trimIndent()
 
-        val actual: String = playground.parseToEnd(scriptData)
+        val logic = playground.parseToEnd(scriptData)
 
-        assertThat(actual).isEqualTo("state.health>1")
+        assertThat(logic.replace(" ", "").trimIndent()).isEqualTo(
+            """
+                    actor::urges(eat).plus(1);actor[state.health > 10]::urges(eat).plus(10);
+            """.trimIndent()
+        )
     }
 }

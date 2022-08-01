@@ -16,7 +16,6 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
-    private val logicBlock by regexToken("^logic\\s*[a-z_]+\\s*[{]\\s*[a-z0-9\\s.:;<>=\\[\\]()]+\\s*[}]\$")
     private val openBraces by literalToken("{")
     private val closeBraces by literalToken("}")
     private val comma by literalToken(",")
