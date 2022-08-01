@@ -30,8 +30,8 @@ internal class ActivityScriptGrammarTest {
     fun `should parse priority and duration value (reverse)`() {
         val scriptData = """
             activity eating {
-                priority { 30 }
-                duration { 10 }
+                priority [ 30 ]
+                duration [ 10 ]
             }
         """.trimIndent()
 
@@ -45,8 +45,8 @@ internal class ActivityScriptGrammarTest {
     fun `should parse priority and duration value`() {
         val scriptData = """
             activity eating {
-                duration { 10 }
-                priority { 30 }
+                duration [ 10 ]
+                priority [ 30 ]
             }
         """.trimIndent()
 
@@ -60,7 +60,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse priority value`() {
         val scriptData = """
             activity eating {
-                priority { 30 }
+                priority [ 30 ]
             }
         """.trimIndent()
 
@@ -73,7 +73,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse abort conditions`() {
         val scriptData = """
             activity eating {
-                abort_conditions { sick, dead }
+                abort_conditions [ sick, dead ]
             }
         """.trimIndent()
 
@@ -86,12 +86,12 @@ internal class ActivityScriptGrammarTest {
     fun `should parse all list options incl duration & priority in any order`() {
         val scriptData = """
             activity eating {
-                duration { 40.0 }
-                blocker_conditions { sick, dead }
-                trigger_urges { eat, enjoy }
-                abort_conditions { stuff }
-                priority { 3 }
-                priority_conditions { starving, crazy }
+                duration [ 40.0 ]
+                blocker_conditions [ sick, dead ]
+                trigger_urges [ eat, enjoy ]
+                abort_conditions [ stuff ]
+                priority [ 3 ]
+                priority_conditions [ starving, crazy ]
             }
         """.trimIndent()
 
@@ -110,7 +110,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse duration for activity`() {
         val scriptData = """
             activity eating {
-                duration { 40.0 }
+                duration [ 40.0 ]
             }
         """.trimIndent()
 
@@ -123,9 +123,9 @@ internal class ActivityScriptGrammarTest {
     fun `should parse all list options`() {
         val scriptData = """
             activity eating {
-                blocker_conditions { sick, dead }
-                trigger_urges { eat, enjoy }
-                priority_conditions { starving, crazy }
+                blocker_conditions [ sick, dead ]
+                trigger_urges [ eat, enjoy ]
+                priority_conditions [ starving, crazy ]
             }
         """.trimIndent()
 
@@ -141,7 +141,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse priority conditions`() {
         val scriptData = """
             activity eating {
-                priority_conditions { starving, crazy }
+                priority_conditions [ starving, crazy ]
             }
         """.trimIndent()
 
@@ -155,8 +155,8 @@ internal class ActivityScriptGrammarTest {
     fun `should parse activity with triggers and blockers declared (reversed)`() {
         val scriptData = """
             activity eating {
-                blocker_conditions { sick, dead }
-                trigger_urges { eat, enjoy }
+                blocker_conditions [ sick, dead ]
+                trigger_urges [ eat, enjoy ]
             }
         """.trimIndent()
 
@@ -171,8 +171,8 @@ internal class ActivityScriptGrammarTest {
     fun `should parse activity with triggers and blockers declared`() {
         val scriptData = """
             activity eating {
-                trigger_urges { eat, enjoy }
-                blocker_conditions { sick, dead }
+                trigger_urges [ eat, enjoy ]
+                blocker_conditions [ sick, dead ]
             }
         """.trimIndent()
 
@@ -187,7 +187,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse simple activity script with name and blocker conditions`() {
         val scriptData = """
             activity eating {
-                blocker_conditions { sick, dead }
+                blocker_conditions [ sick, dead ]
             }
         """.trimIndent()
 
@@ -201,7 +201,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse simple activity script with name and trigger`() {
         val scriptData = """
             activity eating {
-                trigger_urges { eat, enjoy }
+                trigger_urges [ eat, enjoy ]
             }
         """.trimIndent()
 
@@ -215,7 +215,7 @@ internal class ActivityScriptGrammarTest {
     fun `should parse simple activity script with name and one trigger`() {
         val scriptData = """
             activity eating {
-                trigger_urges { eat }
+                trigger_urges [ eat ]
             }
         """.trimIndent()
 

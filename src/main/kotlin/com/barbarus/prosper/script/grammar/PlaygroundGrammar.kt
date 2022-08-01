@@ -11,8 +11,8 @@ class PlaygroundGrammar : Grammar<String>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
-    private val activityKeyword by regexToken("^activity\\s+[a-z_]+")
-    private val logicKeyword by regexToken("^logic\\s+[a-z_]+")
+    private val activityKeyword by regexToken("^activity\\s+[a-z_]+\\s*\\{")
+    private val logicKeyword by regexToken("^logic\\s*[a-z_]+\\s*\\{\\s*[\\w\\d:.<>=()\\[\\]\\s]+\\s*\\}\\s*")
     private val logicBlock by regexToken("^[a-z0-9\\s.:;<>=\\[\\]()]+\\s*")
     private val identifier by regexToken("^[a-z_]+")
 
@@ -21,5 +21,5 @@ class PlaygroundGrammar : Grammar<String>() {
     private val openBraces by literalToken("{")
     private val closeBraces by literalToken("}")
 
-    override val rootParser by -activityKeyword * -openBraces * -logicKeyword * -openBraces * logicBlock * -closeBraces * -closeBraces use { text }
+    override val rootParser by -activityKeyword * -logicKeyword * logicBlock * -closeBraces * -closeBraces use { text }
 }
