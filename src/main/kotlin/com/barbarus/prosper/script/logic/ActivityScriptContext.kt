@@ -11,6 +11,7 @@ import com.barbarus.prosper.core.extension.toDuration
  */
 internal data class ActivityScriptContext(
     val activity: String,
+    val actLogic: String,
     private val options: Map<String, List<String>>
 ) {
     val priority: Int

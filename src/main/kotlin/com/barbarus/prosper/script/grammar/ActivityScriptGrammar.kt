@@ -16,6 +16,7 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
+    private val logicBlock by regexToken("^logic\\s*[a-z_]+\\s*[{]\\s*[a-z0-9\\s.:;<>=\\[\\]()]+\\s*[}]\$")
     private val openBraces by literalToken("{")
     private val closeBraces by literalToken("}")
     private val comma by literalToken(",")
@@ -23,15 +24,16 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val identifier by regexToken("^[a-z_]+")
 
     private val activityNameParser by -identifier * identifier use { text }
-    private val listConfigurationParser by identifier * -openBraces * separatedTerms(
+    private val configurationParser by identifier * -openBraces * separatedTerms(
         (identifier or digit),
         comma
     ) * -closeBraces map { (identifier, terms) ->
         identifier.text to terms.map { it.text }
     }
-    private val activityBodyParser by zeroOrMore(listConfigurationParser)
+    private val activityBodyParser by zeroOrMore(configurationParser)
 
-    override val rootParser by activityNameParser * -openBraces * activityBodyParser * -closeBraces map { (activity, listConfigs) ->
-        ActivityScriptContext(activity, listConfigs.toMap())
+    override val rootParser by activityNameParser * -openBraces * activityBodyParser * -closeBraces map { (activity, body) ->
+        val configs = body.filterIsInstanceTo(mutableListOf<Pair<String, List<String>>>())
+        ActivityScriptContext(activity, "", configs.toMap())
     }
 }

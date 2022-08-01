@@ -18,7 +18,7 @@ internal class LogicScriptGrammar : Grammar<LogicScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
-    private val scriptKeyword by literalToken("logic")
+    private val logicKeyword by literalToken("logic")
     private val filter by regexToken("\\[(.*)\\]")
     private val contextMutationOperator by literalToken("::")
     private val identifier by regexToken("^[a-z]+")
@@ -34,7 +34,7 @@ internal class LogicScriptGrammar : Grammar<LogicScriptContext>() {
     /**
      * logic <name>
      */
-    private val scriptHeadParser by -scriptKeyword * (scriptName or identifier) use { ScriptHead(text) }
+    private val scriptHeadParser by -logicKeyword * (scriptName or identifier) use { ScriptHead(text) }
 
     /**
      * .plus(1)
