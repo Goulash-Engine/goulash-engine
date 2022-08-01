@@ -1,6 +1,7 @@
 package com.barbarus.prosper.script.grammar
 
 import assertk.assertThat
+import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
@@ -22,7 +23,17 @@ internal class GrammarPlayground {
                      actor::urges(eat).plus(1);
                      actor::urges(eat).minus(1);
                  } 
-                 
+                 priority [ "1" ]
+                 duration [ "40.5" ]
+                 priority_conditions ["foo45"]
+                 logic on_finish {
+                     actor::urges(eat).minus(10);
+                 } 
+                 logic on_abort {
+                     actor::urges(eat).minus(10);
+                     actor::urges(eat).minus(10);
+                     actor::urges(eat).minus(10);
+                 } 
              }
         """.trimIndent()
 
@@ -31,10 +42,11 @@ internal class GrammarPlayground {
         assertThat(activityScriptContext.activity).isEqualTo("eating")
         assertThat(activityScriptContext.triggerUrges).containsAll("eat", "brot")
         assertThat(activityScriptContext.abortConditions).containsAll("foo", "bar")
-        assertThat(activityScriptContext.actLogic).isEqualTo(
-            """
-            actor::urges(eat).plus(1);actor::urges(eat).minus(1);
-            """.trimIndent()
-        )
+        assertThat(activityScriptContext.priority).isEqualTo(1)
+        assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
+        assertThat(activityScriptContext.priorityConditions).contains("foo45")
+        assertThat(activityScriptContext.actLogic).isEqualTo("actor::urges(eat).plus(1);actor::urges(eat).minus(1);")
+        assertThat(activityScriptContext.onFinish).isEqualTo("actor::urges(eat).minus(10);")
+        assertThat(activityScriptContext.onAbort).isEqualTo("actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);")
     }
 }

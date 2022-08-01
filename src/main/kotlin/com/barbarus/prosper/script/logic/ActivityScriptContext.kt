@@ -16,6 +16,10 @@ internal data class ActivityScriptContext(
 ) {
     val actLogic: String
         get() = logics["act"] ?: ""
+    val onFinish: String
+        get() = logics["on_finish"] ?: ""
+    val onAbort: String
+        get() = logics["on_abort"] ?: ""
     val priority: Int
         get() = options["priority"]?.firstOrNull()?.toInt() ?: 0
     val duration: Duration
