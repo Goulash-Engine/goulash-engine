@@ -17,23 +17,31 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val newLine by literalToken("\n", ignore = true)
 
     private val activityKeyword by regexToken("^activity\\s+[a-z_]+")
+    private val logicKeyword by regexToken("^logic\\s+[a-z_]+")
+    private val configKeyword by regexToken("priority(?!_)|duration|trigger_urges|priority_conditions|blocker_conditions|abort_conditions")
+    private val configValue by regexToken("^[a-z\\d.\\d]+")
+    private val logicBlock by regexToken("^[a-z0-9\\s.:;<>=\\[\\]()]+\\s*")
     private val openBraces by literalToken("{")
     private val closeBraces by literalToken("}")
     private val comma by literalToken(",")
-    private val digit by regexToken("^[\\d.\\d]+")
-    private val identifier by regexToken("^[a-z_]+")
 
     private val activityNameParser by activityKeyword use { text.removePrefix("activity").trim() }
-    private val configurationParser by identifier * -openBraces * separatedTerms(
-        (identifier or digit),
-        comma
-    ) * -closeBraces map { (identifier, terms) ->
-        identifier.text to terms.map { it.text }
+    private val logicParser by logicKeyword * -openBraces * logicBlock * -closeBraces map { (logic, block) ->
+        logic.text.removePrefix(
+            "logic"
+        ).trim() to block.text.trim()
     }
-    private val activityBodyParser by zeroOrMore(configurationParser)
+    private val configurationParser by configKeyword * -openBraces * separatedTerms(
+        configValue,
+        comma
+    ) * -closeBraces map { (keyword, values) ->
+        keyword.text to values.map { it.text }
+    }
+    private val activityBodyParser by zeroOrMore(logicParser or configurationParser)
 
     override val rootParser by activityNameParser * -openBraces * activityBodyParser * -closeBraces map { (activity, body) ->
         val configs = body.filterIsInstanceTo(mutableListOf<Pair<String, List<String>>>())
-        ActivityScriptContext(activity, "", configs.toMap())
+        val logics = body.filterIsInstanceTo(mutableListOf<Pair<String, String>>())
+        ActivityScriptContext(activity, logics.toMap(), configs.toMap())
     }
 }

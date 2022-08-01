@@ -14,6 +14,7 @@ class PlaygroundGrammar : Grammar<String>() {
     private val activityKeyword by regexToken("^activity\\s+[a-z_]+")
     private val logicKeyword by regexToken("^logic\\s+[a-z_]+")
     private val logicBlock by regexToken("^[a-z0-9\\s.:;<>=\\[\\]()]+\\s*")
+    private val identifier by regexToken("^[a-z_]+")
 
     // private val identifier by regexToken("^[a-z_]+\\s+$(?!:)")
     // private val identifier by regexToken("^[a-z_]+")

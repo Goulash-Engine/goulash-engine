@@ -4,7 +4,6 @@ import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 /**
@@ -13,19 +12,18 @@ import org.junit.jupiter.api.Test
 internal class ActivityScriptGrammarTest {
     private val activityGrammar = ActivityScriptGrammar()
 
-    @Disabled
     @Test
     fun `should parse logic for on finished`() {
         val scriptData = """
             activity eating {
-                logic act { hello }
+                logic act { actor::urge(eat).plus(1); }
             }
         """.trimIndent()
 
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.actLogic).isEqualTo("logic act { }".trim())
+        assertThat(scriptContext.actLogic).isEqualTo("actor::urge(eat).plus(1);")
     }
 
     @Test
