@@ -5,6 +5,7 @@ import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 /**
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test
 internal class GrammarPlayground {
     private val playground = PlaygroundGrammar()
 
+    @Disabled
     @Test
     fun `should parse logic for on finished`() {
         val scriptData = """
