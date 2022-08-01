@@ -16,13 +16,14 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
+    private val activityKeyword by regexToken("^activity\\s+[a-z_]+")
     private val openBraces by literalToken("{")
     private val closeBraces by literalToken("}")
     private val comma by literalToken(",")
     private val digit by regexToken("^[\\d.\\d]+")
     private val identifier by regexToken("^[a-z_]+")
 
-    private val activityNameParser by -identifier * identifier use { text }
+    private val activityNameParser by activityKeyword use { text.removePrefix("activity").trim() }
     private val configurationParser by identifier * -openBraces * separatedTerms(
         (identifier or digit),
         comma
