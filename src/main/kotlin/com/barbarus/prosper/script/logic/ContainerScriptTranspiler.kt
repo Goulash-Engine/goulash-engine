@@ -1,10 +1,9 @@
 package com.barbarus.prosper.script.logic
 
 import com.barbarus.prosper.core.domain.Actor
-import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.State
+import com.barbarus.prosper.script.domain.ContainerScript
 import com.barbarus.prosper.script.domain.ScriptStatement
-import com.barbarus.prosper.script.domain.ScriptedLogic
 import com.barbarus.prosper.script.extension.ReflectionExtensions.callSetter
 import com.barbarus.prosper.script.extension.TranspilerExtensions.tryScriptFilter
 import kotlin.reflect.KMutableProperty
@@ -12,12 +11,12 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.declaredMembers
 
 /**
- * Transpiles [ContainerLogicContext] to [ScriptedLogic]
+ * Transpiles [ContainerScriptContext] to [ContainerScript]
  */
 internal class ContainerScriptTranspiler {
-    fun transpile(containerLogicContext: ContainerLogicContext): ScriptedLogic<Container> {
-        return ScriptedLogic<Container>(containerLogicContext.head.name) { context ->
-            val statements = containerLogicContext.statements
+    fun transpile(containerScriptContext: ContainerScriptContext): ContainerScript {
+        return ContainerScript(containerScriptContext.head.name) { context ->
+            val statements = containerScriptContext.statements
             statements.forEach { statement ->
                 if (statement.context == "actors") {
                     if (statement.mutationType == "state") {

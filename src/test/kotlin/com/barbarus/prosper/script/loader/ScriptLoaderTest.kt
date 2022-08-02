@@ -45,9 +45,9 @@ internal class ScriptLoaderTest {
             """.trimIndent()
         )
 
-        ScriptLoader.loadLogicScripts(tempDir.path)
+        ScriptLoader.loadContainerScripts(tempDir.path)
 
-        assertThat(ScriptLoader.getLogicScripts()).isNotEmpty()
+        assertThat(ScriptLoader.getContainerScripts()).isNotEmpty()
     }
 
     @Test

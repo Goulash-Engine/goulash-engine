@@ -10,16 +10,16 @@ import org.slf4j.LoggerFactory
  */
 class Container(
     val actors: MutableList<Actor> = mutableListOf(),
-    var loadedLogicScripts: List<Logic<Container>> = listOf()
+    var loadedScripts: List<Logic<Container>> = listOf()
 ) {
     init {
         LOG.info("Initialize logic scripts")
-        loadedLogicScripts = ScriptLoader.getLogicScripts()
-        LOG.info("Initialized ${loadedLogicScripts.size} logic scripts")
+        loadedScripts = ScriptLoader.getContainerScripts()
+        LOG.info("Initialized ${loadedScripts.size} logic scripts")
     }
 
     fun act() {
-        loadedLogicScripts.forEach { it.process(this) }
+        loadedScripts.forEach { it.process(this) }
         actors.forEach { it.act() }
     }
 

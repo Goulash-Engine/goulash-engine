@@ -4,7 +4,7 @@ import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.domain.Actor
 
-internal class ScriptedActivity(
+internal class ActivityScript(
     private val parsedContext: ParsedActivityContext
 ) : Activity {
 

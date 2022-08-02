@@ -13,7 +13,7 @@ internal class ContainerScriptTranspilerTest {
     @Test
     fun `should transpile health decrease by 10`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val containerLogicContext = ContainerLogicContext(
+        val containerScriptContext = ContainerScriptContext(
             ScriptHead("foo"),
             listOf(
                 ScriptStatement(
@@ -27,7 +27,7 @@ internal class ContainerScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = containerScriptTranspiler.transpile(containerLogicContext)
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 50.0
@@ -41,7 +41,7 @@ internal class ContainerScriptTranspilerTest {
     @Test
     fun `should transpile health increase by 10`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val containerLogicContext = ContainerLogicContext(
+        val containerScriptContext = ContainerScriptContext(
             ScriptHead("foo"),
             listOf(
                 ScriptStatement(
@@ -55,7 +55,7 @@ internal class ContainerScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = containerScriptTranspiler.transpile(containerLogicContext)
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 50.0
@@ -69,7 +69,7 @@ internal class ContainerScriptTranspilerTest {
     @Test
     fun `should transpile health set to 50_0`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val containerLogicContext = ContainerLogicContext(
+        val containerScriptContext = ContainerScriptContext(
             ScriptHead("foo"),
             listOf(
                 ScriptStatement(
@@ -83,7 +83,7 @@ internal class ContainerScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = containerScriptTranspiler.transpile(containerLogicContext)
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testActor = ActorFactory.testActor()
         val container = Container(mutableListOf(testActor))
@@ -96,7 +96,7 @@ internal class ContainerScriptTranspilerTest {
     @Test
     fun `should transpile filter for greater than`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val containerLogicContext = ContainerLogicContext(
+        val containerScriptContext = ContainerScriptContext(
             ScriptHead("foo"),
             listOf(
                 ScriptStatement(
@@ -110,7 +110,7 @@ internal class ContainerScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = containerScriptTranspiler.transpile(containerLogicContext)
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 61.0
@@ -126,7 +126,7 @@ internal class ContainerScriptTranspilerTest {
     @Test
     fun `should transpile filter for less than`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val containerLogicContext = ContainerLogicContext(
+        val containerScriptContext = ContainerScriptContext(
             ScriptHead("foo"),
             listOf(
                 ScriptStatement(
@@ -140,7 +140,7 @@ internal class ContainerScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = containerScriptTranspiler.transpile(containerLogicContext)
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testActor = ActorFactory.testActor()
         testActor.state.health = 30.0
@@ -156,7 +156,7 @@ internal class ContainerScriptTranspilerTest {
     @Test
     fun `should transpile script context`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val containerLogicContext = ContainerLogicContext(
+        val containerScriptContext = ContainerScriptContext(
             ScriptHead("foo"),
             listOf(
                 ScriptStatement(
@@ -170,7 +170,7 @@ internal class ContainerScriptTranspilerTest {
             )
         )
 
-        val scriptedLogic = containerScriptTranspiler.transpile(containerLogicContext)
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testClan = ActorFactory.testActor()
         val container = Container(mutableListOf(testClan))

@@ -8,8 +8,8 @@ import com.barbarus.prosper.factories.ActorFactory
 import com.barbarus.prosper.script.logic.ActivityScriptContext
 import org.junit.jupiter.api.Test
 
-internal class ScriptedActivityBuilderTest {
-    private val scriptedActivityBuilder = ScriptedActivityBuilder()
+internal class ActivityScriptBuilderTest {
+    private val activityScriptBuilder = ActivityScriptBuilder()
 
     @Test
     fun `should parse activity script context to correct scripted script with working functions`() {
@@ -29,7 +29,7 @@ internal class ScriptedActivityBuilderTest {
             )
         )
 
-        val scriptedActivity = scriptedActivityBuilder.parse(activityScriptContext)
+        val scriptedActivity = activityScriptBuilder.parse(activityScriptContext)
 
         assertThat(scriptedActivity.activity()).isEqualTo("eating")
         assertThat(scriptedActivity.triggerUrges()).containsAll("eat", "brot")

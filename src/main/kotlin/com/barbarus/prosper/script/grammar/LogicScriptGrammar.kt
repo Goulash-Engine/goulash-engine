@@ -1,7 +1,7 @@
 package com.barbarus.prosper.script.grammar
 
 import com.barbarus.prosper.script.domain.ScriptStatement
-import com.barbarus.prosper.script.logic.ContainerLogicContext
+import com.barbarus.prosper.script.logic.ContainerScriptContext
 import com.barbarus.prosper.script.logic.ScriptHead
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.optional
@@ -14,7 +14,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
-internal class LogicScriptGrammar : Grammar<ContainerLogicContext>() {
+internal class LogicScriptGrammar : Grammar<ContainerScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
@@ -40,14 +40,14 @@ internal class LogicScriptGrammar : Grammar<ContainerLogicContext>() {
      * .plus(1)
      */
     private val operationParser by -operationOperator * identifier * -leftPar * (digit or identifier) * -rightPar map { (name, argument) ->
-        ContainerLogicContext.Operation(name.text, argument.text)
+        ContainerScriptContext.Operation(name.text, argument.text)
     }
 
     /**
      * ::urge(eat)[.plus(1)]
      */
     private val mutationParser by -contextMutationOperator * identifier * -leftPar * identifier * -rightPar * operationParser map { (type, target, operation) ->
-        ContainerLogicContext.ContextMutation(type.text, target.text, operation)
+        ContainerScriptContext.ContextMutation(type.text, target.text, operation)
     }
 
     private val filterParser by filter use { text.removeSurrounding("[", "]") }
@@ -69,6 +69,6 @@ internal class LogicScriptGrammar : Grammar<ContainerLogicContext>() {
 
     private val statementsParser by -startLogicBlock * separatedTerms(statementParser, endOfStatement) * -endLogicBlock
     override val rootParser by (scriptHeadParser * statementsParser) map { (scriptHead, statements) ->
-        ContainerLogicContext(scriptHead, statements)
+        ContainerScriptContext(scriptHead, statements)
     }
 }
