@@ -53,9 +53,9 @@ internal class ActivityScriptGrammarTest {
         assertThat(activityScriptContext.priority).isEqualTo(1)
         assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
         assertThat(activityScriptContext.priorityConditions).contains("foo45")
-        assertThat(activityScriptContext.actLogic).isEqualTo("actor::urges(eat).plus(1);actor::urges(eat).minus(1);")
-        assertThat(activityScriptContext.onFinish).isEqualTo("actor::urges(eat).minus(10);")
-        assertThat(activityScriptContext.onAbort).isEqualTo("actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);")
+        assertThat(activityScriptContext.actLogic).isEqualTo("logicact{actor::urges(eat).plus(1);actor::urges(eat).minus(1);}")
+        assertThat(activityScriptContext.onFinish).isEqualTo("logicon_finish{actor::urges(eat).minus(10);}")
+        assertThat(activityScriptContext.onAbort).isEqualTo("logicon_abort{actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);}")
     }
 
     @Test
@@ -90,9 +90,9 @@ internal class ActivityScriptGrammarTest {
         assertThat(activityScriptContext.priority).isEqualTo(1)
         assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
         assertThat(activityScriptContext.priorityConditions).contains("foo45")
-        assertThat(activityScriptContext.actLogic).isEqualTo("actor::urges(eat).plus(1);actor::urges(eat).minus(1);")
-        assertThat(activityScriptContext.onFinish).isEqualTo("actor::urges(eat).minus(10);")
-        assertThat(activityScriptContext.onAbort).isEqualTo("actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);")
+        assertThat(activityScriptContext.actLogic).isEqualTo("logicact{actor::urges(eat).plus(1);actor::urges(eat).minus(1);}")
+        assertThat(activityScriptContext.onFinish).isEqualTo("logicon_finish{actor::urges(eat).minus(10);}")
+        assertThat(activityScriptContext.onAbort).isEqualTo("logicon_abort{actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);}")
     }
 
     @Test

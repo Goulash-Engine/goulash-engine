@@ -3,7 +3,7 @@ package com.barbarus.prosper.script.grammar
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.barbarus.prosper.script.logic.LogicScriptContext
+import com.barbarus.prosper.script.logic.ContainerLogicContext
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.junit.jupiter.api.Test
@@ -16,6 +16,26 @@ internal class LogicScriptGrammarTest {
     private val logicScriptGrammar = LogicScriptGrammar()
 
     @Test
+    fun `should parse statement with filter and no filter mutation operation (oneline)`() {
+        val scriptData =
+            "logicmyfoo{actors[state.health>1]::urge(eat).plus(1);actors::urge(eat).plus(2);}".trim()
+
+        val actual: ContainerLogicContext = logicScriptGrammar.parseToEnd(scriptData)
+
+        assertThat(actual.head.name).isEqualTo("myfoo")
+        assertThat(actual.statements[0].mutationType).isEqualTo("urge")
+        assertThat(actual.statements[0].filter).isEqualTo("state.health>1")
+        assertThat(actual.statements[0].mutationTarget).isEqualTo("eat")
+        assertThat(actual.statements[0].mutationOperation).isEqualTo("plus")
+        assertThat(actual.statements[0].mutationOperationArgument).isEqualTo("1")
+        assertThat(actual.statements[1].mutationType).isEqualTo("urge")
+        assertThat(actual.statements[1].filter).isEqualTo("")
+        assertThat(actual.statements[1].mutationTarget).isEqualTo("eat")
+        assertThat(actual.statements[1].mutationOperation).isEqualTo("plus")
+        assertThat(actual.statements[1].mutationOperationArgument).isEqualTo("2")
+    }
+
+    @Test
     fun `should parse statement with filter and no filter mutation operation`() {
         val scriptData = """
             logic myfoo {
@@ -24,7 +44,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerLogicContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertThat(actual.statements[0].mutationType).isEqualTo("urge")
@@ -38,6 +58,7 @@ internal class LogicScriptGrammarTest {
         assertThat(actual.statements[1].mutationOperation).isEqualTo("plus")
         assertThat(actual.statements[1].mutationOperationArgument).isEqualTo("2")
     }
+
     @Test
     fun `should parse statement with filter`() {
         val scriptData = """
@@ -46,7 +67,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerLogicContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -69,7 +90,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerLogicContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -90,7 +111,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: LogicScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerLogicContext = logicScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {

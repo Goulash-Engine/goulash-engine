@@ -7,7 +7,7 @@ import com.barbarus.prosper.script.grammar.ActivityScriptGrammar
 import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
 import com.barbarus.prosper.script.grammar.LogicScriptGrammar
 import com.barbarus.prosper.script.loader.ScriptedActivityBuilder
-import com.barbarus.prosper.script.logic.ScriptTranspiler
+import com.barbarus.prosper.script.logic.ContainerScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
@@ -75,7 +75,7 @@ object ScriptLoader {
 
     internal fun loadLogicScripts(scriptDirectory: String) {
         val scriptGrammar = LogicScriptGrammar()
-        val scriptTranspiler = ScriptTranspiler()
+        val containerScriptTranspiler = ContainerScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
@@ -92,7 +92,7 @@ object ScriptLoader {
                     loadingError++
                     null
                 }
-            }.map(scriptTranspiler::transpile)
+            }.map(containerScriptTranspiler::transpile)
             .toList()
 
         logicScripts = scriptLogics

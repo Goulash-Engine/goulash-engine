@@ -51,8 +51,9 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
 
     internal class Logic(
         private val name: String,
-        private val block: String
+        private val statements: String
     ) {
-        fun toPair() = name to block
+        fun toPair() = name to statementsToLogicBlock()
+        private fun statementsToLogicBlock() = "logic$name{$statements}".trim()
     }
 }
