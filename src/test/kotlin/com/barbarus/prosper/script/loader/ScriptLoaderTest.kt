@@ -16,6 +16,25 @@ internal class ScriptLoaderTest {
     }
 
     @Test
+    fun `should load activity script file`(@TempDir tempDir: java.io.File) {
+        val config = tempDir.resolve("activity.pros")
+        config.writeText(
+            """ 
+            activity eating {
+                trigger_urges ["eat"]
+                logic act {
+                    actor::urge(eat).minus(1);
+                }
+            }
+            """.trimIndent()
+        )
+
+        ScriptLoader.loadActivityScripts(tempDir.path)
+
+        assertThat(ScriptLoader.getActivityScripts()).isNotEmpty()
+    }
+
+    @Test
     fun `should load logic script file`(@TempDir tempDir: java.io.File) {
         val config = tempDir.resolve("logic.pros")
         config.writeText(
@@ -26,7 +45,7 @@ internal class ScriptLoaderTest {
             """.trimIndent()
         )
 
-        ScriptLoader.loadScripts(tempDir.path)
+        ScriptLoader.loadLogicScripts(tempDir.path)
 
         assertThat(ScriptLoader.getLogicScripts()).isNotEmpty()
     }

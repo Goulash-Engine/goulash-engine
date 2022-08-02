@@ -1,9 +1,12 @@
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
+import com.barbarus.prosper.script.domain.ScriptedActivity
 import com.barbarus.prosper.script.domain.ScriptedLogic
+import com.barbarus.prosper.script.grammar.ActivityScriptGrammar
 import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
 import com.barbarus.prosper.script.grammar.LogicScriptGrammar
+import com.barbarus.prosper.script.loader.ScriptedActivityBuilder
 import com.barbarus.prosper.script.logic.ScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
@@ -18,20 +21,19 @@ object ScriptLoader {
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
     private var logicScripts: List<ScriptedLogic<Container>> = listOf()
-
-    private val configGrammars: List<ListConfigurationGrammar> = listOf(ListConfigurationGrammar())
-    private val scriptGrammar: LogicScriptGrammar = LogicScriptGrammar()
+    private var activityScripts: List<ScriptedActivity> = listOf()
 
     internal fun load() {
         val logicDir = "logic"
         val configDir = "$logicDir/config"
-        if (Path(logicDir).notExists()) {
-            Files.createDirectory(Path(logicDir))
+        val activityDir = "$logicDir/activity"
+
+        listOf(logicDir, configDir, activityDir).forEach {
+            if (Path(it).notExists()) Files.createDirectory(Path(it))
         }
-        if (Path(configDir).notExists()) {
-            Files.createDirectory(Path(configDir))
-        }
-        loadScripts(logicDir)
+
+        loadLogicScripts(logicDir)
+        loadActivityScripts(logicDir)
         loadConfigurations(configDir)
     }
 
@@ -40,7 +42,39 @@ object ScriptLoader {
         logicScripts = listOf()
     }
 
-    internal fun loadScripts(scriptDirectory: String) {
+    internal fun loadActivityScripts(scriptDirectory: String) {
+        val activityGrammar = ActivityScriptGrammar()
+        val scriptedActivityBuilder = ScriptedActivityBuilder()
+        val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
+        var loadingError = 0
+        LOG.info("Loading activities from: $scriptDirectory...")
+        val scriptedActivities =
+            files.asSequence().map { LOG.info("Reading activity script file: ${it.fileName}..."); it.readText() }
+                .mapNotNull { scriptData ->
+                    try {
+                        activityGrammar.parseToEnd(scriptData)
+                    } catch (e: ParseException) {
+                        LOG.error("[Parser Error] ${e.message}")
+                        loadingError++
+                        null
+                    } catch (e: Exception) {
+                        LOG.error("[Syntax Error] ${e.message}")
+                        loadingError++
+                        null
+                    }
+                }.map(scriptedActivityBuilder::parse)
+                .toList()
+
+        activityScripts = scriptedActivities
+
+        LOG.info("Finished loading ${scriptedActivities.count()} activity scripts")
+        if (loadingError > 0) {
+            LOG.error("$loadingError scripts failed to load")
+        }
+    }
+
+    internal fun loadLogicScripts(scriptDirectory: String) {
+        val scriptGrammar = LogicScriptGrammar()
         val scriptTranspiler = ScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
@@ -70,6 +104,7 @@ object ScriptLoader {
     }
 
     internal fun loadConfigurations(configDirectory: String) {
+        val configGrammars = listOf(ListConfigurationGrammar())
         val files = Path(configDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         var loadingCount = 0
@@ -107,6 +142,10 @@ object ScriptLoader {
         globalBlockingConditions ?: default
 
     internal fun getLogicScripts(): List<ScriptedLogic<Container>> {
+        return logicScripts
+    }
+
+    internal fun getActivityScripts(): List<ScriptedLogic<Container>> {
         return logicScripts
     }
 }
