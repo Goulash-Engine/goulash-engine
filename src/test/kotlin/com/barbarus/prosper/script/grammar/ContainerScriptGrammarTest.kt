@@ -12,15 +12,15 @@ import org.junit.jupiter.api.assertThrows
 /**
  * Tests the grammatical parsing ability for given script data.
  */
-internal class LogicScriptGrammarTest {
-    private val logicScriptGrammar = LogicScriptGrammar()
+internal class ContainerScriptGrammarTest {
+    private val containerScriptGrammar = ContainerScriptGrammar()
 
     @Test
     fun `should parse statement with filter and no filter mutation operation (oneline)`() {
         val scriptData =
             "logicmyfoo{actors[state.health>1]::urge(eat).plus(1);actors::urge(eat).plus(2);}".trim()
 
-        val actual: ContainerScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertThat(actual.statements[0].mutationType).isEqualTo("urge")
@@ -44,7 +44,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ContainerScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertThat(actual.statements[0].mutationType).isEqualTo("urge")
@@ -67,7 +67,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ContainerScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -90,7 +90,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ContainerScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -111,7 +111,7 @@ internal class LogicScriptGrammarTest {
             }
         """.trimIndent()
 
-        val actual: ContainerScriptContext = logicScriptGrammar.parseToEnd(scriptData)
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
 
         assertThat(actual.head.name).isEqualTo("myfoo")
         assertAll {
@@ -131,7 +131,7 @@ internal class LogicScriptGrammarTest {
         """.trimIndent()
 
         assertThrows<ParseException> {
-            logicScriptGrammar.parseToEnd(scriptData)
+            containerScriptGrammar.parseToEnd(scriptData)
         }
     }
 }

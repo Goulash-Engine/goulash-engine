@@ -4,7 +4,7 @@ import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.grammar.ActivityScriptGrammar
 import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
-import com.barbarus.prosper.script.grammar.LogicScriptGrammar
+import com.barbarus.prosper.script.grammar.ContainerScriptGrammar
 import com.barbarus.prosper.script.loader.ActivityScriptBuilder
 import com.barbarus.prosper.script.logic.ContainerScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
@@ -74,7 +74,7 @@ object ScriptLoader {
     }
 
     internal fun loadContainerScripts(scriptDirectory: String) {
-        val scriptGrammar = LogicScriptGrammar()
+        val scriptGrammar = ContainerScriptGrammar()
         val containerScriptTranspiler = ContainerScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0

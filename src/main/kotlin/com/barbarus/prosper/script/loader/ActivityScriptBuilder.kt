@@ -2,13 +2,13 @@ package com.barbarus.prosper.script.loader
 
 import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ParsedActivityContext
-import com.barbarus.prosper.script.grammar.LogicScriptGrammar
+import com.barbarus.prosper.script.grammar.ContainerScriptGrammar
 import com.barbarus.prosper.script.logic.ActivityScriptContext
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 
 internal class ActivityScriptBuilder {
     fun parse(context: ActivityScriptContext): ActivityScript {
-        val logicGrammar = LogicScriptGrammar()
+        val logicGrammar = ContainerScriptGrammar()
 
         val actLogic = logicGrammar.parseToEnd(context.actLogic)
         val onFinishLogic = logicGrammar.parseToEnd(context.onFinish)
