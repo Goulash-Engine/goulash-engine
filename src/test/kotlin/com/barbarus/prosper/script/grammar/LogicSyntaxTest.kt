@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  * This test is a whitebox test that asserts functionality from script data to the
  * effects on the context.
  */
-internal class ScriptSyntaxTest {
+internal class LogicSyntaxTest {
     private val logicScriptGrammar = LogicScriptGrammar()
 
     @Test
