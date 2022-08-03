@@ -3,7 +3,7 @@ package com.barbarus.prosper.simulation
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.WorldDate
-import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.factory.ActorFactory
 import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole

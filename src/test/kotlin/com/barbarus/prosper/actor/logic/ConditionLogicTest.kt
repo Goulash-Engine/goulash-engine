@@ -3,7 +3,7 @@ package com.barbarus.prosper.actor.logic
 import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.doesNotContain
-import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.factory.ActorFactory
 import org.junit.jupiter.api.Test
 
 internal class ConditionLogicTest {

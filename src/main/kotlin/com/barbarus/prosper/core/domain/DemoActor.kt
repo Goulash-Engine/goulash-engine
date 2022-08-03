@@ -6,7 +6,7 @@ import com.barbarus.prosper.actor.logic.InventoryLogic
 import com.barbarus.prosper.actor.logic.StateLogic
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.logic.Logic
-import com.barbarus.prosper.factories.ActorNameFactory
+import com.barbarus.prosper.factory.ActorNameFactory
 import org.slf4j.LoggerFactory
 import java.util.UUID
 

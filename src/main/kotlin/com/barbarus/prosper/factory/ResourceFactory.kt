@@ -1,4 +1,4 @@
-package com.barbarus.prosper.factories
+package com.barbarus.prosper.factory
 
 import com.barbarus.prosper.core.domain.Resource
 import com.barbarus.prosper.core.domain.ResourceType

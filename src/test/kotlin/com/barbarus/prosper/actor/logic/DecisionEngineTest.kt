@@ -7,8 +7,8 @@ import com.barbarus.prosper.core.DecisionEngine
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.extension.toDuration
-import com.barbarus.prosper.factories.ActorFactory
-import com.barbarus.prosper.factories.ResourceFactory
+import com.barbarus.prosper.factory.ActorFactory
+import com.barbarus.prosper.factory.ResourceFactory
 import com.barbarus.prosper.script.domain.ActivityScript
 import io.mockk.every
 import io.mockk.justRun

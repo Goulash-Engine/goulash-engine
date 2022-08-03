@@ -2,7 +2,7 @@ package com.barbarus.prosper.logic
 
 import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.core.domain.DemoActor
-import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.factory.ActorFactory
 import spock.lang.Specification
 
 class ConditionLogicSpec extends Specification {

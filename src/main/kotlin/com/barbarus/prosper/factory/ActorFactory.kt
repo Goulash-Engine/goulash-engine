@@ -1,4 +1,4 @@
-package com.barbarus.prosper.factories
+package com.barbarus.prosper.factory
 
 import com.barbarus.prosper.actor.activity.EatActivity
 import com.barbarus.prosper.actor.activity.RestActivity
@@ -9,6 +9,7 @@ import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.Profession
 import com.barbarus.prosper.core.domain.ProfessionType
+import com.barbarus.prosper.script.loader.ScriptLoader
 import kotlin.random.Random
 
 object ActorFactory {
@@ -55,5 +56,5 @@ object ActorFactory {
         ThinkActivity(),
         EatActivity(),
         SleepActivity()
-    )
+    ).also { it.addAll(ScriptLoader.getActivityScripts()) }
 }

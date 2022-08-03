@@ -1,4 +1,4 @@
-package com.barbarus.prosper.factories
+package com.barbarus.prosper.factory
 
 object ActorNameFactory {
 

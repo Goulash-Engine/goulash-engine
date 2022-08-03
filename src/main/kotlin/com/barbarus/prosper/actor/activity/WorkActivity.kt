@@ -6,7 +6,7 @@ import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.ProfessionType
 import com.barbarus.prosper.core.extension.toDuration
-import com.barbarus.prosper.factories.ResourceFactory
+import com.barbarus.prosper.factory.ResourceFactory
 import kotlin.random.Random
 
 /**

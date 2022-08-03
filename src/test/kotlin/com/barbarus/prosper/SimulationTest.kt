@@ -10,7 +10,7 @@ import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.WorldDate
-import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.factory.ActorFactory
 import com.barbarus.prosper.simulation.Simulation
 import io.mockk.mockk
 import org.junit.jupiter.api.Disabled

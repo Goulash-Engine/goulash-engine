@@ -2,7 +2,7 @@ package com.barbarus.prosper.actor.logic
 
 import assertk.assertThat
 import assertk.assertions.isLessThan
-import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.factory.ActorFactory
 import org.junit.jupiter.api.Test
 
 internal class StateLogicTest {

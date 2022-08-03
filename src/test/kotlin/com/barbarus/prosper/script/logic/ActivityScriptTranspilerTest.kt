@@ -4,7 +4,7 @@ import assertk.assertThat
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
-import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.factory.ActorFactory
 import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ScriptStatement
 import org.junit.jupiter.api.Test
