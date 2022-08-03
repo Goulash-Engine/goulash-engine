@@ -28,7 +28,7 @@ dependencies {
     testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
     testImplementation(kotlin("test"))
-    testImplementation("io.mockk:mockk:1.12.4")
+    testImplementation("io.mockk:mockk:1.12.5")
 }
 
 tasks.test {
