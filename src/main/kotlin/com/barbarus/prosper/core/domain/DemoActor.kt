@@ -1,9 +1,9 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.core.DecisionEngine
 import com.barbarus.prosper.actor.logic.ConditionLogic
 import com.barbarus.prosper.actor.logic.InventoryLogic
 import com.barbarus.prosper.actor.logic.StateLogic
+import com.barbarus.prosper.core.DecisionEngine
 import com.barbarus.prosper.core.activity.Activity
 import com.barbarus.prosper.core.logic.Logic
 import com.barbarus.prosper.factory.ActorNameFactory

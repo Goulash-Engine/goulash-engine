@@ -30,5 +30,3 @@ internal class LogicStatementGrammarTest {
         assertThat(statements[1].mutationOperationArgument).isEqualTo("2")
     }
 }
-
-

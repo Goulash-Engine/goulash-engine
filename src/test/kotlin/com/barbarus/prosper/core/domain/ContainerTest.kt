@@ -1,9 +1,9 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.script.loader.ScriptLoader
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.factory.ActorFactory
+import com.barbarus.prosper.script.loader.ScriptLoader
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir

@@ -1,7 +1,7 @@
 package com.barbarus.prosper.core.domain
 
-import com.barbarus.prosper.script.loader.ScriptLoader
 import com.barbarus.prosper.core.logic.Logic
+import com.barbarus.prosper.script.loader.ScriptLoader
 import org.slf4j.LoggerFactory
 
 /**

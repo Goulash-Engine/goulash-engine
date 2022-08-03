@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test
 
 internal class ActivityScriptTest {
 
-
     @Test
     fun `should`() {
         // return ActivityScript(
@@ -14,6 +13,5 @@ internal class ActivityScriptTest {
         //     { context -> transpileStatements(context, onFinishStatements) },
         //     { context -> transpileStatements(context, onAbortStatements) }
         // )
-
     }
 }
