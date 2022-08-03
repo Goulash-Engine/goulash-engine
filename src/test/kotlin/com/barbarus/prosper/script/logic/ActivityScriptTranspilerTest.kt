@@ -1,14 +1,40 @@
 package com.barbarus.prosper.script.logic
 
 import assertk.assertThat
+import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
 import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ScriptStatement
 import org.junit.jupiter.api.Test
 
 internal class ActivityScriptTranspilerTest {
     private val activityScriptTranspiler = ActivityScriptTranspiler()
+
+    @Test
+    fun `should set all given configurations properly`() {
+        val containerScriptContext = ActivityScriptContext(
+            "eating",
+            mapOf(
+                "act" to listOf(
+                    ScriptStatement(
+                        "actor",
+                        "",
+                        "state",
+                        "health",
+                        "plus",
+                        "10"
+                    )
+                )
+            ),
+            mapOf("trigger_urges" to listOf("eat"))
+        )
+
+        val activityScript: ActivityScript = activityScriptTranspiler.transpile(containerScriptContext)
+
+        assertThat(activityScript.triggerUrges()).containsOnly("eat")
+    }
 
     @Test
     fun `should transpile health increase by 10 for act logic and return true`() {

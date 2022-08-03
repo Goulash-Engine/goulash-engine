@@ -13,9 +13,9 @@ class Container(
     var loadedScripts: List<Logic<Container>> = listOf()
 ) {
     init {
-        LOG.info("Initialize logic scripts")
+        LOG.info("Initialize container scripts")
         loadedScripts = ScriptLoader.getContainerScripts()
-        LOG.info("Initialized ${loadedScripts.size} logic scripts")
+        LOG.info("Initialized ${loadedScripts.size} container scripts")
     }
 
     fun act() {
