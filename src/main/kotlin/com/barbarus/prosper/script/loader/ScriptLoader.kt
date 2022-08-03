@@ -1,11 +1,12 @@
+
 import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ContainerScript
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
 import com.barbarus.prosper.script.domain.ListConfiguration
 import com.barbarus.prosper.script.grammar.ActivityScriptGrammar
-import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
 import com.barbarus.prosper.script.grammar.ContainerScriptGrammar
-import com.barbarus.prosper.script.loader.ActivityScriptBuilder
+import com.barbarus.prosper.script.grammar.ListConfigurationGrammar
+import com.barbarus.prosper.script.logic.ActivityScriptTranspiler
 import com.barbarus.prosper.script.logic.ContainerScriptTranspiler
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
@@ -44,7 +45,7 @@ object ScriptLoader {
 
     internal fun loadActivityScripts(scriptDirectory: String) {
         val activityGrammar = ActivityScriptGrammar()
-        val activityScriptBuilder = ActivityScriptBuilder()
+        val transpiler = ActivityScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading activities from: $scriptDirectory...")
@@ -62,7 +63,7 @@ object ScriptLoader {
                         loadingError++
                         null
                     }
-                }.map(activityScriptBuilder::parse)
+                }.map(transpiler::transpile)
                 .toList()
 
         activityScripts = scriptedActivities

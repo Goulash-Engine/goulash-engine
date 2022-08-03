@@ -26,7 +26,7 @@ internal class ActivityScriptGrammarTest {
 
         val activityScriptContext = activityGrammar.parseToEnd(scriptData)
 
-        assertThat(activityScriptContext.actLogic).isEqualTo(
+        assertThat(activityScriptContext.statements["act"]).isEqualTo(
             listOf(
                 ScriptStatement(
                     "actor",
@@ -38,7 +38,7 @@ internal class ActivityScriptGrammarTest {
                 )
             )
         )
-        assertThat(activityScriptContext.onFinish).isEqualTo(
+        assertThat(activityScriptContext.statements["on_finish"]).isEqualTo(
             listOf(
                 ScriptStatement(
                     "actor",
@@ -50,7 +50,7 @@ internal class ActivityScriptGrammarTest {
                 )
             )
         )
-        assertThat(activityScriptContext.onAbort).isEqualTo(
+        assertThat(activityScriptContext.statements["on_abort"]).isEqualTo(
             listOf(
                 ScriptStatement(
                     "actor",
@@ -99,11 +99,11 @@ internal class ActivityScriptGrammarTest {
         val activityScriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(activityScriptContext.activity).isEqualTo("eating")
-        assertThat(activityScriptContext.triggerUrges).containsAll("eat", "brot")
-        assertThat(activityScriptContext.abortConditions).containsAll("foo", "bar")
-        assertThat(activityScriptContext.priority).isEqualTo(1)
-        assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
-        assertThat(activityScriptContext.priorityConditions).contains("foo45")
+        assertThat(activityScriptContext.configurations["trigger_urges"]!!).containsAll("eat", "brot")
+        assertThat(activityScriptContext.configurations["abort_conditions"]!!).containsAll("foo", "bar")
+        assertThat(activityScriptContext.configurations["priority"]!!).contains("1")
+        assertThat(activityScriptContext.configurations["duration"]!!).contains("40.5")
+        assertThat(activityScriptContext.configurations["priority_conditions"]!!).contains("foo45")
     }
 
     @Test
@@ -133,11 +133,11 @@ internal class ActivityScriptGrammarTest {
         val activityScriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(activityScriptContext.activity).isEqualTo("eating")
-        assertThat(activityScriptContext.triggerUrges).containsAll("eat", "brot")
-        assertThat(activityScriptContext.abortConditions).containsAll("foo", "bar")
-        assertThat(activityScriptContext.priority).isEqualTo(1)
-        assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
-        assertThat(activityScriptContext.priorityConditions).contains("foo45")
+        assertThat(activityScriptContext.configurations["trigger_urges"]!!).containsAll("eat", "brot")
+        assertThat(activityScriptContext.configurations["abort_conditions"]!!).containsAll("foo", "bar")
+        assertThat(activityScriptContext.configurations["priority"]!!).contains("1")
+        assertThat(activityScriptContext.configurations["duration"]!!).contains("40.5")
+        assertThat(activityScriptContext.configurations["priority_conditions"]!!).contains("foo45")
     }
 
     @Test
@@ -151,8 +151,8 @@ internal class ActivityScriptGrammarTest {
 
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
-        assertThat(scriptContext.duration.asDouble()).isEqualTo(10.0)
-        assertThat(scriptContext.priority).isEqualTo(30)
+        assertThat(scriptContext.configurations["duration"]!!).contains("10")
+        assertThat(scriptContext.configurations["priority"]!!).contains("30")
     }
 
     @Test
@@ -166,8 +166,8 @@ internal class ActivityScriptGrammarTest {
 
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
-        assertThat(scriptContext.duration.asDouble()).isEqualTo(10.0)
-        assertThat(scriptContext.priority).isEqualTo(30)
+        assertThat(scriptContext.configurations["duration"]!!).contains("10")
+        assertThat(scriptContext.configurations["priority"]!!).contains("30")
     }
 
     @Test
@@ -180,7 +180,7 @@ internal class ActivityScriptGrammarTest {
 
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
-        assertThat(scriptContext.priority).isEqualTo(30)
+        assertThat(scriptContext.configurations["priority"]!!).contains("30")
     }
 
     @Test
@@ -193,7 +193,7 @@ internal class ActivityScriptGrammarTest {
 
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
-        assertThat(scriptContext.abortConditions).containsAll("sick", "dead")
+        assertThat(scriptContext.configurations["abort_conditions"]!!).containsAll("sick", "dead")
     }
 
     @Test
@@ -212,12 +212,12 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.priorityConditions).containsAll("starving", "crazy")
-        assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
-        assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
-        assertThat(scriptContext.abortConditions).containsAll("stuff")
-        assertThat(scriptContext.duration.asDouble()).isEqualTo(40.0)
-        assertThat(scriptContext.priority).isEqualTo(3)
+        assertThat(scriptContext.configurations["priority_conditions"]!!).containsAll("starving", "crazy")
+        assertThat(scriptContext.configurations["trigger_urges"]!!).containsAll("eat", "enjoy")
+        assertThat(scriptContext.configurations["abort_conditions"]!!).containsAll("stuff")
+        assertThat(scriptContext.configurations["blocker_conditions"]!!).containsAll("sick", "dead")
+        assertThat(scriptContext.configurations["priority"]!!).contains("3")
+        assertThat(scriptContext.configurations["duration"]!!).contains("40.0")
     }
 
     @Test
@@ -230,7 +230,7 @@ internal class ActivityScriptGrammarTest {
 
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
-        assertThat(scriptContext.duration.asDouble()).isEqualTo(40.0)
+        assertThat(scriptContext.configurations["duration"]!!).contains("40.0")
     }
 
     @Test
@@ -246,9 +246,9 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.priorityConditions).containsAll("starving", "crazy")
-        assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
-        assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
+        assertThat(scriptContext.configurations["priority_conditions"]!!).containsAll("starving", "crazy")
+        assertThat(scriptContext.configurations["trigger_urges"]!!).containsAll("eat", "enjoy")
+        assertThat(scriptContext.configurations["blocker_conditions"]!!).containsAll("sick", "dead")
     }
 
     @Test
@@ -262,7 +262,7 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.priorityConditions).containsAll("starving", "crazy")
+        assertThat(scriptContext.configurations["priority_conditions"]!!).containsAll("starving", "crazy")
     }
 
     @Test
@@ -277,8 +277,8 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
-        assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
+        assertThat(scriptContext.configurations["trigger_urges"]!!).containsAll("eat", "enjoy")
+        assertThat(scriptContext.configurations["blocker_conditions"]!!).containsAll("sick", "dead")
     }
 
     @Test
@@ -293,8 +293,8 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
-        assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
+        assertThat(scriptContext.configurations["trigger_urges"]!!).containsAll("eat", "enjoy")
+        assertThat(scriptContext.configurations["blocker_conditions"]!!).containsAll("sick", "dead")
     }
 
     @Test
@@ -308,7 +308,7 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.blockerConditions).containsAll("sick", "dead")
+        assertThat(scriptContext.configurations["blocker_conditions"]!!).containsAll("sick", "dead")
     }
 
     @Test
@@ -322,7 +322,7 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.triggerUrges).containsAll("eat", "enjoy")
+        assertThat(scriptContext.configurations["trigger_urges"]!!).containsAll("eat", "enjoy")
     }
 
     @Test
@@ -336,6 +336,6 @@ internal class ActivityScriptGrammarTest {
         val scriptContext = activityGrammar.parseToEnd(scriptData)
 
         assertThat(scriptContext.activity).isEqualTo("eating")
-        assertThat(scriptContext.triggerUrges).containsAll("eat")
+        assertThat(scriptContext.configurations["trigger_urges"]!!).contains("eat")
     }
 }

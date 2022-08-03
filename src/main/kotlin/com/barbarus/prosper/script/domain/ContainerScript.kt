@@ -5,10 +5,10 @@ import com.barbarus.prosper.core.logic.Logic
 
 internal class ContainerScript(
     val name: String,
-    private val compiledLogic: (context: Container) -> Unit
+    private val containerLogic: (context: Container) -> Unit
 ) : Logic<Container> {
 
     override fun process(context: Container) {
-        this.compiledLogic(context)
+        this.containerLogic(context)
     }
 }

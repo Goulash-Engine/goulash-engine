@@ -2,7 +2,7 @@ package com.barbarus.prosper.script.logic
 
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.domain.State
-import com.barbarus.prosper.script.domain.ContainerScript
+import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.extension.ReflectionExtensions.callSetter
 import com.barbarus.prosper.script.extension.TranspilerExtensions.tryScriptFilter
@@ -11,28 +11,41 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.declaredMembers
 
 /**
- * Transpiles [ContainerScriptContext] to [ContainerScript]
+ * Transpiles [ActivityScriptContext] to [ActivityScript]
  */
-internal class ContainerScriptTranspiler {
-    fun transpile(scriptContext: ContainerScriptContext): ContainerScript {
-        return ContainerScript(scriptContext.head.name) { context ->
-            val statements = scriptContext.statements
-            statements.forEach { statement ->
-                if (statement.context == "actors") {
-                    if (statement.mutationType == "state") {
-                        val actors = context.actors.tryScriptFilter(statement.filter)
+internal class ActivityScriptTranspiler {
+    fun transpile(scriptContext: ActivityScriptContext): ActivityScript {
+        val actStatements = scriptContext.statements["act"] ?: emptyList()
+        val onFinishStatements = scriptContext.statements["on_finish"] ?: emptyList()
+        val onAbortStatements = scriptContext.statements["on_abort"] ?: emptyList()
+
+        return ActivityScript(
+            scriptContext.activity,
+            mapOf(),
+            { _ -> true },
+            { context -> transpileStatements(context, onFinishStatements) },
+            { context -> transpileStatements(context, onAbortStatements) }
+        )
+    }
+
+    private fun transpileStatements(context: Actor, statements: List<ScriptStatement>) {
+        statements.forEach { statement ->
+            if (statement.context == "actors") {
+                if (statement.mutationType == "state") {
+                    if (context.tryScriptFilter(statement.filter) != null) {
                         when (statement.mutationOperation) {
-                            "set" -> actors.forEach { set(it, statement.mutationTarget, statement.mutationOperationArgument) }
-                            "plus" -> actors.forEach { plus(it, statement.mutationTarget, statement.mutationOperationArgument) }
-                            "minus" -> actors.forEach { minus(it, statement.mutationTarget, statement.mutationOperationArgument) }
+                            "set" -> set(context, statement.mutationTarget, statement.mutationOperationArgument)
+                            "plus" -> plus(context, statement.mutationTarget, statement.mutationOperationArgument)
+                            "minus" -> minus(context, statement.mutationTarget, statement.mutationOperationArgument)
                         }
                     }
-                    if (statement.mutationType == "urge") {
-                        val actors = context.actors.tryScriptFilter(statement.filter)
+                }
+                if (statement.mutationType == "urge") {
+                    if (context.tryScriptFilter(statement.filter) != null) {
                         when (statement.mutationOperation) {
-                            "plus" -> actors.forEach { increaseUrge(it, statement) }
-                            "minus" -> actors.forEach { decreaseUrge(it, statement) }
-                            "set" -> actors.forEach { setUrge(it, statement) }
+                            "plus" -> increaseUrge(context, statement)
+                            "minus" -> decreaseUrge(context, statement)
+                            "set" -> setUrge(context, statement)
                         }
                     }
                 }
