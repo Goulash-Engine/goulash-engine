@@ -1,4 +1,4 @@
-
+package com.barbarus.prosper.script.loader
 import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ContainerScript
 import com.barbarus.prosper.script.domain.GlobalBlockerCondition
@@ -18,7 +18,7 @@ import kotlin.io.path.notExists
 import kotlin.io.path.readText
 
 object ScriptLoader {
-    private val LOG = LoggerFactory.getLogger("ScriptLoader")
+    private val LOG = LoggerFactory.getLogger("com.barbarus.prosper.script.loader.ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
     private var containerScripts: List<ContainerScript> = listOf()
     private var activityScripts: List<ActivityScript> = listOf()
@@ -44,16 +44,16 @@ object ScriptLoader {
     }
 
     internal fun loadActivityScripts(scriptDirectory: String) {
-        val activityGrammar = ActivityScriptGrammar()
+        val grammar = ActivityScriptGrammar()
         val transpiler = ActivityScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading activities from: $scriptDirectory...")
         val scriptedActivities =
             files.asSequence().map { LOG.info("Reading activity script file: ${it.fileName}..."); it.readText() }
-                .mapNotNull { scriptData ->
+                .mapNotNull {
                     try {
-                        activityGrammar.parseToEnd(scriptData)
+                        grammar.parseToEnd(it)
                     } catch (e: ParseException) {
                         LOG.error("[Parser Error] ${e.message}")
                         loadingError++
@@ -75,15 +75,15 @@ object ScriptLoader {
     }
 
     internal fun loadContainerScripts(scriptDirectory: String) {
-        val scriptGrammar = ContainerScriptGrammar()
+        val grammar = ContainerScriptGrammar()
         val containerScriptTranspiler = ContainerScriptTranspiler()
         val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
         val scriptLogics = files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
-            .mapNotNull { scriptData ->
+            .mapNotNull {
                 try {
-                    scriptGrammar.parseToEnd(scriptData)
+                    grammar.parseToEnd(it)
                 } catch (e: ParseException) {
                     LOG.error("[Parser Error] ${e.message}")
                     loadingError++

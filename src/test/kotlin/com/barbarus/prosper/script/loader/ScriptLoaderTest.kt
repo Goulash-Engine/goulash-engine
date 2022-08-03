@@ -1,6 +1,5 @@
 package com.barbarus.prosper.script.loader
 
-import ScriptLoader
 import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.isEmpty

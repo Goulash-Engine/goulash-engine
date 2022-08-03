@@ -1,6 +1,6 @@
 package com.barbarus.prosper.actor.logic
 
-import ScriptLoader
+import com.barbarus.prosper.script.loader.ScriptLoader
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.logic.Logic
 

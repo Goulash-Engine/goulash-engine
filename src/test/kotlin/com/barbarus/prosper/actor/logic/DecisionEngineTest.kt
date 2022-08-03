@@ -9,15 +9,39 @@ import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.extension.toDuration
 import com.barbarus.prosper.factories.ActorFactory
 import com.barbarus.prosper.factories.ResourceFactory
+import com.barbarus.prosper.script.domain.ActivityScript
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 
 internal class DecisionEngineTest {
     private val decisionEngine = DecisionEngine()
+
+    @Test
+    fun `should properly use script`() {
+        val scriptedSleepActivity = spyk(
+            ActivityScript(
+                "sleeping",
+                mapOf("trigger_urges" to listOf("sleep")),
+                { _ -> true },
+                { _ -> },
+                { _ -> }
+            )
+        )
+
+        val testActor = ActorFactory.testActor(listOf(scriptedSleepActivity))
+        testActor.urges.increaseUrge("sleep", 10.0)
+
+        repeat(1) { decisionEngine.process(testActor) }
+
+        verifyOrder {
+            repeat(1) { scriptedSleepActivity.act(any()) }
+        }
+    }
 
     @Test
     fun `should abort activity if has been exited within act`() {
