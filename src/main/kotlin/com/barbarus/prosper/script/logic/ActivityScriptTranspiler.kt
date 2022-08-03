@@ -22,7 +22,7 @@ internal class ActivityScriptTranspiler {
         return ActivityScript(
             scriptContext.activity,
             mapOf(),
-            { _ -> true },
+            { context -> transpileStatements(context, actStatements); true },
             { context -> transpileStatements(context, onFinishStatements) },
             { context -> transpileStatements(context, onAbortStatements) }
         )
