@@ -30,7 +30,7 @@ internal class ActivityScriptTranspiler {
 
     private fun transpileStatements(context: Actor, statements: List<ScriptStatement>) {
         statements.forEach { statement ->
-            if (statement.context == "actors") {
+            if (statement.context == "actor") {
                 if (statement.mutationType == "state") {
                     if (context.tryScriptFilter(statement.filter) != null) {
                         when (statement.mutationOperation) {

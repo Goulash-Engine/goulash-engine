@@ -21,7 +21,7 @@ object TranspilerExtensions {
     }
 
     fun <T : Actor> T.tryScriptFilter(filterStatement: String): T? {
-        if (filterStatement.isEmpty()) return null
+        if (filterStatement.isEmpty()) return this
         val contextFilter = FilterGrammar().parseToEnd(filterStatement)
         if (contextFilter.type == "state") {
             if (contextFilter.attribute == "health") {
