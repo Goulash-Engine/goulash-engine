@@ -13,7 +13,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
-internal class ScriptStatementGrammar : Grammar<List<ScriptStatement>>() {
+internal class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 

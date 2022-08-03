@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
+import com.barbarus.prosper.script.domain.ScriptStatement
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 
@@ -12,6 +13,56 @@ import org.junit.jupiter.api.Test
  */
 internal class ActivityScriptGrammarTest {
     private val activityGrammar = ActivityScriptGrammar()
+
+    @Test
+    fun `should logic components to statement scripts`() {
+        val scriptData = """
+            activity eating {
+                 logic act { actor::state(health).minus(10)} 
+                 logic on_finish { actor::state(health).minus(10)} 
+                 logic on_abort { actor::state(health).minus(10)} 
+             }
+        """.trimIndent()
+
+        val activityScriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(activityScriptContext.actLogic).isEqualTo(
+            listOf(
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "minus",
+                    "10"
+                )
+            )
+        )
+        assertThat(activityScriptContext.onFinish).isEqualTo(
+            listOf(
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "minus",
+                    "10"
+                )
+            )
+        )
+        assertThat(activityScriptContext.onAbort).isEqualTo(
+            listOf(
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "minus",
+                    "10"
+                )
+            )
+        )
+    }
 
     @Test
     fun `should parse complete activity script with diffused format`() {
@@ -53,9 +104,6 @@ internal class ActivityScriptGrammarTest {
         assertThat(activityScriptContext.priority).isEqualTo(1)
         assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
         assertThat(activityScriptContext.priorityConditions).contains("foo45")
-        assertThat(activityScriptContext.actLogic).isEqualTo("logicact{actor::urges(eat).plus(1);actor::urges(eat).minus(1);}")
-        assertThat(activityScriptContext.onFinish).isEqualTo("logicon_finish{actor::urges(eat).minus(10);}")
-        assertThat(activityScriptContext.onAbort).isEqualTo("logicon_abort{actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);}")
     }
 
     @Test
@@ -90,9 +138,6 @@ internal class ActivityScriptGrammarTest {
         assertThat(activityScriptContext.priority).isEqualTo(1)
         assertThat(activityScriptContext.duration.asDouble()).isEqualTo(40.5)
         assertThat(activityScriptContext.priorityConditions).contains("foo45")
-        assertThat(activityScriptContext.actLogic).isEqualTo("logicact{actor::urges(eat).plus(1);actor::urges(eat).minus(1);}")
-        assertThat(activityScriptContext.onFinish).isEqualTo("logicon_finish{actor::urges(eat).minus(10);}")
-        assertThat(activityScriptContext.onAbort).isEqualTo("logicon_abort{actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);}")
     }
 
     @Test

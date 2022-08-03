@@ -5,6 +5,7 @@ import assertk.assertions.contains
 import assertk.assertions.containsAll
 import assertk.assertions.isEqualTo
 import com.barbarus.prosper.factories.ActorFactory
+import com.barbarus.prosper.script.domain.ScriptStatement
 import com.barbarus.prosper.script.logic.ActivityScriptContext
 import org.junit.jupiter.api.Test
 
@@ -16,9 +17,9 @@ internal class ActivityScriptBuilderTest {
         val activityScriptContext = ActivityScriptContext(
             activity = "eating",
             mapOf(
-                "act" to "actor::urges(eat).plus(1);actor::urges(eat).minus(1);",
-                "on_finish" to "actor::urges(eat).minus(10);",
-                "on_abort" to "actor::urges(eat).minus(10);actor::urges(eat).minus(10);actor::urges(eat).minus(10);"
+                "act" to listOf(ScriptStatement("actors", "", "state", "health", "minus", "10")),
+                "on_finish" to listOf(ScriptStatement("actors", "", "state", "health", "minus", "10")),
+                "on_abort" to listOf(ScriptStatement("actors", "", "state", "health", "minus", "10"))
             ),
             mapOf(
                 "trigger_urges" to listOf("eat", "brot"),

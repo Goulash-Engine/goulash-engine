@@ -29,8 +29,8 @@ internal class ContainerScriptGrammar : Grammar<ContainerScriptContext>() {
 
     private val statementsParser by -startLogicBlock * logicBlockParser * -endLogicBlock
     override val rootParser by (scriptHeadParser * statementsParser) map { (scriptHead, logicBlock) ->
-        val scriptStatementGrammar = ScriptStatementGrammar()
-        val statements = scriptStatementGrammar.parseToEnd(logicBlock)
+        val logicStatementGrammar = LogicStatementGrammar()
+        val statements = logicStatementGrammar.parseToEnd(logicBlock)
         ContainerScriptContext(scriptHead, statements)
     }
 }

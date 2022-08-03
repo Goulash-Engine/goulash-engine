@@ -4,16 +4,14 @@ import com.barbarus.prosper.script.domain.ActivityScript
 import com.barbarus.prosper.script.domain.ParsedActivityContext
 import com.barbarus.prosper.script.grammar.ContainerScriptGrammar
 import com.barbarus.prosper.script.logic.ActivityScriptContext
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
 
 internal class ActivityScriptBuilder {
     fun parse(context: ActivityScriptContext): ActivityScript {
         val logicGrammar = ContainerScriptGrammar()
 
-        val actLogic = logicGrammar.parseToEnd(context.actLogic)
-        val onFinishLogic = logicGrammar.parseToEnd(context.onFinish)
-        val onAbortLogic = logicGrammar.parseToEnd(context.onAbort)
-
+        // val actLogic = logicGrammar.parseToEnd(context.actLogic)
+        // val onFinishLogic = logicGrammar.parseToEnd(context.onFinish)
+        // val onAbortLogic = logicGrammar.parseToEnd(context.onAbort)
         // val scriptedAct = transpiler.transpile(actLogic)
         // val scriptedOnFinish = transpiler.transpile(onFinishLogic)
         // val scriptedOnAbort = transpiler.transpile(onAbortLogic)

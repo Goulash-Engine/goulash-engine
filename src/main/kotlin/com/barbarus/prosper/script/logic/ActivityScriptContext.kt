@@ -2,6 +2,7 @@ package com.barbarus.prosper.script.logic
 
 import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.extension.toDuration
+import com.barbarus.prosper.script.domain.ScriptStatement
 
 /**
  * Context of an activity loaded by script.
@@ -11,15 +12,15 @@ import com.barbarus.prosper.core.extension.toDuration
  */
 internal data class ActivityScriptContext(
     val activity: String,
-    private val statements: Map<String, String>,
+    private val statements: Map<String, List<ScriptStatement>>,
     private val configurations: Map<String, List<String>>
 ) {
-    val actLogic: String
-        get() = statements["act"] ?: ""
-    val onFinish: String
-        get() = statements["on_finish"] ?: ""
-    val onAbort: String
-        get() = statements["on_abort"] ?: ""
+    val actLogic: List<ScriptStatement>
+        get() = statements["act"] ?: listOf()
+    val onFinish: List<ScriptStatement>
+        get() = statements["on_finish"] ?: listOf()
+    val onAbort: List<ScriptStatement>
+        get() = statements["on_abort"] ?: listOf()
     val priority: Int
         get() = configurations["priority"]?.firstOrNull()?.toInt() ?: 0
     val duration: Duration

@@ -7,15 +7,15 @@ import com.barbarus.prosper.script.domain.ScriptStatement
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 
-internal class ScriptStatementGrammarTest {
-    private val scriptStatementGrammar = ScriptStatementGrammar()
+internal class LogicStatementGrammarTest {
+    private val logicStatementGrammar = LogicStatementGrammar()
 
     @Test
     fun `should parse statement with filter and no filter mutation operation (oneline)`() {
         val scriptData =
             "actors[state.health>1]::urge(eat).plus(1);actors::urge(eat).plus(2);".trim()
 
-        val statements: List<ScriptStatement> = scriptStatementGrammar.parseToEnd(scriptData)
+        val statements: List<ScriptStatement> = logicStatementGrammar.parseToEnd(scriptData)
 
         assertThat(statements).hasSize(2)
         assertThat(statements[0].mutationType).isEqualTo("urge")

@@ -8,6 +8,7 @@ import com.github.h0tk3y.betterParse.combinators.separatedTerms
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
 import com.github.h0tk3y.betterParse.grammar.Grammar
+import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
@@ -53,7 +54,7 @@ internal class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
         private val name: String,
         private val statements: String
     ) {
-        fun toPair() = name to statementsToLogicBlock()
-        private fun statementsToLogicBlock() = "logic$name{$statements}".trim()
+        private val grammar = LogicStatementGrammar()
+        fun toPair() = name to grammar.parseToEnd(statements)
     }
 }
