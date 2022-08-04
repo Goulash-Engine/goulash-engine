@@ -39,7 +39,6 @@ internal class SimulationTest {
         val simulation = Simulation(
             maximumTicks = 60 * 24 * 30,
             millisecondsPerTick = 1,
-            container = container,
             tickBase = WorldDate.MINUTE
         )
 

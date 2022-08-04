@@ -8,8 +8,7 @@ fun main() {
     ScriptLoader.load()
     val simulation = Simulation(
         millisecondsPerTick = 100,
-        tickBase = WorldDate.MINUTE,
-        render = true
+        tickBase = WorldDate.MINUTE
     )
     simulation.run()
 }
