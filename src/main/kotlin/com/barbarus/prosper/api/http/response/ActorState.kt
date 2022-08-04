@@ -18,7 +18,7 @@ fun Actor.toResponse() = ActorState(
         "health" to this.state.health,
         "nourishment" to this.state.nourishment
     ),
-    urges = this.urges.getAllUrges(),
+    urges = this.urges.getAllUrges().toSortedMap(),
     activity = this.currentActivity,
     conditions = this.conditions.toList()
 )

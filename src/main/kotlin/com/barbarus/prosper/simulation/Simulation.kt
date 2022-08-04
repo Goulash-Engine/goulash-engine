@@ -29,10 +29,10 @@ class Simulation(
 
     fun run() {
         if (maximumTicks != null) {
-            repeat(maximumTicks) { currentTick ->
+            repeat(maximumTicks) {
                 while (SimulationContext.pause) {
                 }
-                runSimulation(currentTick)
+                runSimulation()
             }
         } else {
             while (true) {
@@ -45,7 +45,7 @@ class Simulation(
         LOG.info("Simulation finished")
     }
 
-    private fun runSimulation(currentTick: Int? = null) {
+    private fun runSimulation() {
         WORLD_TIME.tick(tickBase)
         container.act()
         TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
