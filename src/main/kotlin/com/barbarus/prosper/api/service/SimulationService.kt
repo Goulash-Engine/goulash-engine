@@ -1,5 +1,6 @@
 package com.barbarus.prosper.api.service
 
+import com.barbarus.prosper.core.SimulationContext
 import com.barbarus.prosper.core.domain.WorldDate
 import com.barbarus.prosper.script.loader.ScriptLoader
 import com.barbarus.prosper.simulation.Simulation
@@ -8,25 +9,28 @@ import org.springframework.stereotype.Service
 
 @Service
 class SimulationService {
-    private var simulation: Simulation? = null
-
-    fun startSimulation() {
+    fun start() {
         LOG.info("Simulation start requested")
         ScriptLoader.load()
-        val simulation = Simulation(
+        SimulationContext.simulation = Simulation(
             millisecondsPerTick = 100,
-            tickBase = WorldDate.MINUTE,
-            render = true
+            tickBase = WorldDate.MINUTE
         )
-        simulation.run()
+        SimulationContext.simulation?.run() ?: LOG.error("Simulation not initialized")
     }
 
-    fun stopSimulation() {
-        val simulation = Simulation(
-            millisecondsPerTick = 100,
-            tickBase = WorldDate.MINUTE,
-            render = true
-        )
+    fun stop() {
+        SimulationContext.simulation = null
+        LOG.info("Simulation stopped")
+    }
+
+    fun togglePause() {
+        if (SimulationContext.simulation == null) {
+            LOG.error("Simulation not initialized")
+            return
+        }
+        SimulationContext.pause = !SimulationContext.pause
+        if (SimulationContext.pause) LOG.info("Simulation paused") else LOG.info("Simulation resumed")
     }
 
     companion object {

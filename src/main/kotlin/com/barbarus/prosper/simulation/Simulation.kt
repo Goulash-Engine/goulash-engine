@@ -1,5 +1,6 @@
 package com.barbarus.prosper.simulation
 
+import com.barbarus.prosper.core.SimulationContext
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.core.domain.DemoActor
 import com.barbarus.prosper.core.domain.WorldDate
@@ -39,10 +40,14 @@ class Simulation(
 
         if (maximumTicks != null) {
             repeat(maximumTicks) { currentTick ->
+                while (SimulationContext.pause) {
+                }
                 runSimulation(currentTick)
             }
         } else {
             while (true) {
+                while (SimulationContext.pause) {
+                }
                 runSimulation()
             }
         }

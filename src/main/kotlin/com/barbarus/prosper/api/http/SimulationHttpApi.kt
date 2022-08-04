@@ -13,6 +13,16 @@ class SimulationHttpApi(
 
     @PostMapping("start")
     fun startSimulation() {
-        simulationService.startSimulation()
+        simulationService.start()
+    }
+
+    @PostMapping("pause")
+    fun pauseSimulation() {
+        simulationService.togglePause()
+    }
+
+    @PostMapping("stop")
+    fun stopSimulation() {
+        simulationService.stop()
     }
 }
