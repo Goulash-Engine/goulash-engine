@@ -8,3 +8,8 @@ POST http://localhost:8080/simulation/stop
 ### fetch container
 GET http://localhost:8080/container/root
 
+### fetch actors
+GET http://localhost:8080/actors?container=root
+
+### get world date
+GET http://localhost:8080/simulation/time

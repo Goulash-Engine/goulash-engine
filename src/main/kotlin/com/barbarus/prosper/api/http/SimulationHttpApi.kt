@@ -1,6 +1,9 @@
 package com.barbarus.prosper.api.http
 
 import com.barbarus.prosper.api.service.SimulationService
+import com.barbarus.prosper.core.domain.WorldDate
+import com.barbarus.prosper.simulation.Simulation
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -24,5 +27,10 @@ class SimulationHttpApi(
     @PostMapping("stop")
     fun stopSimulation() {
         simulationService.stop()
+    }
+
+    @GetMapping("time")
+    fun getWorldTime(): WorldDate {
+        return Simulation.WORLD_TIME
     }
 }
