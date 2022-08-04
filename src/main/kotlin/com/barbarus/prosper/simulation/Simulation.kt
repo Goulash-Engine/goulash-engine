@@ -19,10 +19,11 @@ class Simulation(
     private val tickBase: Int = WorldDate.SECOND,
     val container: Container = Container(
         mutableListOf(
+            ActorFactory.poorActor(),
+            ActorFactory.poorActor(),
+            ActorFactory.poorActor(),
+            ActorFactory.poorActor(),
             ActorFactory.poorActor()
-            // ActorFactory.poorGathererActor(),
-            // ActorFactory.poorGathererActor(),
-            // ActorFactory.simpleGathererActor()
         )
     )
 ) {
