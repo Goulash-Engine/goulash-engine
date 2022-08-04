@@ -4,3 +4,7 @@ POST http://localhost:8080/simulation/start
 POST http://localhost:8080/simulation/pause
 ### stop simulation
 POST http://localhost:8080/simulation/stop
+
+### fetch container
+GET http://localhost:8080/container/root
+

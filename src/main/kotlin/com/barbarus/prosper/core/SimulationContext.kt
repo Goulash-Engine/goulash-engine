@@ -8,4 +8,8 @@ import com.barbarus.prosper.simulation.Simulation
 object SimulationContext {
     var simulation: Simulation? = null
     var pause: Boolean = false
+
+    fun isRunning(): Boolean {
+        return simulation != null && !pause
+    }
 }
