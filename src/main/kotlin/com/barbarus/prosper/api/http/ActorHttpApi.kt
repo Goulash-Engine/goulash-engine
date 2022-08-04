@@ -1,7 +1,8 @@
 package com.barbarus.prosper.api.http
 
+import com.barbarus.prosper.api.http.response.ActorState
+import com.barbarus.prosper.api.http.response.toResponse
 import com.barbarus.prosper.core.SimulationContext
-import com.barbarus.prosper.core.domain.Actor
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,19 +11,19 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("actors")
-class ActorHttpEndpoint {
+class ActorHttpApi {
 
     @GetMapping("")
-    fun getActorsForContainer(@RequestParam container: String): List<Actor> {
+    fun getActorsForContainer(@RequestParam container: String): List<ActorState> {
         check(SimulationContext.isRunning()) { "Simulation is not running" }
         return when (container) {
             "root" -> {
                 val rootContainer = SimulationContext.simulation?.container
                 if (rootContainer == null) {
                     LOG.error("Container is null")
-                    return emptyList<Actor>()
+                    return emptyList<ActorState>()
                 }
-                rootContainer.actors
+                rootContainer.actors.map { it.toResponse() }
             }
 
             else -> emptyList()

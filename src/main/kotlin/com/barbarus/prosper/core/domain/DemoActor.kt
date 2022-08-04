@@ -14,7 +14,7 @@ import java.util.UUID
  * The core element of the village. A village is build upon multiple actors that provide a cycle for self-sufficiency.
  */
 class DemoActor(
-    val name: String = ActorNameFactory.randomName(),
+    override val name: String = ActorNameFactory.randomName(),
     override val id: String = UUID.randomUUID().toString(),
     val primaryProfession: Profession,
     val stash: MutableList<Resource> = mutableListOf(),
