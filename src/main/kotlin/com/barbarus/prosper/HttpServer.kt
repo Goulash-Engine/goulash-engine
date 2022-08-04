@@ -1,12 +1,14 @@
 package com.barbarus.prosper
 
+import org.springframework.boot.Banner
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 
 @SpringBootApplication
 open class HttpServer
 
 fun main(args: Array<String>) {
-    @Suppress("SpreadOperator")
-    runApplication<HttpServer>(*args)
+    SpringApplicationBuilder().bannerMode(Banner.Mode.OFF)
+        .sources(HttpServer::class.java)
+        .run(*args)
 }
