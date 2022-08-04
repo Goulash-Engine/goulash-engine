@@ -2,7 +2,6 @@ package com.barbarus.prosper.api.service
 
 import com.barbarus.prosper.core.SimulationContext
 import com.barbarus.prosper.core.domain.WorldDate
-import com.barbarus.prosper.core.domain.WorldTime
 import com.barbarus.prosper.script.loader.ScriptLoader
 import com.barbarus.prosper.simulation.Simulation
 import org.slf4j.LoggerFactory

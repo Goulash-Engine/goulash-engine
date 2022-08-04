@@ -12,4 +12,8 @@ object SimulationContext {
     fun isRunning(): Boolean {
         return simulation != null && !pause
     }
+
+    fun isPaused(): Boolean {
+        return simulation != null && pause
+    }
 }
