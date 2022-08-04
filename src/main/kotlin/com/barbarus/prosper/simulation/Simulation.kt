@@ -32,8 +32,10 @@ class Simulation(
     }
 
     fun run() {
-        AnsiConsole.systemInstall()
-        print(ansi().eraseScreen())
+        if (render) {
+            AnsiConsole.systemInstall()
+            print(ansi().eraseScreen())
+        }
 
         if (maximumTicks != null) {
             repeat(maximumTicks) { currentTick ->

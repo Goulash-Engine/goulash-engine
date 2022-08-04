@@ -1,0 +1,2 @@
+### start simulation
+POST http://localhost:8080/simulation/start

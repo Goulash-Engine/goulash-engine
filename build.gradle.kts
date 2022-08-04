@@ -18,13 +18,14 @@ repositories {
 }
 
 dependencies {
-    implementation("org.codehaus.groovy:groovy-all:3.0.11")
+    implementation("org.codehaus.groovy:groovy-all:3.0.12")
     implementation("ch.qos.logback:logback-core:1.2.11")
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("org.fusesource.jansi:jansi:2.4.0")
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.4")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.0")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.7.2")
     testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
     testImplementation(kotlin("test"))
