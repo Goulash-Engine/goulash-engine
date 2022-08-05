@@ -18,7 +18,7 @@ import kotlin.io.path.notExists
 import kotlin.io.path.readText
 
 object ScriptLoader {
-    private val LOG = LoggerFactory.getLogger("com.barbarus.prosper.script.loader.ScriptLoader")
+    private val LOG = LoggerFactory.getLogger("ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
     private var containerScripts: List<ContainerScript> = listOf()
     private var activityScripts: List<ActivityScript> = listOf()

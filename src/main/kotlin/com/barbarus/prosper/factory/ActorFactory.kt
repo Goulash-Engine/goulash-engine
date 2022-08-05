@@ -1,7 +1,6 @@
 package com.barbarus.prosper.factory
 
 import com.barbarus.prosper.actor.activity.EatActivity
-import com.barbarus.prosper.actor.activity.RestActivity
 import com.barbarus.prosper.actor.activity.ThinkActivity
 import com.barbarus.prosper.actor.activity.WorkActivity
 import com.barbarus.prosper.core.activity.Activity
@@ -61,7 +60,6 @@ object ActorFactory {
 
     private fun actorActivities() = mutableListOf(
         WorkActivity(),
-        RestActivity(),
         ThinkActivity(),
         EatActivity()
     ).also { it.addAll(ScriptLoader.getActivityScripts()) }
