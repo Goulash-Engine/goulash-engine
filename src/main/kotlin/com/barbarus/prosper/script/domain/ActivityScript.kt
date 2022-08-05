@@ -5,7 +5,7 @@ import com.barbarus.prosper.core.activity.Duration
 import com.barbarus.prosper.core.domain.Actor
 import com.barbarus.prosper.core.extension.toDuration
 
-internal class ActivityScript(
+class ActivityScript(
     private val activity: String,
     private val configurations: Map<String, List<String>>,
     private val actLogic: (context: Actor) -> Boolean,

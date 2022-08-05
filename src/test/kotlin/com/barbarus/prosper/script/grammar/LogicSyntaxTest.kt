@@ -27,9 +27,9 @@ internal class LogicSyntaxTest {
         """.trimIndent()
 
         val one = ActorFactory.testActor()
-        one.state.health = 100.0
+        one.state["health"] = 100.0
         val two = ActorFactory.testActor()
-        two.state.health = 300.0
+        two.state["health"] = 300.0
         val container = Container(mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
@@ -37,8 +37,8 @@ internal class LogicSyntaxTest {
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
 
-        assertThat(one.state.health).isEqualTo(0.0)
-        assertThat(two.state.health).isEqualTo(100.0)
+        assertThat(one.state["health"]!!).isEqualTo(0.0)
+        assertThat(two.state["health"]!!).isEqualTo(100.0)
     }
 
     @Test
@@ -52,7 +52,7 @@ internal class LogicSyntaxTest {
         """.trimIndent()
 
         val one = ActorFactory.testActor()
-        one.state.health = 100.0
+        one.state["health"] = 100.0
         val container = Container(mutableListOf(one))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
@@ -60,7 +60,7 @@ internal class LogicSyntaxTest {
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
 
-        assertThat(one.state.health).isEqualTo(70.0)
+        assertThat(one.state["health"]!!).isEqualTo(70.0)
     }
 
     @Test
@@ -73,6 +73,7 @@ internal class LogicSyntaxTest {
         """.trimIndent()
 
         val one = ActorFactory.testActor()
+        one.state["health"] = 150.0
         val container = Container(mutableListOf(one))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
@@ -80,7 +81,7 @@ internal class LogicSyntaxTest {
         val scriptedLogic = transpiler.transpile(actual)
         scriptedLogic.process(container)
 
-        assertThat(one.state.health).isEqualTo(100.0)
+        assertThat(one.state["health"]!!).isEqualTo(100.0)
     }
 
     @Test
@@ -92,9 +93,9 @@ internal class LogicSyntaxTest {
         """.trimIndent()
 
         val one = ActorFactory.testActor()
-        one.state.health = 30.0
+        one.state["health"] = 30.0
         val two = ActorFactory.testActor()
-        two.state.health = 50.0
+        two.state["health"] = 50.0
         val container = Container(mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
@@ -115,8 +116,9 @@ internal class LogicSyntaxTest {
         """.trimIndent()
 
         val one = ActorFactory.testActor()
-        one.state.health = 30.0
+        one.state["health"] = 30.0
         val two = ActorFactory.testActor()
+        two.state["health"] = 100.0
         val container = Container(mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)

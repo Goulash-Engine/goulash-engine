@@ -12,7 +12,7 @@ internal class ConditionLogicTest {
     @Test
     fun `should give dead condition if health is below 0`() {
         val actor = ActorFactory.simpleGathererActor()
-        actor.state.health = -0.1
+        actor.state["health"] = -0.1
 
         conditionLogic.process(actor)
 

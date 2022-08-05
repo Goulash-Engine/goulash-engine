@@ -2,7 +2,7 @@ package com.barbarus.prosper.script.logic
 
 import com.barbarus.prosper.script.domain.ScriptStatement
 
-internal data class ContainerScriptContext(
+data class ContainerScriptContext(
     val head: ScriptHead,
     val statements: List<ScriptStatement>
 ) {

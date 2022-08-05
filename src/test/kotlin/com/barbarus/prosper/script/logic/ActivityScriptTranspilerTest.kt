@@ -14,31 +14,20 @@ internal class ActivityScriptTranspilerTest {
 
     @Test
     fun `should set all given configurations properly`() {
-        val containerScriptContext = ActivityScriptContext(
+        val activityScriptContext = ActivityScriptContext(
             "eating",
-            mapOf(
-                "act" to listOf(
-                    ScriptStatement(
-                        "actor",
-                        "",
-                        "state",
-                        "health",
-                        "plus",
-                        "10"
-                    )
-                )
-            ),
+            emptyMap(),
             mapOf("trigger_urges" to listOf("eat"))
         )
 
-        val activityScript: ActivityScript = activityScriptTranspiler.transpile(containerScriptContext)
+        val activityScript: ActivityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
         assertThat(activityScript.triggerUrges()).containsOnly("eat")
     }
 
     @Test
     fun `should transpile health increase by 10 for act logic and return true`() {
-        val containerScriptContext = ActivityScriptContext(
+        val activityScriptContext = ActivityScriptContext(
             "eating",
             mapOf(
                 "act" to listOf(
@@ -55,20 +44,20 @@ internal class ActivityScriptTranspilerTest {
             mapOf("trigger_urges" to listOf("eat"))
         )
 
-        val activityScript = activityScriptTranspiler.transpile(containerScriptContext)
+        val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
         val testActor = ActorFactory.testActor()
-        testActor.state.health = 50.0
+        testActor.state["health"] = 50.0
 
         val returnVal = activityScript.act(testActor)
 
-        assertThat(testActor.state.health).isEqualTo(60.0)
+        assertThat(testActor.state["health"]!!).isEqualTo(60.0)
         assertThat(returnVal).isTrue()
     }
 
     @Test
     fun `should transpile health increase by 10 for on abort logic with filter`() {
-        val containerScriptContext = ActivityScriptContext(
+        val activityScriptContext = ActivityScriptContext(
             "eating",
             mapOf(
                 "on_abort" to listOf(
@@ -85,19 +74,19 @@ internal class ActivityScriptTranspilerTest {
             mapOf("trigger_urges" to listOf("eat"))
         )
 
-        val activityScript = activityScriptTranspiler.transpile(containerScriptContext)
+        val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
         val testActor = ActorFactory.testActor()
-        testActor.state.health = 50.0
+        testActor.state["health"] = 50.0
 
         activityScript.onAbort(testActor)
 
-        assertThat(testActor.state.health).isEqualTo(50.0)
+        assertThat(testActor.state["health"]!!).isEqualTo(50.0)
     }
 
     @Test
     fun `should transpile health incrase by 10 for on abort logic`() {
-        val containerScriptContext = ActivityScriptContext(
+        val activityScriptContext = ActivityScriptContext(
             "eating",
             mapOf(
                 "on_abort" to listOf(
@@ -114,19 +103,19 @@ internal class ActivityScriptTranspilerTest {
             mapOf("trigger_urges" to listOf("eat"))
         )
 
-        val activityScript = activityScriptTranspiler.transpile(containerScriptContext)
+        val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
         val testActor = ActorFactory.testActor()
-        testActor.state.health = 50.0
+        testActor.state["health"] = 50.0
 
         activityScript.onAbort(testActor)
 
-        assertThat(testActor.state.health).isEqualTo(60.0)
+        assertThat(testActor.state["health"]!!).isEqualTo(60.0)
     }
 
     @Test
     fun `should transpile health incrase by 10 for on finish logic`() {
-        val containerScriptContext = ActivityScriptContext(
+        val activityScriptContext = ActivityScriptContext(
             "eating",
             mapOf(
                 "on_finish" to listOf(
@@ -143,13 +132,13 @@ internal class ActivityScriptTranspilerTest {
             mapOf("trigger_urges" to listOf("eat"))
         )
 
-        val activityScript = activityScriptTranspiler.transpile(containerScriptContext)
+        val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
         val testActor = ActorFactory.testActor()
-        testActor.state.health = 50.0
+        testActor.state["health"] = 50.0
 
         activityScript.onFinish(testActor)
 
-        assertThat(testActor.state.health).isEqualTo(60.0)
+        assertThat(testActor.state["health"]!!).isEqualTo(60.0)
     }
 }

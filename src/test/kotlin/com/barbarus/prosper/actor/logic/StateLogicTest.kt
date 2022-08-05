@@ -12,10 +12,10 @@ internal class StateLogicTest {
     @Test
     fun `should decrease health if bad nourished`() {
         val actor = ActorFactory.poorActor()
-        actor.state.nourishment = 50.0
+        actor.state["nourishment"] = 50.0
 
         stateLogic.process(actor)
 
-        assertThat(actor.state.health).isLessThan(100.0)
+        assertThat(actor.state["health"]!!).isLessThan(100.0)
     }
 }

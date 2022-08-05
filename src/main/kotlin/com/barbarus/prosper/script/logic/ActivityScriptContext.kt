@@ -9,7 +9,7 @@ import com.barbarus.prosper.script.domain.ScriptStatement
  * @param configurations Parsed by the [ActivityScriptGrammar]
  * @param statements Parsed by the [ActivityScriptGrammar]
  */
-internal data class ActivityScriptContext(
+data class ActivityScriptContext(
     val activity: String,
     val statements: Map<String, List<ScriptStatement>>,
     val configurations: Map<String, List<String>>

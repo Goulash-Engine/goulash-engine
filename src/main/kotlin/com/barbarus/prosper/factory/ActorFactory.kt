@@ -22,6 +22,7 @@ object ActorFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
+        state = initStates(),
         activities = mockedActivities
     )
 
@@ -34,6 +35,7 @@ object ActorFactory {
                 generateSequence { ResourceFactory.food() }.take(Random.nextInt(1, 3))
             )
         },
+        state = initStates(),
         activities = actorActivities()
     )
 
@@ -46,8 +48,16 @@ object ActorFactory {
             ResourceFactory.food(),
             ResourceFactory.food()
         ),
+        state = initStates(),
         activities = actorActivities()
     )
+
+    private fun initStates(): MutableMap<String, Double> {
+        return mutableMapOf(
+            "health" to 0.0,
+            "nourishment" to 0.0
+        )
+    }
 
     private fun actorActivities() = mutableListOf(
         WorkActivity(),

@@ -9,7 +9,7 @@ interface Actor {
     val activities: List<Activity>
     val urges: Urges
     var currentActivity: String
-    val state: State
+    val state: MutableMap<String, Double>
 
     // TODO: Add buffs as concepts of temporary conditions
     fun inventory(): MutableList<Resource>

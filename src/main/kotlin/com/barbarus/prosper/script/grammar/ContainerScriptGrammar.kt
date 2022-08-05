@@ -11,7 +11,7 @@ import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
-internal class ContainerScriptGrammar : Grammar<ContainerScriptContext>() {
+class ContainerScriptGrammar : Grammar<ContainerScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 

@@ -11,9 +11,9 @@ object TranspilerExtensions {
         if (contextFilter.type == "state") {
             if (contextFilter.attribute == "health") {
                 when (contextFilter.operator) {
-                    "=" -> return this.filter { it.state.health == contextFilter.argument.toDouble() }
-                    ">" -> return this.filter { it.state.health > contextFilter.argument.toDouble() }
-                    "<" -> return this.filter { it.state.health < contextFilter.argument.toDouble() }
+                    "=" -> return this.filter { it.state["health"] == contextFilter.argument.toDouble() }
+                    ">" -> return this.filter { it.state["health"]!! > contextFilter.argument.toDouble() }
+                    "<" -> return this.filter { it.state["health"]!! < contextFilter.argument.toDouble() }
                 }
             }
         }
@@ -26,9 +26,9 @@ object TranspilerExtensions {
         if (contextFilter.type == "state") {
             if (contextFilter.attribute == "health") {
                 when (contextFilter.operator) {
-                    "=" -> return if (this.state.health == contextFilter.argument.toDouble()) this else null
-                    ">" -> return if (this.state.health > contextFilter.argument.toDouble()) this else null
-                    "<" -> return if (this.state.health < contextFilter.argument.toDouble()) this else null
+                    "=" -> return if (this.state["health"] == contextFilter.argument.toDouble()) this else null
+                    ">" -> return if (this.state["health"]!! > contextFilter.argument.toDouble()) this else null
+                    "<" -> return if (this.state["health"]!! < contextFilter.argument.toDouble()) this else null
                 }
             }
         }
