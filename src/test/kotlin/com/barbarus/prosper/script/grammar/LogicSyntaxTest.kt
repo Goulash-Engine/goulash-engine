@@ -1,7 +1,10 @@
 package com.barbarus.prosper.script.grammar
 
 import assertk.assertThat
+import assertk.assertions.contains
+import assertk.assertions.doesNotContain
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotEmpty
 import assertk.assertions.isNull
 import com.barbarus.prosper.core.domain.Container
 import com.barbarus.prosper.factory.ActorFactory
@@ -16,6 +19,48 @@ import org.junit.jupiter.api.Test
  */
 internal class LogicSyntaxTest {
     private val containerScriptGrammar = ContainerScriptGrammar()
+
+    @Test
+    fun `should remove condition from actor`() {
+        val scriptData = """
+            logic myfoo {
+                actors::state(health).minus(30);
+                actors[state.health > 50]::condition(sick).remove();
+            }
+        """.trimIndent()
+
+        val one = ActorFactory.testActor()
+        one.state["health"] = 100.0
+        one.conditions.add("sick")
+        val container = Container(mutableListOf(one))
+
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
+        val transpiler = ContainerScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(container)
+
+        assertThat(one.conditions).doesNotContain("sick")
+    }
+    @Test
+    fun `should add condition to actors`() {
+        val scriptData = """
+            logic myfoo {
+                actors::state(health).minus(60);
+                actors[state.health < 50]::condition(sick).add();
+            }
+        """.trimIndent()
+
+        val one = ActorFactory.testActor()
+        one.state["health"] = 100.0
+        val container = Container(mutableListOf(one))
+
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
+        val transpiler = ContainerScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(container)
+
+        assertThat(one.conditions).contains("sick")
+    }
 
     @Test
     fun `should reset only reset actors health to 0 who are below 0`() {

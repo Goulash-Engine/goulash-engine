@@ -16,6 +16,22 @@ internal class ContainerScriptGrammarTest {
     private val containerScriptGrammar = ContainerScriptGrammar()
 
     @Test
+    fun `should parse condition operations`() {
+        val scriptData = """
+            logic myfoo {
+                actors::condition(happy).add();
+            }
+        """.trimIndent()
+
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
+
+        assertThat(actual.statements[0].mutationType).isEqualTo("condition")
+        assertThat(actual.statements[0].mutationTarget).isEqualTo("happy")
+        assertThat(actual.statements[0].mutationOperation).isEqualTo("add")
+        assertThat(actual.statements[0].mutationOperationArgument).isEqualTo("")
+    }
+
+    @Test
     fun `should parse statement with filter and no filter mutation operation (oneline)`() {
         val scriptData =
             "logicmyfoo{actors[state.health>1]::urge(eat).plus(1);actors::urge(eat).plus(2);}".trim()

@@ -14,6 +14,14 @@ class ContainerScriptTranspiler {
             val statements = scriptContext.statements
             statements.forEach { statement ->
                 if (statement.context == "actors") {
+                    if (statement.mutationType == "condition") {
+                        val filteredActors = context.actors.tryScriptFilter(statement.filter)
+                        val condition = statement.mutationTarget
+                        when (statement.mutationOperation) {
+                            "add" -> filteredActors.forEach { it.conditions.add(condition) }
+                            "remove" -> filteredActors.forEach { it.conditions.remove(condition) }
+                        }
+                    }
                     if (statement.mutationType == "state") {
                         context.actors.forEach { initStateIfMissing(it, statement.mutationTarget) }
                         val filteredActors = context.actors.tryScriptFilter(statement.filter)
@@ -64,9 +72,5 @@ class ContainerScriptTranspiler {
             statement.mutationTarget,
             statement.mutationOperationArgument.toDouble()
         )
-    }
-
-    companion object {
-        private const val SETTER_PARAM = 1
     }
 }
