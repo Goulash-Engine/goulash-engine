@@ -15,13 +15,14 @@ class ContainerScriptTranspiler {
             statements.forEach { statement ->
                 if (statement.context == "actors") {
                     if (statement.mutationType == "state") {
-                        val actors = context.actors.tryScriptFilter(statement.filter)
+                        context.actors.forEach { initStateIfMissing(it, statement.mutationTarget) }
+                        val filteredActors = context.actors.tryScriptFilter(statement.filter)
                         val stateProperty = statement.mutationTarget
                         val value = statement.mutationOperationArgument.toDouble()
                         when (statement.mutationOperation) {
-                            "set" -> actors.forEach { it.state[stateProperty] = value }
-                            "plus" -> actors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.plus(value) }
-                            "minus" -> actors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.minus(value) }
+                            "set" -> filteredActors.forEach { it.state[stateProperty] = value }
+                            "plus" -> filteredActors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.plus(value) }
+                            "minus" -> filteredActors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.minus(value) }
                         }
                     }
                     if (statement.mutationType == "urge") {
@@ -36,6 +37,13 @@ class ContainerScriptTranspiler {
             }
         }
     }
+
+    private fun initStateIfMissing(context: Actor, mutationTarget: String) {
+        if (!context.state.containsKey(mutationTarget)) {
+            context.state[mutationTarget] = 0.0
+        }
+    }
+
     private fun setUrge(actor: Actor, statement: ScriptStatement) {
         actor.urges.stopUrge("eat")
         actor.urges.increaseUrge(

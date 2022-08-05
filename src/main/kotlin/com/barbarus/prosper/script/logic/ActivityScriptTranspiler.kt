@@ -28,6 +28,7 @@ class ActivityScriptTranspiler {
             if (statement.context == "actor") {
                 if (statement.mutationType == "state") {
                     if (context.tryScriptFilter(statement.filter) != null) {
+                        initStateIfMissing(context, statement.mutationTarget)
                         val stateProperty = statement.mutationTarget
                         val value = statement.mutationOperationArgument.toDouble()
                         when (statement.mutationOperation) {
@@ -47,6 +48,12 @@ class ActivityScriptTranspiler {
                     }
                 }
             }
+        }
+    }
+
+    private fun initStateIfMissing(context: Actor, mutationTarget: String) {
+        if (!context.state.containsKey(mutationTarget)) {
+            context.state[mutationTarget] = 0.0
         }
     }
 
