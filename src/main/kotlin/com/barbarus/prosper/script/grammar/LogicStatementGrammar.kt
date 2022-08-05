@@ -13,7 +13,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
-internal class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
+class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val space by regexToken("\\s+", ignore = true)
     private val newLine by literalToken("\n", ignore = true)
 
@@ -26,11 +26,11 @@ internal class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val leftPar by literalToken("(")
     private val endOfStatement by literalToken(";", ignore = true)
 
-    private val operationParser by -operationOperator * identifier * -leftPar * (digit or identifier) * -rightPar map { (name, argument) ->
-        ContainerScriptContext.Operation(name.text, argument.text)
+    private val operationParser by -optional(operationOperator) * optional(identifier) * -optional(leftPar) * optional((digit or identifier)) * -optional(rightPar) map { (name, argument) ->
+        ContainerScriptContext.Operation(name?.text ?: "", argument?.text ?: "")
     }
-    private val mutationParser by -contextMutationOperator * identifier * -leftPar * identifier * -rightPar * operationParser map { (type, target, operation) ->
-        ContainerScriptContext.ContextMutation(type.text, target.text, operation)
+    private val mutationParser by -contextMutationOperator * identifier * -optional(leftPar) * optional(identifier) * -optional(rightPar) * operationParser map { (type, target, operation) ->
+        ContainerScriptContext.ContextMutation(type.text, target?.text ?: "", operation)
     }
     private val filterParser by filter use { text.removeSurrounding("[", "]") }
     private val contextCommandParser by identifier * optional(filterParser) * mutationParser

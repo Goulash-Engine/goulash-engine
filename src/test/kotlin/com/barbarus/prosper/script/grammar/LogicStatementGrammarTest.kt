@@ -11,6 +11,20 @@ internal class LogicStatementGrammarTest {
     private val logicStatementGrammar = LogicStatementGrammar()
 
     @Test
+    fun `should parse statment for abort`() {
+        val scriptData =
+            "actors[state.health>1]::abort;".trim()
+
+        val statements: List<ScriptStatement> = logicStatementGrammar.parseToEnd(scriptData)
+
+        assertThat(statements).hasSize(1)
+        assertThat(statements[0].mutationType).isEqualTo("abort")
+        assertThat(statements[0].filter).isEqualTo("state.health>1")
+        assertThat(statements[0].mutationTarget).isEqualTo("")
+        assertThat(statements[0].mutationOperation).isEqualTo("")
+        assertThat(statements[0].mutationOperationArgument).isEqualTo("")
+    }
+    @Test
     fun `should parse statement with filter and no filter mutation operation (oneline)`() {
         val scriptData =
             "actors[state.health>1]::urge(eat).plus(1);actors::urge(eat).plus(2);".trim()

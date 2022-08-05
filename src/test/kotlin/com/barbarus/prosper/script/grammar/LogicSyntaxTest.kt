@@ -18,6 +18,28 @@ internal class LogicSyntaxTest {
     private val containerScriptGrammar = ContainerScriptGrammar()
 
     @Test
+    fun `should abort logic at given filter`() {
+        val scriptData = """
+            logic myfoo {
+                actors::state(health).minus(60);
+                actors[state.health < 50]::abort;
+                actors::state(health).minus(50);
+            }
+        """.trimIndent()
+
+        val one = ActorFactory.testActor()
+        one.state["health"] = 100.0
+        val container = Container(mutableListOf(one))
+
+        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
+        val transpiler = ContainerScriptTranspiler()
+        val scriptedLogic = transpiler.transpile(actual)
+        scriptedLogic.process(container)
+
+        assertThat(one.state["health"]!!).isEqualTo(40.0)
+    }
+
+    @Test
     fun `should reset only reset actors health to 0 who are below 0`() {
         val scriptData = """
             logic myfoo {
