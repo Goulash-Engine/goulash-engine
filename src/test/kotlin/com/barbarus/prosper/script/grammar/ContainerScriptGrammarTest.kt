@@ -16,30 +16,6 @@ internal class ContainerScriptGrammarTest {
     private val containerScriptGrammar = ContainerScriptGrammar()
 
     @Test
-    fun `should parse second statement as abort operation`() {
-        val scriptData = """
-            logic myfoo {
-                actors[state.health>1]::urge(eat).plus(1);
-                actors[state.health > 50]::abort;
-            }
-        """.trimIndent()
-
-        val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
-
-        assertThat(actual.head.name).isEqualTo("myfoo")
-        assertThat(actual.statements[0].mutationType).isEqualTo("urge")
-        assertThat(actual.statements[0].filter).isEqualTo("state.health>1")
-        assertThat(actual.statements[0].mutationTarget).isEqualTo("eat")
-        assertThat(actual.statements[0].mutationOperation).isEqualTo("plus")
-        assertThat(actual.statements[0].mutationOperationArgument).isEqualTo("1")
-        assertThat(actual.statements[1].mutationType).isEqualTo("abort")
-        assertThat(actual.statements[1].filter).isEqualTo("state.health > 50")
-        assertThat(actual.statements[1].mutationTarget).isEqualTo("")
-        assertThat(actual.statements[1].mutationOperation).isEqualTo("")
-        assertThat(actual.statements[1].mutationOperationArgument).isEqualTo("")
-    }
-
-    @Test
     fun `should parse statement with filter and no filter mutation operation (oneline)`() {
         val scriptData =
             "logicmyfoo{actors[state.health>1]::urge(eat).plus(1);actors::urge(eat).plus(2);}".trim()
