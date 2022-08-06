@@ -40,5 +40,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("com.barbarus.prosper.MainKt")
+    mainClass.set("com.goulash.MainKt")
 }
