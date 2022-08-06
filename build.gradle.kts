@@ -10,7 +10,7 @@ plugins {
     application
 }
 
-group = "com.barbarus"
+group = "com.goulash"
 version = "0.1"
 
 repositories {

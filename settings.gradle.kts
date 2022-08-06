@@ -1,1 +1,1 @@
-rootProject.name = "prosper-engine"
+rootProject.name = "goulash-engine"
