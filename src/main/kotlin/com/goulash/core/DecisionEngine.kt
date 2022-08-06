@@ -21,7 +21,7 @@ class DecisionEngine : Logic<Actor> {
 
         if (priorityActivity != null) {
             currentActivity.set(priorityActivity)
-        } else if (!currentActivity.hasRunningActivity()) {
+        } else if (currentActivity.isFinished()) {
             setUrgentActivities(context)
         }
         currentActivity.act(context)
@@ -69,7 +69,7 @@ class DecisionEngine : Logic<Actor> {
         private var duration: Int = 0
 
         fun act(actor: Actor) {
-            if (hasRunningActivity()) {
+            if (isRunning()) {
                 if (containsAbortCondition(actor)) {
                     activity.onAbort(actor)
                     set(IdleActivity())
@@ -100,8 +100,12 @@ class DecisionEngine : Logic<Actor> {
             duration = activity.duration().asDouble().toInt()
         }
 
-        fun hasRunningActivity(): Boolean {
-            return duration > 0
+        fun isFinished(): Boolean {
+            return duration <= 0
+        }
+
+        fun isRunning(): Boolean {
+            return !isFinished()
         }
 
         /**

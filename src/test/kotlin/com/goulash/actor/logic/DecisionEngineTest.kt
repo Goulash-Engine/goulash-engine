@@ -22,6 +22,21 @@ internal class DecisionEngineTest {
     private val decisionEngine = DecisionEngine()
 
     @Test
+    fun `should not apply same activity if its already the current one`() {
+        val exitingActivity = mockk<Activity>("foo", relaxed = true)
+        every { exitingActivity.triggerUrges() } returns listOf("foo")
+        every { exitingActivity.duration() } returns 5.0.toDuration()
+        every { exitingActivity.act(any()) } returns true
+
+        val testActor = ActorFactory.testActor(listOf(exitingActivity))
+        testActor.urges.increaseUrge("foo", 100.0)
+
+        repeat(10) { decisionEngine.process(testActor) }
+
+        verify(atMost = 10) { exitingActivity.act(any()) }
+    }
+
+    @Test
     fun `should properly use script`() {
         val scriptedSleepActivity = spyk(
             ActivityScript(
