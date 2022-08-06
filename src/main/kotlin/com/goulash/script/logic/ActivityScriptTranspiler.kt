@@ -26,15 +26,15 @@ class ActivityScriptTranspiler {
     private fun transpileStatements(context: Actor, statements: List<ScriptStatement>) {
         statements.forEach { statement ->
             if (statement.context == "actor") {
-                if (statement.mutationType == "condition") {
-                    val condition = statement.mutationTarget
-                    when (statement.mutationOperation) {
-                        "add" -> context.conditions.add(condition)
-                        "remove" -> context.conditions.remove(condition)
+                if (context.tryScriptFilter(statement.filter) != null) {
+                    if (statement.mutationType == "condition") {
+                        val condition = statement.mutationTarget
+                        when (statement.mutationOperation) {
+                            "add" -> context.conditions.add(condition)
+                            "remove" -> context.conditions.remove(condition)
+                        }
                     }
-                }
-                if (statement.mutationType == "state") {
-                    if (context.tryScriptFilter(statement.filter) != null) {
+                    if (statement.mutationType == "state") {
                         initStateIfMissing(context, statement.mutationTarget)
                         val stateProperty = statement.mutationTarget
                         val value = statement.mutationOperationArgument.toDouble()
@@ -44,9 +44,7 @@ class ActivityScriptTranspiler {
                             "minus" -> context.state[stateProperty] = context.state[stateProperty]!!.minus(value)
                         }
                     }
-                }
-                if (statement.mutationType == "urge") {
-                    if (context.tryScriptFilter(statement.filter) != null) {
+                    if (statement.mutationType == "urge") {
                         when (statement.mutationOperation) {
                             "plus" -> increaseUrge(context, statement)
                             "minus" -> decreaseUrge(context, statement)

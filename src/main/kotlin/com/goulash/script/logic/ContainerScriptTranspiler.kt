@@ -14,8 +14,8 @@ class ContainerScriptTranspiler {
             val statements = scriptContext.statements
             statements.forEach { statement ->
                 if (statement.context == "actors") {
+                    val filteredActors = context.actors.tryScriptFilter(statement.filter)
                     if (statement.mutationType == "condition") {
-                        val filteredActors = context.actors.tryScriptFilter(statement.filter)
                         val condition = statement.mutationTarget
                         when (statement.mutationOperation) {
                             "add" -> filteredActors.forEach { it.conditions.add(condition) }
@@ -24,7 +24,6 @@ class ContainerScriptTranspiler {
                     }
                     if (statement.mutationType == "state") {
                         context.actors.forEach { initStateIfMissing(it, statement.mutationTarget) }
-                        val filteredActors = context.actors.tryScriptFilter(statement.filter)
                         val stateProperty = statement.mutationTarget
                         val value = statement.mutationOperationArgument.toDouble()
                         when (statement.mutationOperation) {
@@ -34,11 +33,10 @@ class ContainerScriptTranspiler {
                         }
                     }
                     if (statement.mutationType == "urge") {
-                        val actors = context.actors.tryScriptFilter(statement.filter)
                         when (statement.mutationOperation) {
-                            "plus" -> actors.forEach { increaseUrge(it, statement) }
-                            "minus" -> actors.forEach { decreaseUrge(it, statement) }
-                            "set" -> actors.forEach { setUrge(it, statement) }
+                            "plus" -> filteredActors.forEach { increaseUrge(it, statement) }
+                            "minus" -> filteredActors.forEach { decreaseUrge(it, statement) }
+                            "set" -> filteredActors.forEach { setUrge(it, statement) }
                         }
                     }
                 }

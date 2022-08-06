@@ -11,6 +11,14 @@ import org.junit.jupiter.api.Test
 internal class TranspilerExtensionsTest {
 
     @Test
+    fun `should filter actor if nourishment is below 30`() {
+        val actor = ActorFactory.testActor()
+        actor.state["nourishment"] = 20.0
+
+        assertThat(actor.tryScriptFilter("state.nourishment < 30")).isNotNull()
+    }
+
+    @Test
     fun `should exclude actor if foo is below 30`() {
         val actor = ActorFactory.testActor()
         actor.state["foo"] = 50.0
