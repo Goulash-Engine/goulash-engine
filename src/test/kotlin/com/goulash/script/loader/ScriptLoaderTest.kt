@@ -16,7 +16,7 @@ internal class ScriptLoaderTest {
 
     @Test
     fun `should load activity script file`(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("activity.pros")
+        val config = tempDir.resolve("activity.gsh")
         config.writeText(
             """ 
             activity eating {
@@ -35,7 +35,7 @@ internal class ScriptLoaderTest {
 
     @Test
     fun `should load logic script file`(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("logic.pros")
+        val config = tempDir.resolve("logic.gsh")
         config.writeText(
             """ 
             logic myfoo {
@@ -51,7 +51,7 @@ internal class ScriptLoaderTest {
 
     @Test
     fun `should execute even if script contains errors with multiple configs `(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("config.pros")
+        val config = tempDir.resolve("config.gsh")
         config.writeText(
             """ 
             [GlobalBlocker]
@@ -72,7 +72,7 @@ internal class ScriptLoaderTest {
 
     @Test
     fun `should execute even if script contains errors `(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("config.pros")
+        val config = tempDir.resolve("config.gsh")
         config.writeText(
             """ 
             [WrongIdentifier]        
@@ -88,7 +88,7 @@ internal class ScriptLoaderTest {
 
     @Test
     fun `should load global blocking conditions from script file`(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("config.pros")
+        val config = tempDir.resolve("config.gsh")
         config.writeText(
             """
             [GlobalBlocker]        

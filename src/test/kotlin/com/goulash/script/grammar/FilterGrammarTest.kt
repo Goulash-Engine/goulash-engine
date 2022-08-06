@@ -10,6 +10,17 @@ internal class FilterGrammarTest {
     private val filterGrammar = FilterGrammar()
 
     @Test
+    fun `should parse filter for state foo greater equal to 50`() {
+        val filter = "state.foo >= 50"
+
+        val contextFilter = filterGrammar.parseToEnd(filter)
+
+        assertThat(contextFilter.type).isEqualTo("state")
+        assertThat(contextFilter.attribute).isEqualTo("foo")
+        assertThat(contextFilter.operator).isEqualTo(">=")
+        assertThat(contextFilter.argument).isEqualTo("50")
+    }
+    @Test
     fun `should parse filter for state health lesser equal to 50`() {
         val filter = "state.health <= 50"
 

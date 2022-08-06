@@ -19,7 +19,7 @@ internal class DemoActorFactoryTest {
 
     @Test
     fun `should create actor with explicity activities plus scriptloader activites`(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("activity.pros")
+        val config = tempDir.resolve("activity.gsh")
         config.writeText(
             """ 
             activity sleeping {

@@ -1,4 +1,6 @@
 package com.goulash.script.loader
+import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import com.github.h0tk3y.betterParse.parser.ParseException
 import com.goulash.script.domain.ActivityScript
 import com.goulash.script.domain.ContainerScript
 import com.goulash.script.domain.GlobalBlockerCondition
@@ -8,8 +10,6 @@ import com.goulash.script.grammar.ContainerScriptGrammar
 import com.goulash.script.grammar.ListConfigurationGrammar
 import com.goulash.script.logic.ActivityScriptTranspiler
 import com.goulash.script.logic.ContainerScriptTranspiler
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
-import com.github.h0tk3y.betterParse.parser.ParseException
 import org.slf4j.LoggerFactory
 import java.nio.file.Files
 import kotlin.io.path.Path
@@ -18,6 +18,7 @@ import kotlin.io.path.notExists
 import kotlin.io.path.readText
 
 object ScriptLoader {
+    private const val SCRIPT_EXTENSION = "gsh"
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
     private var globalBlockingConditions: List<String>? = null
     private var containerScripts: List<ContainerScript> = listOf()
@@ -46,7 +47,7 @@ object ScriptLoader {
     internal fun loadActivityScripts(scriptDirectory: String) {
         val grammar = ActivityScriptGrammar()
         val transpiler = ActivityScriptTranspiler()
-        val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
+        val files = Path(scriptDirectory).listDirectoryEntries("*.$SCRIPT_EXTENSION")
         var loadingError = 0
         LOG.info("Loading activities from: $scriptDirectory...")
         val scriptedActivities =
@@ -77,7 +78,7 @@ object ScriptLoader {
     internal fun loadContainerScripts(scriptDirectory: String) {
         val grammar = ContainerScriptGrammar()
         val containerScriptTranspiler = ContainerScriptTranspiler()
-        val files = Path(scriptDirectory).listDirectoryEntries("*.pros")
+        val files = Path(scriptDirectory).listDirectoryEntries("*.$SCRIPT_EXTENSION")
         var loadingError = 0
         LOG.info("Loading scripts from: $scriptDirectory...")
         val scriptLogics = files.asSequence().map { LOG.info("Reading script file: ${it.fileName}..."); it.readText() }
@@ -106,7 +107,7 @@ object ScriptLoader {
 
     internal fun loadConfigurations(configDirectory: String) {
         val configGrammars = listOf(ListConfigurationGrammar())
-        val files = Path(configDirectory).listDirectoryEntries("*.pros")
+        val files = Path(configDirectory).listDirectoryEntries("*.$SCRIPT_EXTENSION")
         var loadingError = 0
         var loadingCount = 0
         LOG.info("Loading configurations from: $configDirectory...")

@@ -18,7 +18,7 @@ internal class ContainerTest {
 
     @Test
     fun `should invoke scripted logic`(@TempDir tempDir: java.io.File) {
-        val config = tempDir.resolve("logic.pros")
+        val config = tempDir.resolve("logic.gsh")
         config.writeText(
             """ 
             logic myfoo {

@@ -1,37 +1,33 @@
 package com.goulash.script.extension
 
-import com.goulash.core.domain.Actor
-import com.goulash.script.grammar.FilterGrammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import com.goulash.core.domain.Actor
+import com.goulash.script.domain.ContextFilter
+import com.goulash.script.grammar.FilterGrammar
 
 object TranspilerExtensions {
     fun <T : Actor> List<T>.tryScriptFilter(filterStatement: String): List<T> {
         if (filterStatement.isEmpty()) return this
         val contextFilter = FilterGrammar().parseToEnd(filterStatement)
-        if (contextFilter.type == "state") {
-            if (contextFilter.attribute == "health") {
-                when (contextFilter.operator) {
-                    "=" -> return this.filter { it.state["health"] == contextFilter.argument.toDouble() }
-                    ">" -> return this.filter { it.state["health"]!! > contextFilter.argument.toDouble() }
-                    "<" -> return this.filter { it.state["health"]!! < contextFilter.argument.toDouble() }
-                }
-            }
-        }
-        return this
+        return this.mapNotNull { filter(contextFilter, it) }
     }
 
     fun <T : Actor> T.tryScriptFilter(filterStatement: String): T? {
         if (filterStatement.isEmpty()) return this
         val contextFilter = FilterGrammar().parseToEnd(filterStatement)
-        if (contextFilter.type == "state") {
-            if (contextFilter.attribute == "health") {
-                when (contextFilter.operator) {
-                    "=" -> return if (this.state["health"] == contextFilter.argument.toDouble()) this else null
-                    ">" -> return if (this.state["health"]!! > contextFilter.argument.toDouble()) this else null
-                    "<" -> return if (this.state["health"]!! < contextFilter.argument.toDouble()) this else null
-                }
+        return filter(contextFilter, this)
+    }
+
+    private fun <T : Actor> filter(filter: ContextFilter, actor: T): T? {
+        if (filter.type == "state") {
+            when (filter.operator) {
+                "=" -> return if (actor.state[filter.attribute] == filter.argument.toDouble()) actor else null
+                ">" -> return if (actor.state[filter.attribute]!! > filter.argument.toDouble()) actor else null
+                ">=" -> return if (actor.state[filter.attribute]!! >= filter.argument.toDouble()) actor else null
+                "<" -> return if (actor.state[filter.attribute]!! < filter.argument.toDouble()) actor else null
+                "<=" -> return if (actor.state[filter.attribute]!! <= filter.argument.toDouble()) actor else null
             }
         }
-        return this
+        return actor
     }
 }
