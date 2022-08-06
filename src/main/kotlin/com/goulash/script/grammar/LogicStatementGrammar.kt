@@ -1,7 +1,5 @@
 package com.goulash.script.grammar
 
-import com.goulash.script.domain.ScriptStatement
-import com.goulash.script.logic.ContainerScriptContext
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.optional
 import com.github.h0tk3y.betterParse.combinators.or
@@ -12,6 +10,8 @@ import com.github.h0tk3y.betterParse.combinators.use
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
+import com.goulash.script.domain.ScriptStatement
+import com.goulash.script.logic.ContainerScriptContext
 
 class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val space by regexToken("\\s+", ignore = true)
@@ -24,7 +24,7 @@ class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val digit by regexToken("^[\\d.\\d]+")
     private val rightPar by literalToken(")")
     private val leftPar by literalToken("(")
-    private val endOfStatement by literalToken(";", ignore = true)
+    private val endOfStatement by regexToken(";\\s*", ignore = true)
 
     private val operationParser by -optional(operationOperator) * optional(identifier) * -optional(leftPar) * optional((digit or identifier)) * -optional(rightPar) map { (name, argument) ->
         ContainerScriptContext.Operation(name?.text ?: "", argument?.text ?: "")
@@ -32,17 +32,19 @@ class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val mutationParser by -contextMutationOperator * identifier * -optional(leftPar) * optional(identifier) * -optional(rightPar) * operationParser map { (type, target, operation) ->
         ContainerScriptContext.ContextMutation(type.text, target?.text ?: "", operation)
     }
-    private val filterParser by filter use { text.removeSurrounding("[", "]") }
-    private val contextCommandParser by identifier * optional(filterParser) * mutationParser
-    private val statementParser by contextCommandParser map { (context, filter, mutation) ->
-        ScriptStatement(
-            context.text,
-            filter ?: "",
-            mutation.type,
-            mutation.target,
-            mutation.operation.name,
-            mutation.operation.argument
-        )
+    private val filterParser by optional(filter) use { this?.text?.removeSurrounding("[", "]") ?: "" }
+    private val contextCommandParser by identifier * filterParser * mutationParser
+    private val statementParser by separatedTerms(contextCommandParser, endOfStatement) map { statements ->
+        statements.map { (context, filter, mutation) ->
+            ScriptStatement(
+                context.text,
+                filter,
+                mutation.type,
+                mutation.target,
+                mutation.operation.name,
+                mutation.operation.argument
+            )
+        }
     }
-    override val rootParser by separatedTerms(statementParser, endOfStatement)
+    override val rootParser by statementParser
 }

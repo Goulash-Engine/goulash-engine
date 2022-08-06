@@ -1,12 +1,12 @@
 package com.goulash.script.grammar
 
-import com.goulash.script.domain.ContextFilter
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
+import com.goulash.script.domain.ContextFilter
 
 class FilterGrammar : Grammar<ContextFilter>() {
     private val space by regexToken("\\s+", ignore = true)

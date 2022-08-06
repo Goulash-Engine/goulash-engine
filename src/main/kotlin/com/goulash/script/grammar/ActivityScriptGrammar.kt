@@ -1,6 +1,5 @@
 package com.goulash.script.grammar
 
-import com.goulash.script.logic.ActivityScriptContext
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.oneOrMore
 import com.github.h0tk3y.betterParse.combinators.or
@@ -11,6 +10,7 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
+import com.goulash.script.logic.ActivityScriptContext
 
 class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
@@ -55,6 +55,6 @@ class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
         private val statements: String
     ) {
         private val grammar = LogicStatementGrammar()
-        fun toPair() = name to grammar.parseToEnd(statements)
+        fun toPair() = name to grammar.parseToEnd(statements.split(";").joinToString(";\n"))
     }
 }
