@@ -27,10 +27,9 @@ internal class DemoActorFactoryTest {
         ScriptLoader.loadActivityScripts(tempDir.path)
         val activityScripts = ScriptLoader.getActivityScripts()
 
-        val testActor = ActorFactory.testActor()
+        val testActor = ActorFactory.newActor("")
         val activities = testActor.activities
 
         assertThat(activities).containsSubList(activityScripts)
     }
-
 }

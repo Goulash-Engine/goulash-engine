@@ -8,7 +8,6 @@ import kotlin.random.Random
 object ActorFactory {
 
     fun testActor(mockedActivities: List<Activity> = listOf()) = DemoActor(
-        // TODO remove primary profession
         key = "",
         // TODO remove stash
         stash = mutableListOf(
@@ -23,7 +22,8 @@ object ActorFactory {
     )
 
     fun newActor(key: String) = DemoActor(
-        key = key
+        key = key,
+        activities = actorActivities()
     )
 
     private fun initializeStateValues(): MutableMap<String, Double> {
