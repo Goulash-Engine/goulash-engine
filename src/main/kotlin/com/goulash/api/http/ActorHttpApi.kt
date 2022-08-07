@@ -2,6 +2,7 @@ package com.goulash.api.http
 
 import com.goulash.api.http.response.ActorState
 import com.goulash.api.http.response.toResponse
+import com.goulash.api.service.ActorService
 import com.goulash.core.SimulationContext
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("actors")
-class ActorHttpApi {
+class ActorHttpApi(
+    private val actorService: ActorService
+) {
 
     @GetMapping("")
     fun getActorsForContainer(@RequestParam container: String): List<ActorState> {
@@ -32,9 +35,9 @@ class ActorHttpApi {
         }
     }
 
-    @PostMapping("{id}")
-    fun registerActor(@PathVariable id: String) {
-        LOG.info("Registering actor $id")
+    @PostMapping("{key}")
+    fun registerActor(@PathVariable key: String) {
+        actorService.registerActor(key)
     }
 
     companion object {
