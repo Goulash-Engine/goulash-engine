@@ -1,10 +1,10 @@
 package com.goulash.core
 
 import com.goulash.actor.activity.IdleActivity
-import com.goulash.actor.logic.ConditionLogic
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
 import com.goulash.core.logic.Logic
+import com.goulash.script.loader.ScriptLoader
 
 /**
  * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
@@ -33,7 +33,7 @@ class DecisionEngine : Logic<Actor> {
         }
 
     private fun hasGlobalBlockerCondition(actor: Actor) =
-        actor.conditions.any { ConditionLogic.GLOBAL_BLOCKING_CONDITION.contains(it) }
+        actor.conditions.any { ScriptLoader.getGlobalBlockingConditionsOrDefault().contains(it) }
 
     private fun setUrgentActivities(actor: Actor) {
         val highestUrgeValue = actor.urges.getAllUrges().maxByOrNull { it.value }?.value ?: 0

@@ -10,6 +10,7 @@ import com.goulash.core.extension.toDuration
 import com.goulash.factory.ActorFactory
 import com.goulash.factory.ResourceFactory
 import com.goulash.script.domain.ActivityScript
+import com.goulash.script.loader.ScriptLoader
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -175,8 +176,8 @@ internal class DecisionEngineTest {
         every { mockedWorkActivity.abortConditions() } returns listOf("starving")
         val actor = ActorFactory.testActor(listOf(mockedWorkActivity))
         actor.urges.increaseUrge("work", 100.0)
-        ConditionLogic.GLOBAL_BLOCKING_CONDITION = listOf("starving")
-        actor.conditions.add(ConditionLogic.GLOBAL_BLOCKING_CONDITION.first())
+        ScriptLoader.globalBlockingConditions = listOf("starving")
+        actor.conditions.add(ScriptLoader.globalBlockingConditions!!.first())
 
         decisionEngine.process(actor)
 

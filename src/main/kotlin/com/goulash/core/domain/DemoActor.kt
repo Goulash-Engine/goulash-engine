@@ -1,11 +1,7 @@
 package com.goulash.core.domain
 
-import com.goulash.actor.logic.ConditionLogic
-import com.goulash.actor.logic.InventoryLogic
-import com.goulash.actor.logic.StateLogic
 import com.goulash.core.DecisionEngine
 import com.goulash.core.activity.Activity
-import com.goulash.core.logic.Logic
 import com.goulash.factory.ActorNameFactory
 import java.util.UUID
 
@@ -22,12 +18,7 @@ class DemoActor(
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
     override val urges: Urges = Urges().also { it.increaseUrge("think", 1.0) }
-    private val actorLogics: List<Logic<Actor>> = listOf(
-        DecisionEngine(),
-        ConditionLogic(),
-        StateLogic(),
-        InventoryLogic()
-    )
+    private val decisionEngine = DecisionEngine()
     override var currentActivity: String = ""
 
     override fun inventory(): MutableList<Resource> {
@@ -35,7 +26,7 @@ class DemoActor(
     }
 
     override fun act() {
-        actorLogics.forEach { it.process(this) }
+        decisionEngine.process(this)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -54,6 +45,6 @@ class DemoActor(
     }
 
     override fun toString(): String {
-        return "DemoActor(name='$name', id='$id', primaryProfession=$primaryProfession, stash=$stash, activities=$activities, conditions=$conditions, urges=$urges, state=$state, actorLogics=$actorLogics, currentActivity='$currentActivity')"
+        return "DemoActor(name='$name', id='$id', primaryProfession=$primaryProfession, stash=$stash, activities=$activities, conditions=$conditions, state=$state, urges=$urges, decisionEngine=$decisionEngine, currentActivity='$currentActivity')"
     }
 }

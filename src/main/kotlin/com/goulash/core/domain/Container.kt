@@ -1,6 +1,5 @@
 package com.goulash.core.domain
 
-import com.goulash.core.logic.Logic
 import com.goulash.script.loader.ScriptLoader
 import org.slf4j.LoggerFactory
 
@@ -9,17 +8,11 @@ import org.slf4j.LoggerFactory
  * The children [Actor]s of a [Container] all are target by the logic applied to this [Container].
  */
 class Container(
-    val actors: MutableList<Actor> = mutableListOf(),
-    var loadedScripts: List<Logic<Container>> = listOf()
+    val actors: MutableList<Actor> = mutableListOf()
 ) {
-    init {
-        LOG.info("Initialize container scripts")
-        loadedScripts = ScriptLoader.getContainerScripts()
-        LOG.info("Initialized ${loadedScripts.size} container scripts")
-    }
 
     fun act() {
-        loadedScripts.forEach { it.process(this) }
+        ScriptLoader.containerScripts.forEach { it.process(this) }
         actors.forEach { it.act() }
     }
 

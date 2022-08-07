@@ -13,10 +13,6 @@ class Simulation(
     private val tickBase: Int = WorldDate.SECOND,
     val container: Container = Container(
         mutableListOf(
-            ActorFactory.poorActor(),
-            ActorFactory.poorActor(),
-            ActorFactory.poorActor(),
-            ActorFactory.poorActor(),
             ActorFactory.poorActor()
         )
     )
@@ -46,6 +42,7 @@ class Simulation(
     }
 
     private fun runSimulation() {
+        SimulationContext.ticks++
         WORLD_TIME.tick(tickBase)
         container.act()
         TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)

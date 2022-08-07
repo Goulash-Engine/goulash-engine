@@ -29,6 +29,7 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.12.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 }
 
 tasks.test {

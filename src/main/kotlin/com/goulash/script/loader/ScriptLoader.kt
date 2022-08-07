@@ -20,9 +20,9 @@ import kotlin.io.path.readText
 object ScriptLoader {
     private const val SCRIPT_EXTENSION = "gsh"
     private val LOG = LoggerFactory.getLogger("ScriptLoader")
-    private var globalBlockingConditions: List<String>? = null
-    private var containerScripts: List<ContainerScript> = listOf()
-    private var activityScripts: List<ActivityScript> = listOf()
+    var globalBlockingConditions: List<String>? = null
+    var containerScripts: List<ContainerScript> = listOf()
+    var activityScripts: List<ActivityScript> = listOf()
 
     internal fun load() {
         val root = "scripts"

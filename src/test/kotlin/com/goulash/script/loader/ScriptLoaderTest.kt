@@ -46,7 +46,7 @@ internal class ScriptLoaderTest {
 
         ScriptLoader.loadContainerScripts(tempDir.path)
 
-        assertThat(ScriptLoader.getContainerScripts()).isNotEmpty()
+        assertThat(ScriptLoader.containerScripts).isNotEmpty()
     }
 
     @Test

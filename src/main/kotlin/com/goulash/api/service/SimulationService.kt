@@ -25,6 +25,7 @@ class SimulationService {
 
     fun stop() {
         SimulationContext.simulation = null
+        SimulationContext.ticks = 0
         LOG.info("Simulation stopped")
     }
 

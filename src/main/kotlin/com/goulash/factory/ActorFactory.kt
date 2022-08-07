@@ -1,7 +1,5 @@
 package com.goulash.factory
 
-import com.goulash.actor.activity.ThinkActivity
-import com.goulash.actor.activity.WorkActivity
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.DemoActor
 import com.goulash.core.domain.Profession
@@ -57,8 +55,5 @@ object ActorFactory {
         )
     }
 
-    private fun actorActivities() = mutableListOf(
-        WorkActivity(),
-        ThinkActivity(),
-    ).also { it.addAll(ScriptLoader.getActivityScripts()) }
+    private fun actorActivities() = mutableListOf<Activity>().also { it.addAll(ScriptLoader.getActivityScripts()) }
 }
