@@ -1,5 +1,6 @@
 package com.goulash.core
 
+import com.goulash.api.http.response.SimulationStatus
 import com.goulash.simulation.Simulation
 
 /**
@@ -11,14 +12,24 @@ object SimulationContext {
     /**
      * The amount of ticks already simulated.
      */
-    var ticks: Int = 0
-    var pause: Boolean = false
+    var ticks: Long = 0
+    var paused: Boolean = false
+    var stopped: Boolean = false
 
     fun isRunning(): Boolean {
-        return simulation != null && !pause
+        return simulation != null && !paused
     }
 
-    fun isPaused(): Boolean {
-        return simulation != null && pause
+    private fun isPaused(): Boolean {
+        return simulation != null && paused
+    }
+
+    fun toStatus(): SimulationStatus {
+        return when {
+            isPaused() -> SimulationStatus("paused", ticks)
+            isRunning() -> SimulationStatus("running", ticks)
+            !isRunning() -> SimulationStatus("not running", ticks)
+            else -> SimulationStatus("unknown", 0)
+        }
     }
 }

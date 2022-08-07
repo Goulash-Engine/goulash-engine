@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class SimulationService {
     fun start() {
+        SimulationContext.stopped = false
         if (SimulationContext.simulation != null) {
             LOG.warn("Simulation is already running")
             return
@@ -24,6 +25,7 @@ class SimulationService {
     }
 
     fun stop() {
+        SimulationContext.stopped = true
         SimulationContext.simulation = null
         SimulationContext.ticks = 0
         LOG.info("Simulation stopped")
@@ -34,8 +36,8 @@ class SimulationService {
             LOG.error("Simulation not initialized")
             return
         }
-        SimulationContext.pause = !SimulationContext.pause
-        if (SimulationContext.pause) LOG.info("Simulation paused") else LOG.info("Simulation resumed")
+        SimulationContext.paused = !SimulationContext.paused
+        if (SimulationContext.paused) LOG.info("Simulation paused") else LOG.info("Simulation resumed")
     }
 
     companion object {

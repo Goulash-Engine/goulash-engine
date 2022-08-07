@@ -26,13 +26,13 @@ class Simulation(
     fun run() {
         if (maximumTicks != null) {
             repeat(maximumTicks) {
-                while (SimulationContext.pause) {
+                while (SimulationContext.paused) {
                 }
                 runSimulation()
             }
         } else {
-            while (true) {
-                while (SimulationContext.pause) {
+            while (!SimulationContext.stopped) {
+                while (SimulationContext.paused) {
                 }
                 runSimulation()
             }

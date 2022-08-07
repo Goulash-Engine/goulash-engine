@@ -16,14 +16,7 @@ class SimulationHttpApi(
 ) {
 
     @GetMapping("status")
-    fun simulationStatus(): String {
-        return when {
-            SimulationContext.isPaused() -> "paused"
-            SimulationContext.isRunning() -> "running"
-            !SimulationContext.isRunning() -> "not running"
-            else -> "unknown"
-        }
-    }
+    fun simulationStatus() = SimulationContext.toStatus()
 
     @PostMapping("start")
     fun startSimulation() {
