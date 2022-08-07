@@ -11,7 +11,8 @@ import java.util.UUID
 class DemoActor(
     override val name: String = ActorNameFactory.randomName(),
     override val id: String = UUID.randomUUID().toString(),
-    val primaryProfession: Profession,
+    override val key: String,
+    // TODO remove this
     val stash: MutableList<Resource> = mutableListOf(),
     override val activities: List<Activity> = listOf(),
     override val conditions: MutableSet<String> = mutableSetOf(),
@@ -42,9 +43,5 @@ class DemoActor(
 
     override fun hashCode(): Int {
         return id.hashCode()
-    }
-
-    override fun toString(): String {
-        return "DemoActor(name='$name', id='$id', primaryProfession=$primaryProfession, stash=$stash, activities=$activities, conditions=$conditions, state=$state, urges=$urges, decisionEngine=$decisionEngine, currentActivity='$currentActivity')"
     }
 }

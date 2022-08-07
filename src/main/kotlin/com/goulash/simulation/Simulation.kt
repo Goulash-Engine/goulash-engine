@@ -10,13 +10,9 @@ import java.util.concurrent.TimeUnit
 class Simulation(
     private val maximumTicks: Int? = null,
     private val millisecondsPerTick: Long = 1000,
-    private val tickBase: Int = WorldDate.SECOND,
-    val container: Container = Container(
-        mutableListOf(
-            ActorFactory.poorActor()
-        )
-    )
+    private val tickBase: Int = WorldDate.SECOND
 ) {
+    val container: Container = Container()
 
     init {
         LOG.info("Initializing simulation")

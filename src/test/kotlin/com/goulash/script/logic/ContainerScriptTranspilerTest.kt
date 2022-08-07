@@ -31,7 +31,7 @@ internal class ContainerScriptTranspilerTest {
 
         val testActor = ActorFactory.testActor()
         testActor.state["health"] = 50.0
-        val container = Container(mutableListOf(testActor))
+        val container = Container(actors = mutableListOf(testActor))
 
         scriptedLogic.process(container)
 
@@ -59,7 +59,7 @@ internal class ContainerScriptTranspilerTest {
 
         val testActor = ActorFactory.testActor()
         testActor.state["health"] = 50.0
-        val container = Container(mutableListOf(testActor))
+        val container = Container(actors = mutableListOf(testActor))
 
         scriptedLogic.process(container)
 
@@ -86,7 +86,7 @@ internal class ContainerScriptTranspilerTest {
         val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testActor = ActorFactory.testActor()
-        val container = Container(mutableListOf(testActor))
+        val container = Container(actors = mutableListOf(testActor))
 
         scriptedLogic.process(container)
 
@@ -114,7 +114,7 @@ internal class ContainerScriptTranspilerTest {
 
         val testActor = ActorFactory.testActor()
         testActor.state["health"] = 61.0
-        val container = Container(mutableListOf(testActor))
+        val container = Container(actors = mutableListOf(testActor))
 
         assertThat(scriptedLogic.name).isEqualTo("foo")
 
@@ -144,7 +144,7 @@ internal class ContainerScriptTranspilerTest {
 
         val testActor = ActorFactory.testActor()
         testActor.state["health"] = 30.0
-        val container = Container(mutableListOf(testActor))
+        val container = Container(actors = mutableListOf(testActor))
 
         assertThat(scriptedLogic.name).isEqualTo("foo")
 
@@ -173,7 +173,7 @@ internal class ContainerScriptTranspilerTest {
         val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
 
         val testClan = ActorFactory.testActor()
-        val container = Container(mutableListOf(testClan))
+        val container = Container(actors = mutableListOf(testClan))
 
         assertThat(scriptedLogic.name).isEqualTo("foo")
 

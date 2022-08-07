@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
  * The children [Actor]s of a [Container] all are target by the logic applied to this [Container].
  */
 class Container(
+    val id: String = ROOT_CONTAINER,
     val actors: MutableList<Actor> = mutableListOf()
 ) {
 
@@ -17,6 +18,7 @@ class Container(
     }
 
     companion object {
+        const val ROOT_CONTAINER = "root"
         private val LOG = LoggerFactory.getLogger("Simulation")
     }
 }

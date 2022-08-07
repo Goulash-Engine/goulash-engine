@@ -27,7 +27,7 @@ internal class ContainerTest {
             """.trimIndent()
         )
         ScriptLoader.loadContainerScripts(tempDir.path)
-        val container = Container(actors)
+        val container = Container(actors = actors)
 
         container.act()
 

@@ -47,7 +47,7 @@ internal class SyntaxRegressionTest {
         val testActor = ActorFactory.testActor()
         testActor.state["health"] = 100.0
         testActor.conditions.add("sick")
-        val container = Container(mutableListOf(testActor))
+        val container = Container(actors = mutableListOf(testActor))
 
         scriptedLogic.act(testActor)
     }
@@ -64,7 +64,7 @@ internal class SyntaxRegressionTest {
         val one = ActorFactory.testActor()
         one.state["health"] = 100.0
         one.conditions.add("sick")
-        val container = Container(mutableListOf(one))
+        val container = Container(actors = mutableListOf(one))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -85,7 +85,7 @@ internal class SyntaxRegressionTest {
 
         val one = ActorFactory.testActor()
         one.state["health"] = 100.0
-        val container = Container(mutableListOf(one))
+        val container = Container(actors = mutableListOf(one))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -108,7 +108,7 @@ internal class SyntaxRegressionTest {
         one.state["health"] = 100.0
         val two = ActorFactory.testActor()
         two.state["health"] = 300.0
-        val container = Container(mutableListOf(one, two))
+        val container = Container(actors = mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -131,7 +131,7 @@ internal class SyntaxRegressionTest {
 
         val one = ActorFactory.testActor()
         one.state["health"] = 100.0
-        val container = Container(mutableListOf(one))
+        val container = Container(actors = mutableListOf(one))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -152,7 +152,7 @@ internal class SyntaxRegressionTest {
 
         val one = ActorFactory.testActor()
         one.state["health"] = 150.0
-        val container = Container(mutableListOf(one))
+        val container = Container(actors = mutableListOf(one))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -174,7 +174,7 @@ internal class SyntaxRegressionTest {
         one.state["health"] = 30.0
         val two = ActorFactory.testActor()
         two.state["health"] = 50.0
-        val container = Container(mutableListOf(one, two))
+        val container = Container(actors = mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -197,7 +197,7 @@ internal class SyntaxRegressionTest {
         one.state["health"] = 30.0
         val two = ActorFactory.testActor()
         two.state["health"] = 100.0
-        val container = Container(mutableListOf(one, two))
+        val container = Container(actors = mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()
@@ -220,7 +220,7 @@ internal class SyntaxRegressionTest {
 
         val one = ActorFactory.testActor()
         val two = ActorFactory.testActor()
-        val container = Container(mutableListOf(one, two))
+        val container = Container(actors = mutableListOf(one, two))
 
         val actual: ContainerScriptContext = containerScriptGrammar.parseToEnd(scriptData)
         val transpiler = ContainerScriptTranspiler()

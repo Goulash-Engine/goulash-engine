@@ -5,6 +5,8 @@ import com.goulash.api.http.response.toResponse
 import com.goulash.core.SimulationContext
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -28,6 +30,11 @@ class ActorHttpApi {
 
             else -> emptyList()
         }
+    }
+
+    @PostMapping("{id}")
+    fun registerActor(@PathVariable id: String) {
+        LOG.info("Registering actor $id")
     }
 
     companion object {

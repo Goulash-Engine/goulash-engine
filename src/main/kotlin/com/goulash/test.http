@@ -4,6 +4,8 @@ POST http://localhost:8080/simulation/start
 POST http://localhost:8080/simulation/pause
 ### stop simulation
 POST http://localhost:8080/simulation/stop
+### simulation status
+GET http://localhost:8080/simulation/status
 
 ### fetch container
 GET http://localhost:8080/container/root
@@ -13,3 +15,8 @@ GET http://localhost:8080/actors?container=root
 
 ### get world date
 GET http://localhost:8080/simulation/time
+
+### register actor
+POST http://localhost:8080/actors/111
+
+###
