@@ -11,6 +11,21 @@ import org.junit.jupiter.api.Test
 internal class LogicStatementGrammarTest {
     private val logicStatementGrammar = LogicStatementGrammar()
 
+    @Test
+    fun `should parse health state setter`() {
+        val scriptData =
+            "actor::state(health).set(10)".trim()
+
+        val statements: List<ScriptStatement> = logicStatementGrammar.parseToEnd(scriptData)
+
+        assertThat(statements[0].context).isEqualTo("actor")
+        assertThat(statements[0].mutationType).isEqualTo("state")
+        assertThat(statements[0].filter).isEqualTo("")
+        assertThat(statements[0].mutationTarget).isEqualTo("health")
+        assertThat(statements[0].mutationOperation).isEqualTo("set")
+        assertThat(statements[0].mutationOperationArgument).isEqualTo("10")
+    }
+
     @Disabled
     @Test
     fun `should parse successive statements that both have filters and no line break between statements`() {

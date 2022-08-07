@@ -57,12 +57,14 @@ object ScriptLoader {
                         grammar.parseToEnd(it)
                     } catch (e: ParseException) {
                         LOG.error("[Parser Error] ${e.message}")
+                        LOG.error("Abort simulation")
                         loadingError++
-                        null
+                        throw ParseException(e.errorResult)
                     } catch (e: Exception) {
                         LOG.error("[Syntax Error] ${e.message}")
+                        LOG.error("Abort simulation")
                         loadingError++
-                        null
+                        throw Exception(e)
                     }
                 }.map(transpiler::transpile)
                 .toList()
