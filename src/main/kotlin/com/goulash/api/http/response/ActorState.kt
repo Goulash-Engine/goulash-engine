@@ -14,10 +14,7 @@ data class ActorState(
 fun Actor.toResponse() = ActorState(
     id = this.id,
     name = this.name,
-    state = mapOf(
-        "health" to (this.state["health"] ?: 0.0),
-        "nourishment" to (this.state["nourishment"] ?: 0.0)
-    ),
+    state = this.state,
     urges = this.urges.getAllUrges().toSortedMap(),
     activity = this.currentActivity,
     conditions = this.conditions.toList()
