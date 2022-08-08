@@ -20,7 +20,11 @@ class ActorHttpApi(
 
     @GetMapping("")
     fun getActorsForContainer(@RequestParam container: String): List<ActorState> {
-        check(SimulationContext.isRunning()) { "Simulation is not running" }
+        if (!SimulationContext.isRunning()) {
+            LOG.warn("Simulation is not running")
+            return emptyList()
+        }
+
         return when (container) {
             "root" -> {
                 val rootContainer = SimulationContext.simulation?.container
