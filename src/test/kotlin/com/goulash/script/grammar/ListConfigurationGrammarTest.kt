@@ -5,10 +5,10 @@ import assertk.assertions.containsAll
 import assertk.assertions.isEmpty
 import assertk.assertions.isInstanceOf
 import assertk.assertions.isNotEmpty
+import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.goulash.script.domain.GlobalBlockerCondition
 import com.goulash.script.domain.ListConfiguration
 import com.goulash.script.exception.SyntaxException
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

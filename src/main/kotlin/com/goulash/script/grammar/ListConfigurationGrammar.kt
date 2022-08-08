@@ -1,8 +1,5 @@
 package com.goulash.script.grammar
 
-import com.goulash.script.domain.GlobalBlockerCondition
-import com.goulash.script.domain.ListConfiguration
-import com.goulash.script.exception.SyntaxException
 import com.github.h0tk3y.betterParse.combinators.and
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.separatedTerms
@@ -13,6 +10,9 @@ import com.github.h0tk3y.betterParse.lexer.TokenMatch
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.Parser
+import com.goulash.script.domain.GlobalBlockerCondition
+import com.goulash.script.domain.ListConfiguration
+import com.goulash.script.exception.SyntaxException
 
 class ListConfigurationGrammar : Grammar<List<ListConfiguration>>() {
     private val space by regexToken("\\s+", ignore = true)

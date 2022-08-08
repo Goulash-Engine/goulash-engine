@@ -3,9 +3,9 @@ package com.goulash.script.grammar
 import assertk.assertAll
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.goulash.script.logic.ContainerScriptContext
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
+import com.goulash.script.logic.ContainerScriptContext
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 

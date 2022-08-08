@@ -3,7 +3,6 @@ package com.goulash.simulation
 import com.goulash.core.SimulationContext
 import com.goulash.core.domain.Container
 import com.goulash.core.domain.WorldDate
-import com.goulash.factory.ActorFactory
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 

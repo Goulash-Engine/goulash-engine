@@ -1,7 +1,5 @@
 package com.goulash.script.grammar
 
-import com.goulash.script.logic.ContainerScriptContext
-import com.goulash.script.logic.ScriptHead
 import com.github.h0tk3y.betterParse.combinators.map
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
@@ -10,6 +8,8 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
+import com.goulash.script.logic.ContainerScriptContext
+import com.goulash.script.logic.ScriptHead
 
 class ContainerScriptGrammar : Grammar<ContainerScriptContext>() {
     private val space by regexToken("\\s+", ignore = true)
