@@ -2,3 +2,4 @@
 /.idea
 build
 /scripts
+src/main/.DS_Store

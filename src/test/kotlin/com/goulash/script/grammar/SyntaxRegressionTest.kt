@@ -47,7 +47,6 @@ internal class SyntaxRegressionTest {
         val testActor = ActorFactory.testActor()
         testActor.state["health"] = 100.0
         testActor.conditions.add("sick")
-        val container = Container(actors = mutableListOf(testActor))
 
         scriptedLogic.act(testActor)
     }
