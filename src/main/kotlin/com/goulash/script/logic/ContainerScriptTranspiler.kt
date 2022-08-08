@@ -51,7 +51,11 @@ class ContainerScriptTranspiler {
     }
 
     private fun setUrge(actor: Actor, statement: ScriptStatement) {
-        actor.urges.stopUrge("eat")
+        actor.urges.stopUrge(statement.mutationTarget)
+        val argValue = statement.mutationOperationArgument.toDouble()
+        if (argValue <= 0.0) {
+            return
+        }
         actor.urges.increaseUrge(
             statement.mutationTarget,
             statement.mutationOperationArgument.toDouble()
