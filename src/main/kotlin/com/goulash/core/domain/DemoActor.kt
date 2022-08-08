@@ -18,7 +18,7 @@ class DemoActor(
     override val conditions: MutableSet<String> = mutableSetOf(),
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
-    override val urges: Urges = Urges().also { it.increaseUrge("think", 1.0) }
+    override val urges: Urges = Urges().also { it.increaseUrge("wakeup", 100.0) }
     private val decisionEngine = DecisionEngine()
     override var currentActivity: String = ""
 
