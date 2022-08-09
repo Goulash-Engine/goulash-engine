@@ -5,11 +5,9 @@ import com.goulash.core.domain.Actor
 import com.goulash.script.loader.ScriptLoader
 
 /**
- * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
- * actor is the driving factor of this logic. There can be only one [Activity] running for each [Actor].
+ * Responsible for choosing the most relevant [Activity] for an actor.
  */
-// TODO: rename to ActivityManager
-class DecisionEngine {
+class ActivityManager {
 
     private val runningActivity = ActivityRunner()
 

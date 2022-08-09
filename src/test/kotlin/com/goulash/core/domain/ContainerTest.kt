@@ -3,7 +3,7 @@ package com.goulash.core.domain
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.goulash.core.ActivityRunner
-import com.goulash.core.DecisionEngine
+import com.goulash.core.ActivityManager
 import com.goulash.factory.BaseActorFactory
 import com.goulash.script.loader.ScriptLoader
 import io.mockk.mockk
@@ -21,29 +21,29 @@ internal class ContainerTest {
     }
 
     @Test
-    fun `should run the decision engine and after that the activity runner`() {
+    fun `should run the activity manager and after that the activity runner`() {
         val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
-        val decisionEngineMock: DecisionEngine = mockk(relaxed = true)
+        val activityManagerMock: ActivityManager = mockk(relaxed = true)
         val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
-        val container = Container(actors = actors, decisionEngine = decisionEngineMock, activityRunner = activityRunnerMock)
+        val container = Container(actors = actors, activityManager = activityManagerMock, activityRunner = activityRunnerMock)
 
         container.tick()
 
         verifyOrder {
-            decisionEngineMock.tick(actors[0])
+            activityManagerMock.tick(actors[0])
             activityRunnerMock.tick(actors[0])
         }
     }
 
     @Test
-    fun `should run the decision engine for every actor in a container on every tick`() {
+    fun `should run the activity manager for every actor in a container on every tick`() {
         val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
-        val decisionEngineMock: DecisionEngine = mockk(relaxed = true)
-        val container = Container(actors = actors, decisionEngine = decisionEngineMock)
+        val activityManagerMock: ActivityManager = mockk(relaxed = true)
+        val container = Container(actors = actors, activityManager = activityManagerMock)
 
         container.tick()
 
-        verify { decisionEngineMock.tick(actors[0]) }
+        verify { activityManagerMock.tick(actors[0]) }
     }
 
     @Test
