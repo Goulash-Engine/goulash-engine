@@ -12,5 +12,5 @@ interface Actor {
     var currentActivity: String
     val state: MutableMap<String, Double>
 
-    fun act()
+    fun tick()
 }

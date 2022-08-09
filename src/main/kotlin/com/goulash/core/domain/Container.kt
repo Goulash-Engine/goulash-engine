@@ -17,7 +17,7 @@ class Container(
 
     fun act() {
         ScriptLoader.containerScripts.forEach { it.process(this) }
-        actors.forEach { it.act() }
+        actors.forEach { it.tick() }
     }
 
     companion object {

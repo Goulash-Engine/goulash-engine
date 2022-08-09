@@ -20,7 +20,7 @@ class BaseActor(
     private val decisionEngine = DecisionEngine()
     override var currentActivity: String = ""
 
-    override fun act() {
+    override fun tick() {
         decisionEngine.tick(this)
     }
 
