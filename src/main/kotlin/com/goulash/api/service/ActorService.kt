@@ -2,7 +2,7 @@ package com.goulash.api.service
 
 import com.goulash.core.SimulationContext
 import com.goulash.core.domain.Container
-import com.goulash.factory.ActorFactory
+import com.goulash.factory.BaseActorFactory
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
@@ -29,7 +29,7 @@ class ActorService {
             LOG.error("Actor with key '$key' already exists.")
             return
         }
-        val newActor = ActorFactory.newActor(key)
+        val newActor = BaseActorFactory.newActor(key)
         container.actors.add(newActor)
     }
 

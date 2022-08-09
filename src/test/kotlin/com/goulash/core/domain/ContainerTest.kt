@@ -2,14 +2,14 @@ package com.goulash.core.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.goulash.factory.ActorFactory
+import com.goulash.factory.BaseActorFactory
 import com.goulash.script.loader.ScriptLoader
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
 internal class ContainerTest {
-    private val actors: MutableList<Actor> = mutableListOf(ActorFactory.testActor())
+    private val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
 
     @BeforeEach
     fun setup() {
@@ -32,7 +32,7 @@ internal class ContainerTest {
             """.trimIndent()
         )
         ScriptLoader.loadContainerScripts(tempDir.path)
-        val container = Container(actors = actors)
+        Container(actors = actors)
 
         assertThat(actors[0].state["health"]).isEqualTo(20.0)
     }

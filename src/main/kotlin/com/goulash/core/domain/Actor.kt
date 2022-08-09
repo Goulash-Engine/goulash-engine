@@ -12,7 +12,5 @@ interface Actor {
     var currentActivity: String
     val state: MutableMap<String, Double>
 
-    // TODO: Add buffs as concepts of temporary conditions
-    fun inventory(): MutableList<Resource>
     fun act()
 }

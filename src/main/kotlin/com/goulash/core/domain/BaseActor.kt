@@ -12,8 +12,6 @@ class BaseActor(
     override val name: String = ActorNameFactory.randomName(),
     override val id: String = UUID.randomUUID().toString(),
     override val key: String,
-    // TODO remove this
-    val stash: MutableList<Resource> = mutableListOf(),
     override val activities: List<Activity> = listOf(),
     override val conditions: MutableSet<String> = mutableSetOf(),
     override val state: MutableMap<String, Double> = mutableMapOf()
@@ -21,10 +19,6 @@ class BaseActor(
     override val urges: Urges = Urges()
     private val decisionEngine = DecisionEngine()
     override var currentActivity: String = ""
-
-    override fun inventory(): MutableList<Resource> {
-        return this.stash
-    }
 
     override fun act() {
         decisionEngine.tick(this)

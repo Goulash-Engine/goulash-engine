@@ -2,7 +2,7 @@ package com.goulash.api.http.response
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.goulash.factory.ActorFactory
+import com.goulash.factory.BaseActorFactory
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -11,7 +11,7 @@ internal class ActorStateTest {
     @Disabled
     @Test
     fun `should return actor state with urges sorted by highest urge at top`() {
-        val testActor = ActorFactory.testActor()
+        val testActor = BaseActorFactory.testActor()
         testActor.urges.increaseUrge("eat", 100.0)
         testActor.urges.increaseUrge("sleep", 30.0)
         testActor.urges.increaseUrge("shat", 10.0)

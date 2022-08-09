@@ -2,13 +2,13 @@ package com.goulash
 
 import assertk.assertThat
 import assertk.assertions.containsSubList
-import com.goulash.factory.ActorFactory
+import com.goulash.factory.BaseActorFactory
 import com.goulash.script.loader.ScriptLoader
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
-internal class BaseActorFactoryTest {
+internal class BaseBaseActorFactoryTest {
     @AfterEach
     fun tearDown() {
         ScriptLoader.resetLoader()
@@ -27,7 +27,7 @@ internal class BaseActorFactoryTest {
         ScriptLoader.loadActivityScripts(tempDir.path)
         val activityScripts = ScriptLoader.getActivityScripts()
 
-        val testActor = ActorFactory.newActor("")
+        val testActor = BaseActorFactory.newActor("")
         val activities = testActor.activities
 
         assertThat(activities).containsSubList(activityScripts)

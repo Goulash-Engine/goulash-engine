@@ -18,7 +18,7 @@ class ActivityScriptTranspiler {
         return ActivityScript(
             scriptContext.activity,
             scriptContext.configurations,
-            { context -> transpileStatements(context, initStatements)},
+            { context -> transpileStatements(context, initStatements) },
             { context -> transpileStatements(context, actStatements); true },
             { context -> transpileStatements(context, onFinishStatements) },
             { context -> transpileStatements(context, onAbortStatements) }

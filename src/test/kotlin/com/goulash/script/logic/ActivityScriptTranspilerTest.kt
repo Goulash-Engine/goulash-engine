@@ -5,7 +5,7 @@ import assertk.assertions.contains
 import assertk.assertions.containsOnly
 import assertk.assertions.isEqualTo
 import assertk.assertions.isTrue
-import com.goulash.factory.ActorFactory
+import com.goulash.factory.BaseActorFactory
 import com.goulash.script.domain.ActivityScript
 import com.goulash.script.domain.ScriptStatement
 import org.junit.jupiter.api.Test
@@ -34,8 +34,8 @@ internal class ActivityScriptTranspilerTest {
 
         val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
-        val testActor = ActorFactory.testActor()
-        val returnVal = activityScript.init(testActor)
+        val testActor = BaseActorFactory.testActor()
+        activityScript.init(testActor)
 
         assertThat(testActor.state["health"]!!).isEqualTo(50.0)
     }
@@ -61,7 +61,7 @@ internal class ActivityScriptTranspilerTest {
 
         val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
-        val testActor = ActorFactory.testActor()
+        val testActor = BaseActorFactory.testActor()
         val returnVal = activityScript.act(testActor)
 
         assertThat(testActor.conditions).contains("sick")
@@ -102,7 +102,7 @@ internal class ActivityScriptTranspilerTest {
 
         val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
-        val testActor = ActorFactory.testActor()
+        val testActor = BaseActorFactory.testActor()
         testActor.state["health"] = 50.0
 
         val returnVal = activityScript.act(testActor)
@@ -132,7 +132,7 @@ internal class ActivityScriptTranspilerTest {
 
         val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
-        val testActor = ActorFactory.testActor()
+        val testActor = BaseActorFactory.testActor()
         testActor.state["health"] = 50.0
 
         activityScript.onAbort(testActor)
@@ -161,7 +161,7 @@ internal class ActivityScriptTranspilerTest {
 
         val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
-        val testActor = ActorFactory.testActor()
+        val testActor = BaseActorFactory.testActor()
         testActor.state["health"] = 50.0
 
         activityScript.onAbort(testActor)
@@ -190,7 +190,7 @@ internal class ActivityScriptTranspilerTest {
 
         val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
 
-        val testActor = ActorFactory.testActor()
+        val testActor = BaseActorFactory.testActor()
         testActor.state["health"] = 50.0
 
         activityScript.onFinish(testActor)
