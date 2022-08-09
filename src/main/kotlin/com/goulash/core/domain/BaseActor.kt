@@ -1,6 +1,5 @@
 package com.goulash.core.domain
 
-import com.goulash.core.DecisionEngine
 import com.goulash.core.activity.Activity
 import com.goulash.factory.ActorNameFactory
 import java.util.UUID
@@ -17,11 +16,9 @@ class BaseActor(
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
     override val urges: Urges = Urges()
-    private val decisionEngine = DecisionEngine()
     override var currentActivity: String = ""
 
     override fun tick() {
-        decisionEngine.tick(this)
     }
 
     override fun equals(other: Any?): Boolean {
