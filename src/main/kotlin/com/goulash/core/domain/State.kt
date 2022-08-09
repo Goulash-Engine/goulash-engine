@@ -1,7 +1,7 @@
 package com.goulash.core.domain
 
 /**
- * Represenation of a [DemoActor]s state
+ * Represenation of a [BaseActor]s state
  */
 data class State(
     var health: Double = 100.0,

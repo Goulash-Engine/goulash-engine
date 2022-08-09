@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
-internal class DemoActorFactoryTest {
+internal class BaseActorFactoryTest {
     @AfterEach
     fun tearDown() {
         ScriptLoader.resetLoader()

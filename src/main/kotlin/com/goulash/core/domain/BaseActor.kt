@@ -6,9 +6,9 @@ import com.goulash.factory.ActorNameFactory
 import java.util.UUID
 
 /**
- * The core element of the village. A village is build upon multiple actors that provide a cycle for self-sufficiency.
+ * Base implementation of the [Actor] interface.
  */
-class DemoActor(
+class BaseActor(
     override val name: String = ActorNameFactory.randomName(),
     override val id: String = UUID.randomUUID().toString(),
     override val key: String,
@@ -34,7 +34,7 @@ class DemoActor(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as DemoActor
+        other as BaseActor
 
         if (id != other.id) return false
 
