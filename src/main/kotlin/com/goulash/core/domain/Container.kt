@@ -1,5 +1,6 @@
 package com.goulash.core.domain
 
+import com.goulash.core.DecisionEngine
 import com.goulash.script.loader.ScriptLoader
 import org.slf4j.LoggerFactory
 
@@ -9,19 +10,22 @@ import org.slf4j.LoggerFactory
  */
 class Container(
     val id: String = ROOT_CONTAINER,
-    val actors: MutableList<Actor> = mutableListOf()
+    val actors: MutableList<Actor> = mutableListOf(),
+    private val decisionEngine: DecisionEngine = DecisionEngine()
 ) {
     init {
         ScriptLoader.containerScripts.forEach { it.init(this) }
     }
 
-    fun act() {
+    fun tick() {
         ScriptLoader.containerScripts.forEach { it.process(this) }
-        actors.forEach { it.tick() }
+        actors.forEach {
+            decisionEngine.tick(it)
+            it.tick()
+        }
     }
 
     companion object {
         const val ROOT_CONTAINER = "root"
-        private val LOG = LoggerFactory.getLogger("Simulation")
     }
 }

@@ -39,7 +39,7 @@ class Simulation(
     private fun runSimulation() {
         SimulationContext.ticks++
         WORLD_TIME.tick(tickBase)
-        container.act()
+        container.tick()
         TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
     }
 
