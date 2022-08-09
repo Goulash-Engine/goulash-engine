@@ -3,28 +3,29 @@ package com.goulash.core
 import com.goulash.actor.activity.IdleActivity
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
-import com.goulash.core.logic.Logic
 import com.goulash.script.loader.ScriptLoader
 
 /**
  * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
  * actor is the driving factor of this logic. There can be only one [Activity] running for each [Actor].
  */
-class DecisionEngine : Logic<Actor> {
+// TODO: ActivityEngine
+class DecisionEngine {
 
-    private val currentActivity = RunningActivity()
+    private val runningActivity = ActivityRunner()
 
-    override fun process(context: Actor) {
-        if (hasGlobalBlockerCondition(context)) return
+    fun tick(actor: Actor) {
+        if (hasGlobalBlockerCondition(actor)) return
 
-        val priorityActivity = context.activities.find { isPrioritizedActivity(it, context) }
+        val priorityActivity = actor.activities.find { isPrioritizedActivity(it, actor) }
 
         if (priorityActivity != null) {
-            currentActivity.set(priorityActivity)
-        } else if (currentActivity.isFinished()) {
-            setUrgentActivities(context)
+            priorityActivity.init(actor)
+            runningActivity.start(priorityActivity)
+        } else if (runningActivity.isFinished()) {
+            setUrgentActivities(actor)
         }
-        currentActivity.act(context)
+        runningActivity.tick(actor)
     }
 
     private fun isPrioritizedActivity(activity: Activity, context: Actor) =
@@ -50,9 +51,11 @@ class DecisionEngine : Logic<Actor> {
             .minByOrNull { it.priority() }
 
         if (urgentActivity != null) {
-            this.currentActivity.set(urgentActivity)
+            urgentActivity.init(actor)
+            this.runningActivity.start(urgentActivity)
         } else if (wildcardActivity != null) {
-            this.currentActivity.set(wildcardActivity)
+            wildcardActivity.init(actor)
+            this.runningActivity.start(wildcardActivity)
         }
     }
 
@@ -64,22 +67,22 @@ class DecisionEngine : Logic<Actor> {
             .any { blockerCondition: String -> actor.conditions.contains(blockerCondition) }
     }
 
-    private class RunningActivity {
+    private class ActivityRunner {
         private var activity: Activity = IdleActivity()
         private var duration: Int = 0
 
-        fun act(actor: Actor) {
+        fun tick(actor: Actor) {
             if (isRunning()) {
                 if (containsAbortCondition(actor)) {
                     activity.onAbort(actor)
-                    set(IdleActivity())
+                    start(IdleActivity())
                     return
                 }
 
                 val shouldContinue = activity.act(actor)
                 if (!shouldContinue) {
                     activity.onAbort(actor)
-                    set(IdleActivity())
+                    start(IdleActivity())
                     return
                 }
 
@@ -87,7 +90,7 @@ class DecisionEngine : Logic<Actor> {
                 val hasFinished = countDown()
                 if (hasFinished) {
                     activity.onFinish(actor)
-                    set(IdleActivity())
+                    start(IdleActivity())
                 }
             }
         }
@@ -95,7 +98,7 @@ class DecisionEngine : Logic<Actor> {
         private fun containsAbortCondition(actor: Actor) =
             actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
 
-        fun set(activity: Activity) {
+        fun start(activity: Activity) {
             this.activity = activity
             duration = activity.duration().asDouble().toInt()
         }

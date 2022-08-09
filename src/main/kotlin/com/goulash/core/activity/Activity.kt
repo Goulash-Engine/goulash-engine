@@ -46,6 +46,11 @@ interface Activity {
     fun duration(): Duration = 1.0.toDuration()
 
     /**
+     * Logic once an actor is created.
+     */
+    fun init(actor: Actor) = Unit
+
+    /**
      * Logic to be executed when the activity finishes hence it's duration is over
      */
     fun onFinish(actor: Actor) = Unit

@@ -11,12 +11,14 @@ import com.goulash.script.extension.TranspilerExtensions.tryScriptFilter
 class ActivityScriptTranspiler {
     fun transpile(scriptContext: ActivityScriptContext): ActivityScript {
         val actStatements = scriptContext.statements["act"] ?: emptyList()
+        val initStatements = scriptContext.statements["init"] ?: emptyList()
         val onFinishStatements = scriptContext.statements["on_finish"] ?: emptyList()
         val onAbortStatements = scriptContext.statements["on_abort"] ?: emptyList()
 
         return ActivityScript(
             scriptContext.activity,
             scriptContext.configurations,
+            { context -> transpileStatements(context, initStatements)},
             { context -> transpileStatements(context, actStatements); true },
             { context -> transpileStatements(context, onFinishStatements) },
             { context -> transpileStatements(context, onAbortStatements) }

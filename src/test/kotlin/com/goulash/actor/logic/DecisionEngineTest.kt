@@ -23,6 +23,32 @@ internal class DecisionEngineTest {
     private val decisionEngine = DecisionEngine()
 
     @Test
+    fun `should call activity init logic once when activity has started`() {
+        val scriptedSleepActivity = spyk(
+            ActivityScript(
+                "sleeping",
+                mapOf(
+                    "trigger_urges" to listOf("sleep"),
+                    "duration" to listOf("5")
+                ),
+                { _ -> },
+                { _ -> true },
+                { _ -> },
+                { _ -> }
+            )
+        )
+
+        val testActor = ActorFactory.testActor(listOf(scriptedSleepActivity))
+        testActor.urges.increaseUrge("sleep", 10.0)
+
+        repeat(2) { decisionEngine.tick(testActor) }
+
+        verify(exactly = 1) {
+            scriptedSleepActivity.init(any())
+        }
+    }
+
+    @Test
     fun `should not apply same activity if its already the current one`() {
         val exitingActivity = mockk<Activity>("foo", relaxed = true)
         every { exitingActivity.triggerUrges() } returns listOf("foo")
@@ -32,7 +58,7 @@ internal class DecisionEngineTest {
         val testActor = ActorFactory.testActor(listOf(exitingActivity))
         testActor.urges.increaseUrge("foo", 100.0)
 
-        repeat(10) { decisionEngine.process(testActor) }
+        repeat(10) { decisionEngine.tick(testActor) }
 
         verify(atMost = 10) { exitingActivity.act(any()) }
     }
@@ -43,6 +69,7 @@ internal class DecisionEngineTest {
             ActivityScript(
                 "sleeping",
                 mapOf("trigger_urges" to listOf("sleep")),
+                { _ -> },
                 { _ -> true },
                 { _ -> },
                 { _ -> }
@@ -52,7 +79,7 @@ internal class DecisionEngineTest {
         val testActor = ActorFactory.testActor(listOf(scriptedSleepActivity))
         testActor.urges.increaseUrge("sleep", 10.0)
 
-        repeat(1) { decisionEngine.process(testActor) }
+        repeat(1) { decisionEngine.tick(testActor) }
 
         verifyOrder {
             repeat(1) { scriptedSleepActivity.act(any()) }
@@ -69,7 +96,7 @@ internal class DecisionEngineTest {
         val testActor = ActorFactory.testActor(listOf(exitingActivity))
         testActor.urges.increaseUrge("foo", 10.0)
 
-        repeat(10) { decisionEngine.process(testActor) }
+        repeat(10) { decisionEngine.tick(testActor) }
 
         verifyOrder {
             repeat(4) { exitingActivity.act(any()) }
@@ -91,7 +118,7 @@ internal class DecisionEngineTest {
         actor.urges.increaseUrge("eat", 100.0)
         actor.conditions.add("underfed")
 
-        repeat(10) { decisionEngine.process(actor) }
+        repeat(10) { decisionEngine.tick(actor) }
 
         verify(inverse = true) { idleActivity.act(any()) }
     }
@@ -107,9 +134,9 @@ internal class DecisionEngineTest {
         val actor = ActorFactory.testActor(listOf(testActivity))
         actor.urges.increaseUrge("sleep", 100.0)
 
-        repeat(2) { decisionEngine.process(actor) }
+        repeat(2) { decisionEngine.tick(actor) }
         actor.conditions.add("stop")
-        repeat(1) { decisionEngine.process(actor) }
+        repeat(1) { decisionEngine.tick(actor) }
 
         verify(atMost = 2) { testActivity.act(any()) }
         verify(atMost = 1) { testActivity.onAbort(any()) }
@@ -135,7 +162,7 @@ internal class DecisionEngineTest {
         actor.urges.increaseUrge("eat", 100.0)
         actor.urges.increaseUrge("sleep", 100.0)
 
-        repeat(2) { decisionEngine.process(actor) }
+        repeat(2) { decisionEngine.tick(actor) }
 
         verifyOrder {
             prioritizedActivity.act(any())
@@ -160,7 +187,7 @@ internal class DecisionEngineTest {
         actor.urges.increaseUrge("eat", 100.0)
         actor.urges.increaseUrge("think", 20.0)
 
-        repeat(2) { decisionEngine.process(actor) }
+        repeat(2) { decisionEngine.tick(actor) }
 
         verifyOrder {
             prioritizedActivity.act(any())
@@ -179,7 +206,7 @@ internal class DecisionEngineTest {
         ScriptLoader.globalBlockingConditions = listOf("starving")
         actor.conditions.add(ScriptLoader.globalBlockingConditions!!.first())
 
-        decisionEngine.process(actor)
+        decisionEngine.tick(actor)
 
         verify(inverse = true) { mockedWorkActivity.act(any()) }
     }
@@ -193,16 +220,16 @@ internal class DecisionEngineTest {
         val clan = ActorFactory.testActor(listOf(mockedWorkActivity))
         clan.urges.increaseUrge("work", 100.0)
 
-        repeat(3) { decisionEngine.process(clan) }
+        repeat(3) { decisionEngine.tick(clan) }
         clan.conditions.add("starving")
-        repeat(2) { decisionEngine.process(clan) }
+        repeat(2) { decisionEngine.tick(clan) }
 
         verify(atMost = 3) { mockedWorkActivity.act(any()) }
     }
 
     @Test
     fun `should add resource to stash of actor if activity has finished`() {
-        val mockedWorkActivity = mockk<Activity>("workMock")
+        val mockedWorkActivity = mockk<Activity>("workMock", relaxed = true)
         every { mockedWorkActivity.triggerUrges() } returns listOf("*")
         every { mockedWorkActivity.blockerConditions() } returns listOf("sick")
         every { mockedWorkActivity.activity() } returns "working"
@@ -216,7 +243,7 @@ internal class DecisionEngineTest {
         }
         every { mockedWorkActivity.act(clan) } returns true
 
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }
@@ -226,14 +253,14 @@ internal class DecisionEngineTest {
 
     @Test
     fun `should execute an activity with higher urge for duration and then the next activity`() {
-        val primaryActivity = mockk<Activity>(name = "primary")
+        val primaryActivity = mockk<Activity>(name = "primary", relaxed = true)
         every { primaryActivity.triggerUrges() } returns listOf("work")
         every { primaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { primaryActivity.activity() } returns "working"
         every { primaryActivity.duration() } returns 2.0.toDuration()
         justRun { primaryActivity.onFinish(any()) }
 
-        val secondaryActivity = mockk<Activity>(name = "secondary")
+        val secondaryActivity = mockk<Activity>(name = "secondary", relaxed = true)
         every { secondaryActivity.triggerUrges() } returns listOf("rest")
         every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { secondaryActivity.activity() } returns "resting"
@@ -251,9 +278,9 @@ internal class DecisionEngineTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 9.0)
 
-        decisionEngine.process(clan)
-        decisionEngine.process(clan)
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
+        decisionEngine.tick(clan)
+        decisionEngine.tick(clan)
 
         verify(exactly = 2) { primaryActivity.act(clan) }
         verify(exactly = 1) { secondaryActivity.act(clan) }
@@ -261,14 +288,14 @@ internal class DecisionEngineTest {
 
     @Test
     fun `should execute an activity for it's duration value`() {
-        val primaryActivity = mockk<Activity>(name = "primary")
+        val primaryActivity = mockk<Activity>(name = "primary", relaxed = true)
         every { primaryActivity.triggerUrges() } returns listOf("work")
         every { primaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { primaryActivity.activity() } returns "working"
         every { primaryActivity.duration() } returns 4.0.toDuration()
         justRun { primaryActivity.onFinish(any()) }
 
-        val secondaryActivity = mockk<Activity>()
+        val secondaryActivity = mockk<Activity>(relaxed = true)
         every { secondaryActivity.triggerUrges() } returns listOf("rest")
         every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { secondaryActivity.activity() } returns "resting"
@@ -283,14 +310,14 @@ internal class DecisionEngineTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("resting", 9.0)
 
-        repeat(4) { decisionEngine.process(clan) }
+        repeat(4) { decisionEngine.tick(clan) }
 
         verify(exactly = 4) { primaryActivity.act(clan) }
     }
 
     @Test
     fun `should set current activity of a context`() {
-        val firstActivity = mockk<Activity>()
+        val firstActivity = mockk<Activity>(relaxed = true)
         every { firstActivity.triggerUrges() } returns listOf("work")
         every { firstActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { firstActivity.activity() } returns "working"
@@ -299,14 +326,14 @@ internal class DecisionEngineTest {
         every { firstActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
 
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
 
         assertThat(clan.currentActivity).isEqualTo(firstActivity.activity())
     }
 
     @Test
     fun `should execute wildcard activities without a matching urge`() {
-        val mockedIdleActivity = mockk<Activity>("idle")
+        val mockedIdleActivity = mockk<Activity>("idle", relaxed = true)
         every { mockedIdleActivity.triggerUrges() } returns listOf("*")
         every { mockedIdleActivity.blockerConditions() } returns listOf()
         every { mockedIdleActivity.activity() } returns "idle"
@@ -316,14 +343,14 @@ internal class DecisionEngineTest {
         clan.urges.increaseUrge("work", 100.0)
         every { mockedIdleActivity.act(any()) } returns true
 
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
 
         verify { mockedIdleActivity.act(any()) }
     }
 
     @Test
     fun `should chose the first of two equally urgent urges`() {
-        val mockedWorkActivity = mockk<Activity>()
+        val mockedWorkActivity = mockk<Activity>(relaxed = true)
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
@@ -333,7 +360,7 @@ internal class DecisionEngineTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 10.0)
 
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }
@@ -353,7 +380,7 @@ internal class DecisionEngineTest {
         clan.urges.increaseUrge("rest", 5.0)
         clan.conditions.add("sick")
 
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }
@@ -362,7 +389,7 @@ internal class DecisionEngineTest {
 
     @Test
     fun `should execute activity if trigger urge is the top urge`() {
-        val mockedWorkActivity = mockk<Activity>()
+        val mockedWorkActivity = mockk<Activity>(relaxed = true)
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
@@ -372,7 +399,7 @@ internal class DecisionEngineTest {
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)
 
-        decisionEngine.process(clan)
+        decisionEngine.tick(clan)
 
         verify { mockedWorkActivity.triggerUrges() }
         verify { mockedWorkActivity.blockerConditions() }

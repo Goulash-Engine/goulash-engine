@@ -8,6 +8,7 @@ import com.goulash.core.extension.toDuration
 class ActivityScript(
     private val activity: String,
     private val configurations: Map<String, List<String>>,
+    private val initLogic: (context: Actor) -> Unit,
     private val actLogic: (context: Actor) -> Boolean,
     private val onFinishLogic: (context: Actor) -> Unit,
     private val onAbortLogic: (context: Actor) -> Unit
@@ -47,6 +48,10 @@ class ActivityScript(
 
     override fun onAbort(actor: Actor) {
         onAbortLogic(actor)
+    }
+
+    override fun init(actor: Actor) {
+        return initLogic(actor)
     }
 
     override fun act(actor: Actor): Boolean {

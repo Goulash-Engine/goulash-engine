@@ -15,6 +15,82 @@ internal class ActivityScriptGrammarTest {
     private val activityGrammar = ActivityScriptGrammar()
 
     @Test
+    fun `should have parse logic init and other logic types`() {
+        val scriptData = """
+            activity eating {
+                 logic init {
+                      actor::state(health).set(100);
+                      actor::state(health).set(100);
+                  }
+                 logic act {
+                      actor::state(health).set(100);
+                  }
+             }
+        """.trimIndent()
+
+        val activityScriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(activityScriptContext.statements["act"]).isEqualTo(
+            listOf(
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "set",
+                    "100"
+                )
+            )
+        )
+        assertThat(activityScriptContext.statements["init"]).isEqualTo(
+            listOf(
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "set",
+                    "100"
+                ),
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "set",
+                    "100"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `should have init logic working`() {
+        val scriptData = """
+            activity eating {
+                 logic init {
+                      actor::state(health).set(100);
+                  }
+             }
+        """.trimIndent()
+
+        val activityScriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(activityScriptContext.statements["init"]).isEqualTo(
+            listOf(
+                ScriptStatement(
+                    "actor",
+                    "",
+                    "state",
+                    "health",
+                    "set",
+                    "100"
+                )
+            )
+        )
+    }
+
+    @Test
     fun `should parse act logic with two filter statements`() {
         val scriptData = """
             activity eating {

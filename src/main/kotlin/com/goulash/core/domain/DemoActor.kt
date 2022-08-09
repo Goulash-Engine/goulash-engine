@@ -27,7 +27,7 @@ class DemoActor(
     }
 
     override fun act() {
-        decisionEngine.process(this)
+        decisionEngine.tick(this)
     }
 
     override fun equals(other: Any?): Boolean {
