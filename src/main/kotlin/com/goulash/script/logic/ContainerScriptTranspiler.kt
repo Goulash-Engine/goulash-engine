@@ -12,10 +12,12 @@ import com.goulash.script.extension.TranspilerExtensions.tryScriptFilter
 class ContainerScriptTranspiler {
     fun transpile(scriptContext: ContainerScriptContext): ContainerScript {
         val containerStatements = scriptContext.statements["container"] ?: emptyList()
+        val initStatements = scriptContext.statements["init"] ?: emptyList()
 
         return ContainerScript(
             scriptContext.head.name,
-            { context -> transpileStatements(context, containerStatements) }
+            { context -> transpileStatements(context, containerStatements) },
+            { context -> transpileStatements(context, initStatements) }
         )
     }
 
