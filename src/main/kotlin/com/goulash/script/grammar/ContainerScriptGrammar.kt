@@ -5,6 +5,7 @@ import com.github.h0tk3y.betterParse.combinators.oneOrMore
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
 import com.github.h0tk3y.betterParse.combinators.use
+import com.github.h0tk3y.betterParse.combinators.zeroOrMore
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
@@ -33,7 +34,7 @@ class ContainerScriptGrammar : Grammar<ContainerScriptContext>() {
         )
     }
 
-    private val statementsParser by -openBraces * oneOrMore(logicParser) * -closedBraces
+    private val statementsParser by -openBraces * zeroOrMore(logicParser) * -closedBraces
     override val rootParser by (scriptHeadParser * statementsParser) map { (scriptHead, logics) ->
         ContainerScriptContext(scriptHead, logics.associate { it.toPair() })
     }

@@ -38,8 +38,10 @@ internal class ScriptLoaderTest {
         val config = tempDir.resolve("logic.gsh")
         config.writeText(
             """ 
-            logic myfoo {
-                actors::urge(eat).plus(1);
+            container myfoo {
+                logic container {
+                    actors::urge(eat).plus(1);
+                }
             }
             """.trimIndent()
         )

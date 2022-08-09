@@ -54,9 +54,11 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should remove condition from actor`() {
         val scriptData = """
-            logic myfoo {
-                actors::state(health).minus(30);
-                actors[state.health > 50]::condition(sick).remove();
+            container myfoo {
+                logic container{ 
+                    actors::state(health).minus(30);
+                    actors[state.health > 50]::condition(sick).remove();
+                }
             }
         """.trimIndent()
 
@@ -76,9 +78,11 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should add condition to actors`() {
         val scriptData = """
-            logic myfoo {
-                actors::state(health).minus(60);
-                actors[state.health < 50]::condition(sick).add();
+            container myfoo {
+                logic container {
+                    actors::state(health).minus(60);
+                    actors[state.health < 50]::condition(sick).add();
+                }
             }
         """.trimIndent()
 
@@ -97,9 +101,11 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should reset only reset actors health to 0 who are below 0`() {
         val scriptData = """
-            logic myfoo {
-                actors::state(health).minus(200);
-                actors[state.health < 0]::state(health).set(0);
+            container myfoo {
+                logic container {
+                    actors::state(health).minus(200);
+                    actors[state.health < 0]::state(health).set(0);
+                }
             }
         """.trimIndent()
 
@@ -121,10 +127,12 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should decrease actors health down three times by 10`() {
         val scriptData = """
-            logic myfoo {
-                actors::state(health).minus(10);
-                actors::state(health).minus(10);
-                actors::state(health).minus(10);
+            container myfoo {
+                logic container {
+                    actors::state(health).minus(10);
+                    actors::state(health).minus(10);
+                    actors::state(health).minus(10);
+                }
             }
         """.trimIndent()
 
@@ -143,9 +151,11 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should set health to 100 if over 100`() {
         val scriptData = """
-            logic myfoo {
-                actors::state(health).plus(50);
-                actors[state.health > 100]::state(health).set(100);
+            container myfoo {
+                logic container {
+                    actors::state(health).plus(50);
+                    actors[state.health > 100]::state(health).set(100);
+                }
             }
         """.trimIndent()
 
@@ -164,8 +174,10 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should set eat urge of actors where health is equal 30 to 20`() {
         val scriptData = """
-            logic myfoo {
-                actors[state.health = 50]::urge(foo).set(20);
+            container myfoo {
+                logic container {
+                    actors[state.health = 50]::urge(foo).set(20);
+                }
             }
         """.trimIndent()
 
@@ -187,8 +199,10 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should increase urge of all actors where health is greater than 50`() {
         val scriptData = """
-            logic myfoo {
-                actors[state.health > 50]::urge(foo).plus(1);
+            container myfoo {
+                logic container {
+                    actors[state.health > 50]::urge(foo).plus(1);
+                }
             }
         """.trimIndent()
 
@@ -210,10 +224,12 @@ internal class SyntaxRegressionTest {
     @Test
     fun `should increase urge of all actors`() {
         val scriptData = """
-            logic myfoo {
-                actors::urge(foo).plus(1);
-                actors::urge(bar).plus(0.5);
-                actors::urge(foo).plus(2);
+            container myfoo {
+                logic container {
+                    actors::urge(foo).plus(1);
+                    actors::urge(bar).plus(0.5);
+                    actors::urge(foo).plus(2);
+                }
             }
         """.trimIndent()
 
