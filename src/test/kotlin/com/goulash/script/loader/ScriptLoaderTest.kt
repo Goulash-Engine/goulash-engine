@@ -15,6 +15,26 @@ internal class ScriptLoaderTest {
     }
 
     @Test
+    fun `should load container script file`(@TempDir tempDir: java.io.File) {
+        val config = tempDir.resolve("container.gsh")
+        config.writeText(
+            """ 
+            container routine {
+                logic container {
+                    actor::urge(eat).minus(1);
+                }
+                logic init {
+                    actor::urge(eat).minus(1);
+                }
+            }
+            """.trimIndent()
+        )
+
+        ScriptLoader.loadContainerScripts(tempDir.path)
+
+        assertThat(ScriptLoader.getContainerScripts()).isNotEmpty()
+    }
+    @Test
     fun `should load activity script file`(@TempDir tempDir: java.io.File) {
         val config = tempDir.resolve("activity.gsh")
         config.writeText(

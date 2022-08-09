@@ -17,6 +17,27 @@ internal class ContainerTest {
     }
 
     @Test
+    fun `should init container logic`(@TempDir tempDir: java.io.File) {
+        val config = tempDir.resolve("logic.gsh")
+        config.writeText(
+            """ 
+            container myfoo {
+                logic container {
+                    actors::urge(eat).plus(1);
+                }
+                logic init {
+                    actors::state(health).set(20);
+                }
+            }
+            """.trimIndent()
+        )
+        ScriptLoader.loadContainerScripts(tempDir.path)
+        val container = Container(actors = actors)
+
+        assertThat(actors[0].state["health"]).isEqualTo(20.0)
+    }
+
+    @Test
     fun `should invoke scripted logic`(@TempDir tempDir: java.io.File) {
         val config = tempDir.resolve("logic.gsh")
         config.writeText(

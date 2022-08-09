@@ -11,6 +11,9 @@ class Container(
     val id: String = ROOT_CONTAINER,
     val actors: MutableList<Actor> = mutableListOf()
 ) {
+    init {
+        ScriptLoader.containerScripts.forEach { it.init(this) }
+    }
 
     fun act() {
         ScriptLoader.containerScripts.forEach { it.process(this) }
