@@ -1,5 +1,6 @@
 package com.goulash.core.domain
 
+import com.goulash.core.ActivityRunner
 import com.goulash.core.activity.Activity
 
 interface Actor {
@@ -10,6 +11,8 @@ interface Actor {
     val activities: List<Activity>
     val urges: Urges
     var currentActivity: String
-    var activity: Activity?
+    var activityRunner: ActivityRunner
     val state: MutableMap<String, Double>
+
+    fun tick()
 }

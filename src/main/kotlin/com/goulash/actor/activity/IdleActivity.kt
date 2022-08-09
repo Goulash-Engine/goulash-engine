@@ -11,8 +11,4 @@ class IdleActivity : Activity {
     override fun activity(): String {
         return "idle"
     }
-
-    override fun duration(): Duration {
-        return 0.0.toDuration()
-    }
 }

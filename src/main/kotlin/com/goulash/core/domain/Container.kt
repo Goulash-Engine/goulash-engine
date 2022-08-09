@@ -1,7 +1,7 @@
 package com.goulash.core.domain
 
-import com.goulash.core.ActivityRunner
 import com.goulash.core.ActivityManager
+import com.goulash.script.extension.ActivityExtensions.createRunner
 import com.goulash.script.loader.ScriptLoader
 
 /**
@@ -11,8 +11,7 @@ import com.goulash.script.loader.ScriptLoader
 class Container(
     val id: String = ROOT_CONTAINER,
     val actors: MutableList<Actor> = mutableListOf(),
-    private val activityManager: ActivityManager = ActivityManager(),
-    private val activityRunner: ActivityRunner = ActivityRunner()
+    private val activityManager: ActivityManager = ActivityManager()
 ) {
     init {
         ScriptLoader.containerScripts.forEach { it.init(this) }
@@ -21,8 +20,14 @@ class Container(
     fun tick() {
         ScriptLoader.containerScripts.forEach { it.process(this) }
         actors.forEach { actor ->
-            activityManager.tick(actor)
-            activityRunner.tick(actor)
+            activityManager.resolve(actor) { activity ->
+                if (actor.activityRunner.isRunning()) {
+                    actor.tick()
+                } else {
+                    actor.activityRunner = activity.createRunner()
+                    actor.tick()
+                }
+            }
         }
     }
 

@@ -1,6 +1,5 @@
 package com.goulash.core
 
-import com.goulash.actor.activity.IdleActivity
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
 
@@ -8,22 +7,20 @@ import com.goulash.core.domain.Actor
  * Executes activity logic and determines if an activity is either running, aborted or finished
  * and therefore executes lifecycle logic.
  */
-class ActivityRunner {
-    private var activity: Activity = IdleActivity()
-    private var duration: Int = 0
-
-    fun tick(actor: Actor) {
+class ActivityRunner(
+    private val activity: Activity,
+    private var duration: Double = 0.0
+) {
+    fun run(actor: Actor) {
         if (isRunning()) {
-            if (containsAbortCondition(actor)) {
-                activity.onAbort(actor)
-                start(IdleActivity())
+            if (containsAbortCondition(actor, activity)) {
+                abort(actor)
                 return
             }
 
             val shouldContinue = activity.act(actor)
             if (!shouldContinue) {
-                activity.onAbort(actor)
-                start(IdleActivity())
+                abort(actor)
                 return
             }
 
@@ -31,20 +28,20 @@ class ActivityRunner {
             val hasFinished = countDown()
             if (hasFinished) {
                 activity.onFinish(actor)
-                start(IdleActivity())
+                return
             }
         }
     }
 
-    private fun containsAbortCondition(actor: Actor) =
-        actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
-
-    fun start(activity: Activity) {
-        this.activity = activity
-        duration = activity.duration().asDouble().toInt()
+    private fun abort(actor: Actor) {
+        duration = 0.0
+        activity.onAbort(actor)
     }
 
-    fun isFinished(): Boolean {
+    private fun containsAbortCondition(actor: Actor, activity: Activity) =
+        actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
+
+    private fun isFinished(): Boolean {
         return duration <= 0
     }
 

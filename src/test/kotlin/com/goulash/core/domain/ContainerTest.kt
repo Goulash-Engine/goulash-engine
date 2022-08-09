@@ -25,13 +25,13 @@ internal class ContainerTest {
         val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
         val activityManagerMock: ActivityManager = mockk(relaxed = true)
         val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
-        val container = Container(actors = actors, activityManager = activityManagerMock, activityRunner = activityRunnerMock)
+        val container = Container(actors = actors, activityManager = activityManagerMock)
 
         container.tick()
 
         verifyOrder {
-            activityManagerMock.tick(actors[0])
-            activityRunnerMock.tick(actors[0])
+            activityManagerMock.resolve(actors[0], onResolve = any())
+            activityRunnerMock.run(actors[0])
         }
     }
 
@@ -43,7 +43,7 @@ internal class ContainerTest {
 
         container.tick()
 
-        verify { activityManagerMock.tick(actors[0]) }
+        verify { activityManagerMock.resolve(actors[0], onResolve = any()) }
     }
 
     @Test
