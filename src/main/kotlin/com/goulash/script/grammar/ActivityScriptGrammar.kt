@@ -7,7 +7,6 @@ import com.github.h0tk3y.betterParse.combinators.separatedTerms
 import com.github.h0tk3y.betterParse.combinators.times
 import com.github.h0tk3y.betterParse.combinators.unaryMinus
 import com.github.h0tk3y.betterParse.grammar.Grammar
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.goulash.script.logic.ActivityScriptContext
@@ -48,13 +47,5 @@ class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
             body.filterIsInstanceTo<Logic, MutableList<Logic>>(mutableListOf())
 
         ActivityScriptContext(activityName, logics.associate { it.toPair() }, configs.toMap())
-    }
-
-    internal class Logic(
-        private val name: String,
-        private val statements: String
-    ) {
-        private val grammar = LogicStatementGrammar()
-        fun toPair() = name to grammar.parseToEnd(statements.split(";").joinToString(";\n"))
     }
 }

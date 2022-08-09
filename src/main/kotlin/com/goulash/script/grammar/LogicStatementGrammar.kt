@@ -11,7 +11,6 @@ import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.goulash.script.domain.ScriptStatement
-import com.goulash.script.logic.ContainerScriptContext
 
 class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val space by regexToken("\\s+", ignore = true)
@@ -27,10 +26,10 @@ class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
     private val endOfStatement by regexToken(";\\s*", ignore = true)
 
     private val operationParser by -optional(operationOperator) * optional(identifier) * -optional(leftPar) * optional((digit or identifier)) * -optional(rightPar) map { (name, argument) ->
-        ContainerScriptContext.Operation(name?.text ?: "", argument?.text ?: "")
+        Operation(name?.text ?: "", argument?.text ?: "")
     }
     private val mutationParser by -contextMutationOperator * identifier * -optional(leftPar) * optional(identifier) * -optional(rightPar) * operationParser map { (type, target, operation) ->
-        ContainerScriptContext.ContextMutation(type.text, target?.text ?: "", operation)
+        ContextMutation(type.text, target?.text ?: "", operation)
     }
     private val filterParser by optional(filter) use { this?.text?.removeSurrounding("[", "]") ?: "" }
     private val contextCommandParser by identifier * filterParser * mutationParser
@@ -47,4 +46,15 @@ class LogicStatementGrammar : Grammar<List<ScriptStatement>>() {
         }
     }
     override val rootParser by statementParser
+
+    internal data class ContextMutation(
+        val type: String,
+        val target: String,
+        val operation: Operation
+    )
+
+    internal data class Operation(
+        val name: String,
+        val argument: String
+    )
 }
