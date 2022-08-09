@@ -10,7 +10,6 @@ interface Actor {
     val activities: List<Activity>
     val urges: Urges
     var currentActivity: String
+    var activity: Activity?
     val state: MutableMap<String, Double>
-
-    fun tick()
 }

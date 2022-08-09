@@ -2,11 +2,13 @@ package com.goulash.core.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.goulash.core.ActivityRunner
 import com.goulash.core.DecisionEngine
 import com.goulash.factory.BaseActorFactory
 import com.goulash.script.loader.ScriptLoader
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -16,6 +18,21 @@ internal class ContainerTest {
     @BeforeEach
     fun setup() {
         ScriptLoader.resetLoader()
+    }
+
+    @Test
+    fun `should run the decision engine and after that the activity runner`() {
+        val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
+        val decisionEngineMock: DecisionEngine = mockk(relaxed = true)
+        val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
+        val container = Container(actors = actors, decisionEngine = decisionEngineMock, activityRunner = activityRunnerMock)
+
+        container.tick()
+
+        verifyOrder {
+            decisionEngineMock.tick(actors[0])
+            activityRunnerMock.tick(actors[0])
+        }
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.goulash.core
 
-import com.goulash.actor.activity.IdleActivity
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
 import com.goulash.script.loader.ScriptLoader
@@ -9,7 +8,7 @@ import com.goulash.script.loader.ScriptLoader
  * This logic manages all the [Activity] objects an [Actor] owns. The urge level of an
  * actor is the driving factor of this logic. There can be only one [Activity] running for each [Actor].
  */
-// TODO: ActivityEngine
+// TODO: rename to ActivityManager
 class DecisionEngine {
 
     private val runningActivity = ActivityRunner()
@@ -22,6 +21,7 @@ class DecisionEngine {
         if (priorityActivity != null) {
             priorityActivity.init(actor)
             runningActivity.start(priorityActivity)
+            actor.activity = priorityActivity
         } else if (runningActivity.isFinished()) {
             setUrgentActivities(actor)
         }
@@ -53,9 +53,11 @@ class DecisionEngine {
         if (urgentActivity != null) {
             urgentActivity.init(actor)
             this.runningActivity.start(urgentActivity)
+            actor.activity = urgentActivity
         } else if (wildcardActivity != null) {
             wildcardActivity.init(actor)
             this.runningActivity.start(wildcardActivity)
+            actor.activity = wildcardActivity
         }
     }
 
@@ -65,59 +67,5 @@ class DecisionEngine {
     private fun isBlocked(activity: Activity, actor: Actor): Boolean {
         return activity.blockerConditions()
             .any { blockerCondition: String -> actor.conditions.contains(blockerCondition) }
-    }
-
-    private class ActivityRunner {
-        private var activity: Activity = IdleActivity()
-        private var duration: Int = 0
-
-        fun tick(actor: Actor) {
-            if (isRunning()) {
-                if (containsAbortCondition(actor)) {
-                    activity.onAbort(actor)
-                    start(IdleActivity())
-                    return
-                }
-
-                val shouldContinue = activity.act(actor)
-                if (!shouldContinue) {
-                    activity.onAbort(actor)
-                    start(IdleActivity())
-                    return
-                }
-
-                actor.currentActivity = activity.activity()
-                val hasFinished = countDown()
-                if (hasFinished) {
-                    activity.onFinish(actor)
-                    start(IdleActivity())
-                }
-            }
-        }
-
-        private fun containsAbortCondition(actor: Actor) =
-            actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
-
-        fun start(activity: Activity) {
-            this.activity = activity
-            duration = activity.duration().asDouble().toInt()
-        }
-
-        fun isFinished(): Boolean {
-            return duration <= 0
-        }
-
-        fun isRunning(): Boolean {
-            return !isFinished()
-        }
-
-        /**
-         * Decrease duration
-         * @return true if duration has finished
-         */
-        private fun countDown(): Boolean {
-            duration--
-            return duration <= 0
-        }
     }
 }

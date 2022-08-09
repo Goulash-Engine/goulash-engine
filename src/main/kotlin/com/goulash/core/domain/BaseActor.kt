@@ -16,10 +16,9 @@ class BaseActor(
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
     override val urges: Urges = Urges()
+    // TODO remove if [activity] is working
     override var currentActivity: String = ""
-
-    override fun tick() {
-    }
+    override var activity: Activity? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
