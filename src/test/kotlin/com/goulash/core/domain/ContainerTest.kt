@@ -2,10 +2,11 @@ package com.goulash.core.domain
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.goulash.core.ActivityRunner
 import com.goulash.core.ActivityManager
+import com.goulash.core.ActivityRunner
 import com.goulash.factory.BaseActorFactory
 import com.goulash.script.loader.ScriptLoader
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -21,29 +22,37 @@ internal class ContainerTest {
     }
 
     @Test
-    fun `should run the activity manager and after that the activity runner`() {
-        val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
+    fun `should not resolve an activity if there is one still running`() {
+        val actorMock: Actor = mockk(relaxed = true)
         val activityManagerMock: ActivityManager = mockk(relaxed = true)
         val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
-        val container = Container(actors = actors, activityManager = activityManagerMock)
+        every { activityManagerMock.resolve(actorMock) } returns mockk()
+        every { activityRunnerMock.isRunning() } returns true
+        every { actorMock.activityRunner } returns activityRunnerMock
+        val container = Container(actors = mutableListOf(actorMock), activityManager = activityManagerMock)
 
         container.tick()
 
         verifyOrder {
-            activityManagerMock.resolve(actors[0], onResolve = any())
-            activityRunnerMock.run(actors[0])
+            activityRunnerMock.isRunning()
+            actorMock.tick()
         }
+        verify(inverse = true) { activityManagerMock.resolve(actorMock) }
     }
 
     @Test
     fun `should run the activity manager for every actor in a container on every tick`() {
-        val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
+        val actorMock: Actor = mockk(relaxed = true)
         val activityManagerMock: ActivityManager = mockk(relaxed = true)
-        val container = Container(actors = actors, activityManager = activityManagerMock)
+        val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
+        val container = Container(actors = mutableListOf(actorMock), activityManager = activityManagerMock)
 
         container.tick()
 
-        verify { activityManagerMock.resolve(actors[0], onResolve = any()) }
+        verifyOrder {
+            activityManagerMock.resolve(actorMock)
+            actorMock.tick()
+        }
     }
 
     @Test

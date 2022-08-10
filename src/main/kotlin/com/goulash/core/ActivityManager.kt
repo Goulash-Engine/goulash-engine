@@ -8,20 +8,20 @@ import com.goulash.script.loader.ScriptLoader
  * Responsible for choosing the most relevant [Activity] for an actor.
  */
 class ActivityManager {
-    fun resolve(actor: Actor, onResolve: (activity: Activity) -> Unit) {
-        if (hasGlobalBlockerCondition(actor)) return
+    fun resolve(actor: Actor): Activity? {
+        if (hasGlobalBlockerCondition(actor)) return null
 
         val priorityActivity = actor.activities.find { isPrioritizedActivity(it, actor) }
         if (priorityActivity != null) {
             priorityActivity.init(actor)
-            onResolve(priorityActivity)
-            return
+            return priorityActivity
         }
 
         val urgentActivity = findUrgentActivity(actor)
         if (urgentActivity != null) {
-            onResolve(urgentActivity)
+            return urgentActivity
         }
+        return null
     }
 
     private fun isPrioritizedActivity(activity: Activity, context: Actor) = context.conditions.any {

@@ -20,13 +20,15 @@ class Container(
     fun tick() {
         ScriptLoader.containerScripts.forEach { it.process(this) }
         actors.forEach { actor ->
-            activityManager.resolve(actor) { activity ->
-                if (actor.activityRunner.isRunning()) {
-                    actor.tick()
-                } else {
-                    actor.activityRunner = activity.createRunner()
-                    actor.tick()
-                }
+            if (actor.activityRunner.isRunning()) {
+                actor.tick()
+                return
+            }
+
+            val activity = activityManager.resolve(actor)
+            if (activity != null) {
+                actor.activityRunner = activity.createRunner()
+                actor.tick()
             }
         }
     }
