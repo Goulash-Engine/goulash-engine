@@ -7,6 +7,7 @@ import com.goulash.core.SimulationContext
 import com.goulash.core.domain.Container
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Executors
 
@@ -22,7 +23,7 @@ internal class StandaloneRunnerTest {
         executor.submit {
             standaloneRunner.run(1000)
         }
-        Thread.sleep(2500)
+        Thread.sleep(2000)
         standaloneRunner.pause()
 
         assertThat(standaloneRunner.ticks).isEqualTo(2)
