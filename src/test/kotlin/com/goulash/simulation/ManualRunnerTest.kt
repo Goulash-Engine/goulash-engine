@@ -8,7 +8,6 @@ import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 
 internal class ManualRunnerTest {
-
     @Test
     fun `should reset ticks`() {
         val containerMock: Container = mockk(relaxed = true)

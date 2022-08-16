@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
-class ForestSimulation {
+class ForestSimulationTest {
 
     @Test
     fun `should run a simulation of dying trees`() {
