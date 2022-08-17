@@ -3,17 +3,18 @@ package com.goulash.simulation
 import com.goulash.core.domain.Container
 
 class ManualRunner(
-    private val containers: List<Container>
-) : SimulationRunner {
+    private var containers: List<Container>
+) {
     var ticks: Long = 0
         private set
 
-    override fun tick() {
+    fun tick() {
         containers.forEach(Container::tick)
         ticks++
     }
 
-    override fun reset() {
+    fun reset(containers: List<Container>) {
+        this.containers = containers
         ticks = 0
     }
 }

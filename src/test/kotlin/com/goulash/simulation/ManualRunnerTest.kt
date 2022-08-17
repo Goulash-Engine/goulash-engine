@@ -16,7 +16,7 @@ internal class ManualRunnerTest {
 
         manualRunner.tick()
         manualRunner.tick()
-        manualRunner.reset()
+        manualRunner.reset(listOf())
 
         assertThat(manualRunner.ticks).isEqualTo(0)
     }
