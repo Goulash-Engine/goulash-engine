@@ -15,7 +15,7 @@ internal class StandaloneRunnerTest {
     fun `should stop simulation`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val standaloneRunner = StandaloneRunner(listOf(containerMock, containerMock2))
+        val standaloneRunner = StandaloneRunner()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
@@ -32,7 +32,7 @@ internal class StandaloneRunnerTest {
     fun `should pause simulation`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val standaloneRunner = StandaloneRunner(listOf(containerMock, containerMock2))
+        val standaloneRunner = StandaloneRunner()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
@@ -50,7 +50,7 @@ internal class StandaloneRunnerTest {
     fun `should run for two seconds and have two ticks`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val standaloneRunner = StandaloneRunner(listOf(containerMock, containerMock2))
+        val standaloneRunner = StandaloneRunner()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {

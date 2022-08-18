@@ -3,9 +3,8 @@ package com.goulash.simulation
 import com.goulash.core.domain.Container
 import java.util.concurrent.TimeUnit
 
-class StandaloneRunner(
-    private val containers: List<Container>
-) {
+class StandaloneRunner {
+    private lateinit var containers: List<Container>
     var paused: Boolean = false
         private set
     var running: Boolean = false
