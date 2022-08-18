@@ -20,9 +20,9 @@ class ForestSimulationTest {
             BaseActorFactory.newActor("tree1")
         )
         val container = Container(actors = trees)
-        val manualRunner = ManualRunner(listOf(container))
+        val manualSimulationRunner = ManualSimulationRunner(listOf(container))
 
-        repeat(110) { manualRunner.tick() }
+        repeat(110) { manualSimulationRunner.tick() }
 
         assertThat(trees[0].state["hydration"]).isEqualTo(0.0)
         assertThat(trees[0].state["damage"]).isEqualTo(11.0)

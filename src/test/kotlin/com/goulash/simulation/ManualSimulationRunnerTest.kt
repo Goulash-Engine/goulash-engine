@@ -7,32 +7,32 @@ import io.mockk.mockk
 import io.mockk.verifyAll
 import org.junit.jupiter.api.Test
 
-internal class ManualRunnerTest {
+internal class ManualSimulationRunnerTest {
     @Test
     fun `should reset ticks`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val manualRunner = ManualRunner(listOf(containerMock, containerMock2))
+        val manualSimulationRunner = ManualSimulationRunner(listOf(containerMock, containerMock2))
 
-        manualRunner.tick()
-        manualRunner.tick()
-        manualRunner.reset(listOf())
+        manualSimulationRunner.tick()
+        manualSimulationRunner.tick()
+        manualSimulationRunner.reset(listOf())
 
-        assertThat(manualRunner.ticks).isEqualTo(0)
+        assertThat(manualSimulationRunner.ticks).isEqualTo(0)
     }
 
     @Test
     fun `should tick containers`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val manualRunner = ManualRunner(listOf(containerMock, containerMock2))
+        val manualSimulationRunner = ManualSimulationRunner(listOf(containerMock, containerMock2))
 
-        manualRunner.tick()
+        manualSimulationRunner.tick()
 
         verifyAll {
             containerMock.tick()
             containerMock2.tick()
         }
-        assertThat(manualRunner.ticks).isEqualTo(1)
+        assertThat(manualSimulationRunner.ticks).isEqualTo(1)
     }
 }
