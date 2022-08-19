@@ -25,11 +25,14 @@ dependencies {
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.4")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.0")
     implementation("org.springframework.boot:spring-boot-starter-web:2.7.2")
+
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
     testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
     testImplementation("com.willowtreeapps.assertk:assertk:0.25")
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.12.5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.2")
 }
 
 tasks.test {

@@ -38,13 +38,11 @@ class Simulation(
 
     private fun runSimulation() {
         SimulationContext.ticks++
-        WORLD_TIME.tick(tickBase)
         container.tick()
         TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
     }
 
     companion object {
         private val LOG = LoggerFactory.getLogger("Simulation")
-        val WORLD_TIME = WorldDate()
     }
 }

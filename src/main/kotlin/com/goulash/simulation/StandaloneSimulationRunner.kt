@@ -1,5 +1,6 @@
 package com.goulash.simulation
 
+import com.goulash.api.http.response.SimulationStatus
 import com.goulash.core.domain.Container
 import java.util.concurrent.TimeUnit
 
@@ -37,5 +38,14 @@ class StandaloneSimulationRunner {
         running = false
         paused = false
         ticks = 0
+    }
+
+    fun toStatus(): SimulationStatus {
+        return when {
+            paused -> SimulationStatus("paused", ticks)
+            running -> SimulationStatus("running", ticks)
+            !running -> SimulationStatus("not running", ticks)
+            else -> SimulationStatus("unknown", 0)
+        }
     }
 }
