@@ -9,58 +9,58 @@ import io.mockk.mockk
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Executors
 
-internal class StandaloneRunnerTest {
+internal class StandaloneSimulationRunnerTest {
 
     @Test
     fun `should stop simulation`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val standaloneRunner = StandaloneRunner()
+        val standaloneSimulationRunner = StandaloneSimulationRunner()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
-            standaloneRunner.run(listOf(containerMock, containerMock2), 10)
+            standaloneSimulationRunner.run(listOf(containerMock, containerMock2), 10)
         }
         Thread.sleep(50)
-        standaloneRunner.stop()
+        standaloneSimulationRunner.stop()
 
-        assertThat(standaloneRunner.running).isFalse()
-        assertThat(standaloneRunner.ticks).isEqualTo(0)
+        assertThat(standaloneSimulationRunner.running).isFalse()
+        assertThat(standaloneSimulationRunner.ticks).isEqualTo(0)
     }
 
     @Test
     fun `should pause simulation`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val standaloneRunner = StandaloneRunner()
+        val standaloneSimulationRunner = StandaloneSimulationRunner()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
-            standaloneRunner.run(listOf(containerMock, containerMock2), 1000)
+            standaloneSimulationRunner.run(listOf(containerMock, containerMock2), 1000)
         }
         Thread.sleep(50)
-        standaloneRunner.pause()
+        standaloneSimulationRunner.pause()
 
-        assertThat(standaloneRunner.paused).isTrue()
+        assertThat(standaloneSimulationRunner.paused).isTrue()
 
-        standaloneRunner.stop()
+        standaloneSimulationRunner.stop()
     }
 
     @Test
     fun `should run for two seconds and have two ticks`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val standaloneRunner = StandaloneRunner()
+        val standaloneSimulationRunner = StandaloneSimulationRunner()
 
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
-            standaloneRunner.run(listOf(containerMock, containerMock2), 1000)
+            standaloneSimulationRunner.run(listOf(containerMock, containerMock2), 1000)
         }
         Thread.sleep(2000)
-        standaloneRunner.pause()
+        standaloneSimulationRunner.pause()
 
-        assertThat(standaloneRunner.ticks).isEqualTo(2)
+        assertThat(standaloneSimulationRunner.ticks).isEqualTo(2)
 
-        standaloneRunner.stop()
+        standaloneSimulationRunner.stop()
     }
 }
