@@ -1,5 +1,7 @@
 package com.goulash.api.http
 
+import com.goulash.api.http.response.SimulationStatus
+import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Actor
 import com.goulash.core.domain.Container
 import com.goulash.simulation.StandaloneSimulationRunner
@@ -14,7 +16,7 @@ class StandaloneSimulationHttpApi {
     private val standaloneSimulationRunner = StandaloneSimulationRunner()
 
     @GetMapping("status")
-    fun simulationStatus() = standaloneSimulationRunner.toStatus()
+    fun simulationStatus() = SimulationHolder.simulation?.toStatus() ?: SimulationStatus("not running", 0)
 
     @PostMapping("start")
     fun startSimulation() {

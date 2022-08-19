@@ -1,21 +1,6 @@
 package com.goulash.actor.logic
 
-import assertk.assertThat
-import assertk.assertions.isEqualTo
 import com.goulash.core.ActivityManager
-import com.goulash.core.activity.Activity
-import com.goulash.core.domain.Actor
-import com.goulash.core.extension.toDuration
-import com.goulash.factory.BaseActorFactory
-import com.goulash.script.domain.ActivityScript
-import com.goulash.script.loader.ScriptLoader
-import io.mockk.every
-import io.mockk.justRun
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
-import io.mockk.verifyOrder
-import org.junit.jupiter.api.Test
 
 internal class ActivityManagerTest {
     private val activityManager = ActivityManager()

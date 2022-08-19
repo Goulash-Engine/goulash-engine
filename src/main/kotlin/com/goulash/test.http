@@ -1,11 +1,11 @@
 ### start simulation
-POST http://localhost:8080/simulation/start
+POST http://localhost:8080/simulation/standalone/start
 ### pause simulation
-POST http://localhost:8080/simulation/pause
+POST http://localhost:8080/simulation/standalone/pause
 ### stop simulation
-POST http://localhost:8080/simulation/stop
+POST http://localhost:8080/simulation/standalone/stop
 ### simulation status
-GET http://localhost:8080/simulation/status
+GET http://localhost:8080/simulation/standalone/status
 
 ### fetch container
 GET http://localhost:8080/container/root
@@ -14,7 +14,7 @@ GET http://localhost:8080/container/root
 GET http://localhost:8080/actors?container=root
 
 ### get world date
-GET http://localhost:8080/simulation/time
+GET http://localhost:8080/simulation/standalone/time
 
 ### register actor
 POST http://localhost:8080/actors/tree-03

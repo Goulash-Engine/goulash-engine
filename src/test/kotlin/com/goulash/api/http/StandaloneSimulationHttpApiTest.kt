@@ -3,6 +3,9 @@ package com.goulash.api.http
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.goulash.api.http.response.SimulationStatus
+import com.goulash.core.SimulationHolder
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,6 +21,11 @@ internal class StandaloneSimulationHttpApiTest {
 
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
+
+    @AfterEach
+    fun tearDown() {
+        SimulationHolder.simulation = null
+    }
 
     @Test
     fun `should start simulation`() {

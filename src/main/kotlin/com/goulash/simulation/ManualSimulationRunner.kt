@@ -1,5 +1,7 @@
 package com.goulash.simulation
 
+import com.goulash.api.http.response.SimulationStatus
+import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Container
 
 /**
@@ -7,7 +9,16 @@ import com.goulash.core.domain.Container
  */
 class ManualSimulationRunner(
     private var containers: List<Container>
-) {
+) : SimulationRunner {
+
+    override fun getContainers(): List<Container> {
+        return this.containers
+    }
+
+    init {
+        SimulationHolder.simulation = this
+    }
+
     /**
      * The ticks that have been simulated so far.
      */
@@ -29,5 +40,15 @@ class ManualSimulationRunner(
     fun reset(containers: List<Container>) {
         this.containers = containers
         ticks = 0
+    }
+
+    fun stop() {
+        this.containers = emptyList()
+        ticks = 0
+        SimulationHolder.simulation = null
+    }
+
+    override fun toStatus(): SimulationStatus {
+        return SimulationStatus("manual", ticks)
     }
 }

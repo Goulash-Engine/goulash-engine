@@ -1,6 +1,6 @@
 package com.goulash.api.service
 
-import com.goulash.core.SimulationContext
+import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Container
 import com.goulash.factory.BaseActorFactory
 import org.slf4j.LoggerFactory
@@ -15,13 +15,17 @@ class ActorService {
      */
     fun registerActor(key: String, containerId: String = Container.ROOT_CONTAINER) {
         require(key.isNotBlank()) { "Key must not be blank." }
-        if (!SimulationContext.isRunning()) {
+        if (SimulationHolder.simulation == null) {
+            LOG.error("No running Simulation found")
+            return
+        }
+        if (SimulationHolder.simulation?.toStatus()?.status != "running") {
             LOG.error("Simulation is not running")
             return
         }
-        val container = SimulationContext.simulation?.container
+        val container = SimulationHolder.simulation?.getContainers()?.find { it.id == containerId }
         if (container == null) {
-            LOG.error("No simulation context found. Cannot register actor.")
+            LOG.error("No container found for id $containerId")
             return
         }
         val actorExists = container.actors.any { it.key == key }

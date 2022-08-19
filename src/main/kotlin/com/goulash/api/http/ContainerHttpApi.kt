@@ -1,6 +1,6 @@
 package com.goulash.api.http
 
-import com.goulash.core.SimulationContext
+import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Container
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,8 +13,8 @@ class ContainerHttpApi {
 
     @GetMapping("root")
     fun getRootContainer(): Container? {
-        check(SimulationContext.isRunning()) { "Simulation is not running" }
-        val container = SimulationContext.simulation?.container
+        check(SimulationHolder.simulation?.toStatus()?.status != "running") { "Simulation is not running" }
+        val container = SimulationHolder.simulation?.getContainers()?.find { it.id == Container.ROOT_CONTAINER }
         if (container == null) {
             LOG.error("Container is null")
             return null

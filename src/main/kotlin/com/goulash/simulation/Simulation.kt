@@ -1,6 +1,6 @@
 package com.goulash.simulation
 
-import com.goulash.core.SimulationContext
+import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Container
 import com.goulash.core.domain.WorldDate
 import org.slf4j.LoggerFactory
@@ -21,13 +21,13 @@ class Simulation(
     fun run() {
         if (maximumTicks != null) {
             repeat(maximumTicks) {
-                while (SimulationContext.paused) {
+                while (SimulationHolder.paused) {
                 }
                 runSimulation()
             }
         } else {
-            while (!SimulationContext.stopped) {
-                while (SimulationContext.paused) {
+            while (!SimulationHolder.stopped) {
+                while (SimulationHolder.paused) {
                 }
                 runSimulation()
             }
@@ -37,7 +37,7 @@ class Simulation(
     }
 
     private fun runSimulation() {
-        SimulationContext.ticks++
+        SimulationHolder.ticks++
         container.tick()
         TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
     }

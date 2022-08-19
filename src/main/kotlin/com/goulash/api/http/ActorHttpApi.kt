@@ -3,7 +3,8 @@ package com.goulash.api.http
 import com.goulash.api.http.response.ActorState
 import com.goulash.api.http.response.toResponse
 import com.goulash.api.service.ActorService
-import com.goulash.core.SimulationContext
+import com.goulash.core.SimulationHolder
+import com.goulash.core.domain.Container
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,14 +21,14 @@ class ActorHttpApi(
 
     @GetMapping("")
     fun getActorsForContainer(@RequestParam container: String): List<ActorState> {
-        if (!SimulationContext.isRunning()) {
+        if (SimulationHolder.simulation?.toStatus()?.status == "running") {
             LOG.warn("Simulation is not running")
             return emptyList()
         }
 
         return when (container) {
             "root" -> {
-                val rootContainer = SimulationContext.simulation?.container
+                val rootContainer = SimulationHolder.simulation?.getContainers()?.find { it.id == Container.ROOT_CONTAINER }
                 if (rootContainer == null) {
                     LOG.error("Container is null")
                     return emptyList<ActorState>()
