@@ -21,8 +21,8 @@ class ActorHttpApi(
 
     @GetMapping("")
     fun getActorsForContainer(@RequestParam container: String): List<ActorState> {
-        if (SimulationHolder.simulation?.toStatus()?.status == "running") {
-            LOG.warn("Simulation is not running")
+        if (SimulationHolder.simulation?.toStatus()?.status != "running") {
+            LOG.trace("Simulation is not running")
             return emptyList()
         }
 
