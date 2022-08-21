@@ -12,7 +12,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import java.util.concurrent.Executors
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-internal class StandaloneSimulationHttpApiTest {
+internal class ManualSimulationHttpApiTest {
+
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
 
@@ -22,20 +23,33 @@ internal class StandaloneSimulationHttpApiTest {
     }
 
     @Test
+    fun `should tick simulation`() {
+        val executor = Executors.newSingleThreadExecutor()
+        executor.submit {
+            testRestTemplate.postForEntity("/simulation/manual/start", Any::class.java, Any::class.java)
+        }
+        Thread.sleep(500)
+        testRestTemplate.postForEntity("/simulation/manual/tick", Any::class.java, Any::class.java)
+
+        val simulationStatus = testRestTemplate.getForObject("/simulation/manual/status", SimulationStatus::class.java)
+        assertThat(simulationStatus.ticks).isEqualTo(1)
+    }
+
+    @Test
     fun `should start simulation`() {
         val executor = Executors.newSingleThreadExecutor()
         executor.submit {
-            testRestTemplate.postForEntity("/simulation/standalone/start", Any::class.java, Any::class.java)
+            testRestTemplate.postForEntity("/simulation/manual/start", Any::class.java, Any::class.java)
         }
         Thread.sleep(500)
 
-        val simulationStatus = testRestTemplate.getForObject("/simulation/standalone/status", SimulationStatus::class.java)
-        assertThat(simulationStatus.status).isEqualTo("running")
+        val simulationStatus = testRestTemplate.getForObject("/simulation/manual/status", SimulationStatus::class.java)
+        assertThat(simulationStatus.status).isEqualTo("manual")
     }
 
     @Test
     fun `should check status for not running simulation`() {
-        val simulationStatus = testRestTemplate.getForObject("/simulation/standalone/status", SimulationStatus::class.java)
+        val simulationStatus = testRestTemplate.getForObject("/simulation/manual/status", SimulationStatus::class.java)
 
         assertThat(simulationStatus.status).isEqualTo("not running")
     }
