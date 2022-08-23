@@ -31,7 +31,7 @@ internal class ManualSimulationHttpApiTest {
         Thread.sleep(500)
         testRestTemplate.postForEntity("/simulation/manual/tick", Any::class.java, Any::class.java)
 
-        val simulationStatus = testRestTemplate.getForObject("/simulation/manual/status", SimulationStatus::class.java)
+        val simulationStatus = testRestTemplate.getForObject("/simulation/status", SimulationStatus::class.java)
         assertThat(simulationStatus.ticks).isEqualTo(1)
     }
 
@@ -43,13 +43,13 @@ internal class ManualSimulationHttpApiTest {
         }
         Thread.sleep(500)
 
-        val simulationStatus = testRestTemplate.getForObject("/simulation/manual/status", SimulationStatus::class.java)
+        val simulationStatus = testRestTemplate.getForObject("/simulation/status", SimulationStatus::class.java)
         assertThat(simulationStatus.status).isEqualTo("manual")
     }
 
     @Test
     fun `should check status for not running simulation`() {
-        val simulationStatus = testRestTemplate.getForObject("/simulation/manual/status", SimulationStatus::class.java)
+        val simulationStatus = testRestTemplate.getForObject("/simulation/status", SimulationStatus::class.java)
 
         assertThat(simulationStatus.status).isEqualTo("not running")
     }

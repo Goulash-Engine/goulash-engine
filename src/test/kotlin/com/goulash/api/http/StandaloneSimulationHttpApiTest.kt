@@ -29,13 +29,13 @@ internal class StandaloneSimulationHttpApiTest {
         }
         Thread.sleep(500)
 
-        val simulationStatus = testRestTemplate.getForObject("/simulation/standalone/status", SimulationStatus::class.java)
+        val simulationStatus = testRestTemplate.getForObject("/simulation/status", SimulationStatus::class.java)
         assertThat(simulationStatus.status).isEqualTo("running")
     }
 
     @Test
     fun `should check status for not running simulation`() {
-        val simulationStatus = testRestTemplate.getForObject("/simulation/standalone/status", SimulationStatus::class.java)
+        val simulationStatus = testRestTemplate.getForObject("/simulation/status", SimulationStatus::class.java)
 
         assertThat(simulationStatus.status).isEqualTo("not running")
     }

@@ -5,5 +5,5 @@ import com.goulash.core.domain.Container
 
 interface SimulationRunner {
     fun getContainers(): List<Container>
-    fun toStatus(): SimulationStatus
+    fun toStatus(): SimulationStatus = SimulationStatus("not running", 0)
 }

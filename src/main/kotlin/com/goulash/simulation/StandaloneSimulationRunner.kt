@@ -23,7 +23,9 @@ class StandaloneSimulationRunner : SimulationRunner {
         running = true
         this.containers = containers
         SimulationHolder.simulation = this
-        while (!paused) {
+        while (running) {
+            while (paused) {
+            }
             this.containers.forEach(Container::tick)
             ticks++
             TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
@@ -31,15 +33,7 @@ class StandaloneSimulationRunner : SimulationRunner {
     }
 
     fun pause() {
-        if (running) {
-            paused = true
-        }
-    }
-
-    fun `continue`() {
-        if (running) {
-            paused = false
-        }
+        paused = !paused
     }
 
     fun stop() {

@@ -19,7 +19,7 @@ class ActorService {
             LOG.error("No running Simulation found")
             return
         }
-        if (SimulationHolder.simulation?.toStatus()?.status != "running") {
+        if (SimulationHolder.simulation?.toStatus()?.status == "not running") {
             LOG.error("Simulation is not running")
             return
         }
