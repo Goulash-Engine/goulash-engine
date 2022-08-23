@@ -8,7 +8,8 @@ import com.goulash.core.domain.Container
  * The simulation runner for manual tick control.
  */
 class ManualSimulationRunner(
-    private var containers: List<Container>
+    private var containers: List<Container>,
+    private val containerRunner: ContainerRunner = ContainerRunner()
 ) : SimulationRunner {
 
     override fun getContainers(): List<Container> {
@@ -17,6 +18,7 @@ class ManualSimulationRunner(
 
     init {
         SimulationHolder.simulation = this
+        containers.forEach(containerRunner::register)
     }
 
     /**
@@ -29,7 +31,7 @@ class ManualSimulationRunner(
      * Will execute a tick for this simulation manually.
      */
     fun tick() {
-        containers.forEach(Container::tick)
+        containerRunner.tick()
         ticks++
     }
 

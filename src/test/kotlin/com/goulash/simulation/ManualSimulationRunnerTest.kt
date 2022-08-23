@@ -25,13 +25,15 @@ internal class ManualSimulationRunnerTest {
     fun `should tick containers`() {
         val containerMock: Container = mockk(relaxed = true)
         val containerMock2: Container = mockk(relaxed = true)
-        val manualSimulationRunner = ManualSimulationRunner(listOf(containerMock, containerMock2))
+        val containerRunnerMock: ContainerRunner = mockk(relaxed = true)
+        val manualSimulationRunner = ManualSimulationRunner(listOf(containerMock, containerMock2), containerRunnerMock)
 
         manualSimulationRunner.tick()
 
         verifyAll {
-            containerMock.tick()
-            containerMock2.tick()
+            containerRunnerMock.register(containerMock)
+            containerRunnerMock.register(containerMock2)
+            containerRunnerMock.tick()
         }
         assertThat(manualSimulationRunner.ticks).isEqualTo(1)
     }

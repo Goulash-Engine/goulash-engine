@@ -6,7 +6,9 @@ import com.goulash.core.domain.Container
 import com.goulash.script.loader.ScriptLoader
 import java.util.concurrent.TimeUnit
 
-class StandaloneSimulationRunner : SimulationRunner {
+class StandaloneSimulationRunner(
+    private val containerRunner: ContainerRunner = ContainerRunner()
+) : SimulationRunner {
     private lateinit var containers: List<Container>
 
     var paused: Boolean = false
@@ -21,6 +23,7 @@ class StandaloneSimulationRunner : SimulationRunner {
     }
 
     fun run(containers: List<Container>, millisecondsPerTick: Long) {
+        containers.forEach(containerRunner::register)
         ScriptLoader.load()
         running = true
         this.containers = containers
@@ -28,7 +31,7 @@ class StandaloneSimulationRunner : SimulationRunner {
         while (running) {
             while (paused) {
             }
-            this.containers.forEach(Container::tick)
+            containerRunner.tick()
             ticks++
             TimeUnit.MILLISECONDS.sleep(millisecondsPerTick)
         }

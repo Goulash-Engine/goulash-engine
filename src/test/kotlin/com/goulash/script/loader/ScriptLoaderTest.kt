@@ -18,16 +18,16 @@ internal class ScriptLoaderTest {
 
     @Test
     fun `should clear loaded scripts when loading`() {
-        val containerScript = ContainerScript("test", { _ -> {} }, { _ -> {} })
+        val containerScript = ContainerScript("test", { _ -> run {} }, { _ -> run {} })
         ScriptLoader.containerScripts = listOf(containerScript)
         ScriptLoader.activityScripts = listOf(
             ActivityScript(
                 "test",
                 mapOf(),
-                { _ -> {} },
+                { _ -> run {} },
                 { _ -> false },
-                { _ -> {} },
-                { _ -> {} }
+                { _ -> run {} },
+                { _ -> run {} }
             )
         )
         ScriptLoader.load()

@@ -1,6 +1,5 @@
 package com.goulash.core
 
-import com.goulash.simulation.Simulation
 import com.goulash.simulation.SimulationRunner
 
 /**
