@@ -1,4 +1,5 @@
 package com.goulash.script.loader
+
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.parser.ParseException
 import com.goulash.script.domain.ActivityScript
@@ -25,6 +26,10 @@ object ScriptLoader {
     var activityScripts: List<ActivityScript> = listOf()
 
     internal fun load() {
+        // reset old loaded scripts
+        containerScripts = listOf()
+        activityScripts = listOf()
+
         val root = "scripts"
         val configDir = "$root/configurations"
         val activityDir = "$root/activities"

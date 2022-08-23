@@ -3,6 +3,7 @@ package com.goulash.simulation
 import com.goulash.api.http.response.SimulationStatus
 import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Container
+import com.goulash.script.loader.ScriptLoader
 import java.util.concurrent.TimeUnit
 
 class StandaloneSimulationRunner : SimulationRunner {
@@ -20,6 +21,7 @@ class StandaloneSimulationRunner : SimulationRunner {
     }
 
     fun run(containers: List<Container>, millisecondsPerTick: Long) {
+        ScriptLoader.load()
         running = true
         this.containers = containers
         SimulationHolder.simulation = this

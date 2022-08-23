@@ -4,6 +4,8 @@ import assertk.assertThat
 import assertk.assertions.containsAll
 import assertk.assertions.isEmpty
 import assertk.assertions.isNotEmpty
+import com.goulash.script.domain.ActivityScript
+import com.goulash.script.domain.ContainerScript
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -12,6 +14,26 @@ internal class ScriptLoaderTest {
     @BeforeEach
     fun setup() {
         ScriptLoader.resetLoader()
+    }
+
+    @Test
+    fun `should clear loaded scripts when loading`() {
+        val containerScript = ContainerScript("test", { _ -> {} }, { _ -> {} })
+        ScriptLoader.containerScripts = listOf(containerScript)
+        ScriptLoader.activityScripts = listOf(
+            ActivityScript(
+                "test",
+                mapOf(),
+                { _ -> {} },
+                { _ -> false },
+                { _ -> {} },
+                { _ -> {} }
+            )
+        )
+        ScriptLoader.load()
+
+        assertThat(ScriptLoader.getContainerScripts()).isEmpty()
+        assertThat(ScriptLoader.getActivityScripts()).isEmpty()
     }
 
     @Test
@@ -34,6 +56,7 @@ internal class ScriptLoaderTest {
 
         assertThat(ScriptLoader.getContainerScripts()).isNotEmpty()
     }
+
     @Test
     fun `should load activity script file`(@TempDir tempDir: java.io.File) {
         val config = tempDir.resolve("activity.gsh")
