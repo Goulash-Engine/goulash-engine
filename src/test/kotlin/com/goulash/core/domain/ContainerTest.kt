@@ -13,10 +13,10 @@ internal class ContainerTest {
         val container = Container(actors = mutableListOf(actorMock, actorMock2))
 
         container.mutateActors { actors ->
-            actors.forEach { it.tick() }
+            actors.forEach { it.urges.getAllUrges() }
         }
 
-        verify { actorMock.tick() }
-        verify { actorMock2.tick() }
+        verify { actorMock.urges.getAllUrges() }
+        verify { actorMock2.urges.getAllUrges() }
     }
 }

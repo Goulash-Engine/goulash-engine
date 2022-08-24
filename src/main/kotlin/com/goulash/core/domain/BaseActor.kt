@@ -1,7 +1,6 @@
 package com.goulash.core.domain
 
 import com.goulash.actor.activity.IdleActivity
-import com.goulash.core.ActivityRunner
 import com.goulash.core.activity.Activity
 import com.goulash.factory.ActorNameFactory
 import java.util.UUID
@@ -18,15 +17,7 @@ class BaseActor(
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
     override var urges: Urges = Urges()
-
-    // TODO remove if [activity] is working
-    override var currentActivity: String = ""
-    override var activityRunner: ActivityRunner = ActivityRunner(IdleActivity(), 0.0)
-
-    override fun tick() {
-        // TODO: move script logic to ContainerRunner
-        activityRunner.run(this)
-    }
+    override var activity: Activity = IdleActivity()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -46,7 +37,6 @@ class BaseActor(
     override fun copy() = BaseActor(name, id, key, activities.toList(), conditions.toMutableSet(), state.toMutableMap())
         .also {
             it.urges = this.urges.copy()
-            it.currentActivity = this.currentActivity
-            it.activityRunner = this.activityRunner
+            it.activity = this.activity
         }
 }

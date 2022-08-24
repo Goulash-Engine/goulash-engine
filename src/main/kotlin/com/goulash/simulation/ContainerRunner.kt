@@ -1,8 +1,9 @@
 package com.goulash.simulation
 
+import com.goulash.actor.activity.IdleActivity
+import com.goulash.core.ActivityRunner
 import com.goulash.core.ActivitySelector
 import com.goulash.core.domain.Container
-import com.goulash.script.extension.ActivityExtensions.createRunner
 import com.goulash.script.loader.ScriptLoader
 import org.slf4j.LoggerFactory
 
@@ -10,7 +11,8 @@ import org.slf4j.LoggerFactory
  * Responsible for the tick execution of all given containers.
  */
 class ContainerRunner(
-    private val activitySelector: ActivitySelector = ActivitySelector()
+    private val activitySelector: ActivitySelector = ActivitySelector(),
+    private val activityRunner: ActivityRunner = ActivityRunner()
 ) {
     private val containers: MutableList<Container> = mutableListOf()
 
@@ -29,14 +31,13 @@ class ContainerRunner(
         containers.forEach { container ->
             container.mutateActors { actors ->
                 actors.forEach { actor ->
-                    if (actor.activityRunner.isRunning()) {
-                        actor.tick()
+                    if (activityRunner.isRunning()) {
+                        activityRunner.`continue`(actor)
                     } else {
                         val activity = activitySelector.select(actor)
                         if (activity != null) {
-                            actor.activityRunner = activity.createRunner()
                             activity.init(actor)
-                            actor.tick()
+                            activityRunner.start(actor, activity)
                         }
                     }
                 }

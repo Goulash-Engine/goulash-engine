@@ -19,7 +19,11 @@ import org.junit.jupiter.api.io.TempDir
 
 internal class ContainerRunnerTest {
     private val activitySelectorMock = mockk<ActivitySelector>(relaxed = true)
-    private val containerRunner = ContainerRunner(activitySelector = activitySelectorMock)
+    private val activityRunnerMock = mockk<ActivityRunner>(relaxed = true)
+    private val containerRunner = ContainerRunner(
+        activitySelector = activitySelectorMock,
+        activityRunner = activityRunnerMock
+    )
 
     @BeforeEach
     fun setup() {
@@ -39,7 +43,7 @@ internal class ContainerRunnerTest {
         verifyOrder {
             activitySelectorMock.select(actorMock)
             activityMock.init(actorMock)
-            actorMock.tick()
+            activityRunnerMock.start(actorMock, activityMock)
         }
     }
 
@@ -47,9 +51,9 @@ internal class ContainerRunnerTest {
     fun `should not resolve an activity if there is one still running`() {
         val actorMock: Actor = mockk(relaxed = true)
         val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
-        every { activitySelectorMock.select(actorMock) } returns mockk()
+        val activityMock: Activity = mockk(relaxed = true)
+        every { activitySelectorMock.select(actorMock) } returns activityMock
         every { activityRunnerMock.isRunning() } returns true
-        every { actorMock.activityRunner } returns activityRunnerMock
         val container = Container(actors = mutableListOf(actorMock))
 
         containerRunner.register(container)
@@ -57,7 +61,7 @@ internal class ContainerRunnerTest {
 
         verifyOrder {
             activityRunnerMock.isRunning()
-            actorMock.tick()
+            activityRunnerMock.start(actorMock, activityMock)
         }
         verify(inverse = true) { activitySelectorMock.select(actorMock) }
     }
@@ -66,13 +70,14 @@ internal class ContainerRunnerTest {
     fun `should run the activity manager for every actor in a container on every tick`() {
         val actorMock: Actor = mockk(relaxed = true)
         val container = Container(actors = mutableListOf(actorMock))
+        val activityMock: Activity = mockk(relaxed = true)
 
         containerRunner.register(container)
         containerRunner.tick()
 
         verifyOrder {
             activitySelectorMock.select(actorMock)
-            actorMock.tick()
+            activityRunnerMock.start(actorMock, activityMock)
         }
     }
 

@@ -13,6 +13,7 @@ interface Activity {
     /**
      * A blacklist conditions that prevents the [Activity] from being triggered
      */
+    fun requirements(): MutableList<String> = mutableListOf()
     fun blockerConditions(): List<String> = listOf()
 
     /**

@@ -1,5 +1,6 @@
 package com.goulash.core
 
+import com.goulash.actor.activity.IdleActivity
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
 
@@ -7,39 +8,83 @@ import com.goulash.core.domain.Actor
  * Executes activity logic and determines if an activity is either running, aborted or finished
  * and therefore executes lifecycle logic.
  */
-class ActivityRunner(
-    private val activity: Activity,
+class ActivityRunner {
     private var duration: Double = 0.0
-) {
-    fun run(actor: Actor) {
-        if (isRunning()) {
-            if (containsAbortCondition(actor, activity)) {
-                abort(actor)
-                return
-            }
+    private var shouldAbort: Boolean = false
 
-            val shouldContinue = activity.act(actor)
-            if (!shouldContinue) {
-                abort(actor)
-                return
-            }
-
-            actor.currentActivity = activity.activity()
-            val hasFinished = countDown()
-            if (hasFinished) {
-                activity.onFinish(actor)
-                return
-            }
+    fun `continue`(actor: Actor) {
+        if (containsAbortCondition(actor)) {
+            abort(actor)
+            return
         }
+
+        if (hasFinished()) {
+            finish(actor)
+            return
+        }
+
+        if (shouldAbort) {
+            abort(actor)
+            return
+        }
+
+        if (hasUnfulfilledRequirement(actor)) {
+            return
+        }
+
+        shouldAbort = !actor.activity.act(actor)
+        countDown()
+
+        if (hasFinished()) {
+            finish(actor)
+            return
+        }
+    }
+
+    fun start(actor: Actor, newActivity: Activity) {
+        actor.activity = newActivity
+        if (containsAbortCondition(actor)) {
+            abort(actor)
+            return
+        }
+
+        duration = actor.activity.duration().asDouble()
+        if (hasUnfulfilledRequirement(actor)) {
+            return
+        }
+
+        // skip activity if duration is 0
+        if (duration == 0.0) {
+            return
+        }
+
+        shouldAbort = !actor.activity.act(actor)
+        countDown()
+
+        if (hasFinished()) {
+            finish(actor)
+            return
+        }
+    }
+
+    private fun hasUnfulfilledRequirement(actor: Actor): Boolean {
+        return actor.activity.requirements().isNotEmpty()
+    }
+
+    private fun finish(actor: Actor) {
+        duration = 0.0
+        actor.activity.onFinish(actor)
+        actor.activity = IdleActivity()
     }
 
     private fun abort(actor: Actor) {
         duration = 0.0
-        activity.onAbort(actor)
+        actor.activity.onAbort(actor)
+        actor.activity = IdleActivity()
     }
 
-    private fun containsAbortCondition(actor: Actor, activity: Activity) =
-        actor.conditions.any { actorCondition -> activity.abortConditions().contains(actorCondition) }
+    private fun containsAbortCondition(actor: Actor) =
+        actor.conditions.any { actorCondition -> actor.activity.abortConditions().contains(actorCondition) }
 
     private fun isFinished(): Boolean {
         return duration <= 0
@@ -51,10 +96,12 @@ class ActivityRunner(
 
     /**
      * Decrease duration
-     * @return true if duration has finished
      */
-    private fun countDown(): Boolean {
+    private fun countDown() {
         duration--
+    }
+
+    private fun hasFinished(): Boolean {
         return duration <= 0
     }
 }
