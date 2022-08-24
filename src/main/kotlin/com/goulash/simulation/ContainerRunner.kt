@@ -1,6 +1,5 @@
 package com.goulash.simulation
 
-import com.goulash.actor.activity.IdleActivity
 import com.goulash.core.ActivityRunner
 import com.goulash.core.ActivitySelector
 import com.goulash.core.domain.Container
@@ -31,14 +30,14 @@ class ContainerRunner(
         containers.forEach { container ->
             container.mutateActors { actors ->
                 actors.forEach { actor ->
-                    if (activityRunner.isRunning()) {
-                        activityRunner.`continue`(actor)
-                    } else {
+                    if (activityRunner.hasEnded(actor)) {
                         val activity = activitySelector.select(actor)
                         if (activity != null) {
                             activity.init(actor)
                             activityRunner.start(actor, activity)
                         }
+                    } else {
+                        activityRunner.`continue`(actor)
                     }
                 }
             }

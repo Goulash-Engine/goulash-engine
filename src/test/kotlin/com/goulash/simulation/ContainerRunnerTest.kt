@@ -12,6 +12,7 @@ import com.goulash.script.loader.ScriptLoader
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyAll
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,6 +36,7 @@ internal class ContainerRunnerTest {
         val actorMock: Actor = mockk(relaxed = true)
         val activityMock: Activity = mockk(relaxed = true)
         every { activitySelectorMock.select(actorMock) } returns activityMock
+        every { activityRunnerMock.hasEnded(any()) } returns true
         val container = Container(actors = mutableListOf(actorMock))
 
         containerRunner.register(container)
@@ -50,35 +52,32 @@ internal class ContainerRunnerTest {
     @Test
     fun `should not resolve an activity if there is one still running`() {
         val actorMock: Actor = mockk(relaxed = true)
-        val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
         val activityMock: Activity = mockk(relaxed = true)
         every { activitySelectorMock.select(actorMock) } returns activityMock
-        every { activityRunnerMock.isRunning() } returns true
+        every { activityRunnerMock.hasEnded(actorMock) } returns false
         val container = Container(actors = mutableListOf(actorMock))
 
         containerRunner.register(container)
         containerRunner.tick()
 
-        verifyOrder {
-            activityRunnerMock.isRunning()
-            activityRunnerMock.start(actorMock, activityMock)
-        }
+        verify { activityRunnerMock.`continue`(actorMock) }
         verify(inverse = true) { activitySelectorMock.select(actorMock) }
     }
 
     @Test
-    fun `should run the activity manager for every actor in a container on every tick`() {
-        val actorMock: Actor = mockk(relaxed = true)
-        val container = Container(actors = mutableListOf(actorMock))
-        val activityMock: Activity = mockk(relaxed = true)
+    fun `should run the activity selector for every actor in a container on every tick`() {
+        val actorMock: Actor = mockk(name = "foo", relaxed = true)
+        val actorMock2: Actor = mockk(name = "bar", relaxed = true)
+        val container = Container(actors = mutableListOf(actorMock, actorMock2))
+        every { activityRunnerMock.hasEnded(any()) } returns true
 
         containerRunner.register(container)
         containerRunner.tick()
 
-        verifyOrder {
-            activitySelectorMock.select(actorMock)
-            activityRunnerMock.start(actorMock, activityMock)
-        }
+        verify { activitySelectorMock.select(actorMock) }
+        verify { activitySelectorMock.select(actorMock2) }
+        verify { activityRunnerMock.start(actorMock, any()) }
+        verify { activityRunnerMock.start(actorMock2, any()) }
     }
 
     @Test

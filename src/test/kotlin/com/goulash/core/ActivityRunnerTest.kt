@@ -6,11 +6,52 @@ import com.goulash.factory.BaseActorFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyAll
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 
 internal class ActivityRunnerTest {
     private val activityRunner = ActivityRunner()
+
+    @Test
+    fun `should only abort for a separate actor`() {
+        val testActor = BaseActorFactory.testActor()
+        val testActor2 = BaseActorFactory.testActor()
+        val mockedActivity: Activity = mockk(relaxed = true)
+        every { mockedActivity.duration() } returns 3.0.toDuration()
+        every { mockedActivity.act(testActor) } returns true
+        every { mockedActivity.act(testActor2) } returnsMany listOf(true, false)
+
+        activityRunner.start(testActor, mockedActivity)
+        activityRunner.start(testActor2, mockedActivity)
+        repeat(2) { activityRunner.`continue`(testActor) }
+        repeat(2) { activityRunner.`continue`(testActor2) }
+
+        verify(atMost = 3) { mockedActivity.act(testActor) }
+        verify(atMost = 1) { mockedActivity.onFinish(testActor) }
+        verify(atMost = 2) { mockedActivity.act(testActor2) }
+        verify(atMost = 1) { mockedActivity.onAbort(testActor2) }
+    }
+
+    @Test
+    fun `should separately count down duration of activity for every actor`() {
+        val testActor = BaseActorFactory.testActor()
+        val testActor2 = BaseActorFactory.testActor()
+        val mockedActivity: Activity = mockk(relaxed = true)
+        every { mockedActivity.duration() } returns 3.0.toDuration()
+        every { mockedActivity.act(testActor) } returns true
+        every { mockedActivity.act(testActor2) } returns true
+
+        activityRunner.start(testActor, mockedActivity)
+        activityRunner.start(testActor2, mockedActivity)
+        repeat(2) { activityRunner.`continue`(testActor) }
+        repeat(2) { activityRunner.`continue`(testActor2) }
+
+        verify(atMost = 3) { mockedActivity.act(testActor) }
+        verify(atMost = 1) { mockedActivity.onFinish(testActor) }
+        verify(atMost = 3) { mockedActivity.act(testActor2) }
+        verify(atMost = 1) { mockedActivity.onFinish(testActor2) }
+    }
 
     @Test
     fun `should not run if requirement exists`() {

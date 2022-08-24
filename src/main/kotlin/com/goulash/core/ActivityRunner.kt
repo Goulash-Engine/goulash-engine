@@ -9,23 +9,24 @@ import com.goulash.core.domain.Actor
  * and therefore executes lifecycle logic.
  */
 class ActivityRunner {
-    private var duration: Double = 0.0
-    private var shouldAbort: Boolean = false
+    // TODO: create map to associate activity with actor
+    private val activityDurations: MutableMap<Actor, Double> = mutableMapOf()
+    private val activityAbortStates: MutableMap<Actor, Boolean> = mutableMapOf()
 
     fun `continue`(actor: Actor) {
         // @formatter:off
         when {
+            hasEnded(actor) ->  return
             containsAbortCondition(actor) -> { abort(actor); return }
-            hasFinished() -> { finish(actor); return }
-            shouldAbort -> { abort(actor); return }
+            activityAbortStates[actor]?: false -> { abort(actor); return }
             hasUnfulfilledRequirement(actor) -> return
         }
         // @formatter:on
 
-        shouldAbort = !actor.activity.act(actor)
-        countDown()
+        activityAbortStates[actor] = !actor.activity.act(actor)
+        countDown(actor)
 
-        if (hasFinished()) {
+        if (hasEnded(actor)) {
             finish(actor)
             return
         }
@@ -39,20 +40,20 @@ class ActivityRunner {
             return
         }
 
-        duration = actor.activity.duration().asDouble()
+        activityDurations[actor] = actor.activity.duration().asDouble()
         if (hasUnfulfilledRequirement(actor)) {
             return
         }
 
         // skip activity if duration is 0
-        if (duration == 0.0) {
+        if (activityDurations[actor] == 0.0) {
             return
         }
 
-        shouldAbort = !actor.activity.act(actor)
-        countDown()
+        activityAbortStates[actor] = !actor.activity.act(actor)
+        countDown(actor)
 
-        if (hasFinished()) {
+        if (hasEnded(actor)) {
             finish(actor)
             return
         }
@@ -63,13 +64,13 @@ class ActivityRunner {
     }
 
     private fun finish(actor: Actor) {
-        duration = 0.0
+        activityDurations[actor] = 0.0
         actor.activity.onFinish(actor)
         actor.activity = IdleActivity()
     }
 
     private fun abort(actor: Actor) {
-        duration = 0.0
+        activityDurations[actor] = 0.0
         actor.activity.onAbort(actor)
         actor.activity = IdleActivity()
     }
@@ -77,22 +78,17 @@ class ActivityRunner {
     private fun containsAbortCondition(actor: Actor) =
         actor.conditions.any { actorCondition -> actor.activity.abortConditions().contains(actorCondition) }
 
-    private fun isFinished(): Boolean {
-        return duration <= 0
-    }
-
-    fun isRunning(): Boolean {
-        return !isFinished()
+    fun hasEnded(actor: Actor): Boolean {
+        if (!activityDurations.containsKey(actor)) {
+            return true
+        }
+        return activityDurations[actor]!! <= 0
     }
 
     /**
      * Decrease duration
      */
-    private fun countDown() {
-        duration--
-    }
-
-    private fun hasFinished(): Boolean {
-        return duration <= 0
+    private fun countDown(actor: Actor) {
+        activityDurations[actor] = activityDurations[actor]!!.minus(1)
     }
 }
