@@ -6,8 +6,25 @@ package com.goulash.core.domain
  */
 class Container(
     val id: String = ROOT_CONTAINER,
-    val actors: MutableList<Actor> = mutableListOf()
+    private val actors: MutableList<Actor> = mutableListOf()
 ) {
+    private var transactionalState: List<Actor>? = null
+
+    fun addActor(actor: Actor) {
+        actors.add(actor)
+    }
+
+    fun getActors(): List<Actor> = transactionalState ?: actors
+
+    /**
+     * Mutate actors transactionally.
+     */
+    fun mutateActors(mutation: (actors: List<Actor>) -> Unit) {
+        transactionalState = actors.map { it.copy() }
+        mutation(actors)
+        transactionalState = actors
+    }
+
     companion object {
         const val ROOT_CONTAINER = "root"
     }

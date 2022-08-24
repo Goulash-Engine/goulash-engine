@@ -33,7 +33,7 @@ class ActorHttpApi(
                     LOG.error("Container is null")
                     return emptyList<ActorState>()
                 }
-                rootContainer.actors.map { it.toResponse() }
+                rootContainer.getActors().map { it.toResponse() }
             }
 
             else -> emptyList()

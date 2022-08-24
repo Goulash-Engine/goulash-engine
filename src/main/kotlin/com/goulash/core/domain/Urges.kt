@@ -29,4 +29,8 @@ class Urges {
     fun stopUrge(name: String) {
         _urges.remove(name)
     }
+
+    fun copy() = Urges().apply {
+        _urges.putAll(_urges)
+    }
 }

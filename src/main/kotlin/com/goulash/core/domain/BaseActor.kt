@@ -17,12 +17,14 @@ class BaseActor(
     override val conditions: MutableSet<String> = mutableSetOf(),
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
-    override val urges: Urges = Urges()
+    override var urges: Urges = Urges()
+
     // TODO remove if [activity] is working
     override var currentActivity: String = ""
     override var activityRunner: ActivityRunner = ActivityRunner(IdleActivity(), 0.0)
 
     override fun tick() {
+        // TODO: move script logic to ContainerRunner
         activityRunner.run(this)
     }
 
@@ -40,4 +42,11 @@ class BaseActor(
     override fun hashCode(): Int {
         return id.hashCode()
     }
+
+    override fun copy() = BaseActor(name, id, key, activities.toList(), conditions.toMutableSet(), state.toMutableMap())
+        .also {
+            it.urges = this.urges.copy()
+            it.currentActivity = this.currentActivity
+            it.activityRunner = this.activityRunner
+        }
 }

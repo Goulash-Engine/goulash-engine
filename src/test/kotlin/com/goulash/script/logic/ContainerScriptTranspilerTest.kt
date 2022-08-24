@@ -11,6 +11,36 @@ import org.junit.jupiter.api.Test
 internal class ContainerScriptTranspilerTest {
 
     @Test
+    fun `should init state if it is missing`() {
+        val containerScriptTranspiler = ContainerScriptTranspiler()
+        val containerScriptContext = ContainerScriptContext(
+            ScriptHead("foo"),
+            mapOf(
+                "init" to
+                    listOf(
+                        ScriptStatement(
+                            "actors",
+                            "",
+                            "state",
+                            "health",
+                            "plus",
+                            "10"
+                        )
+                    )
+            )
+        )
+
+        val scriptedLogic = containerScriptTranspiler.transpile(containerScriptContext)
+
+        val testActor = BaseActorFactory.testActor()
+        val container = Container(actors = mutableListOf(testActor))
+
+        scriptedLogic.init(container)
+
+        assertThat(testActor.state["health"]!!).isEqualTo(10.0)
+    }
+
+    @Test
     fun `should transpile init logic of container script`() {
         val containerScriptTranspiler = ContainerScriptTranspiler()
         val containerScriptContext = ContainerScriptContext(

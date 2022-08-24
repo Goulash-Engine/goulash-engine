@@ -15,4 +15,6 @@ interface Actor {
     val state: MutableMap<String, Double>
 
     fun tick()
+
+    fun copy(): Actor
 }

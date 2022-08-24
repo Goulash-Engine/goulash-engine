@@ -28,13 +28,13 @@ class ActorService {
             LOG.error("No container found for id $containerId")
             return
         }
-        val actorExists = container.actors.any { it.key == key }
+        val actorExists = container.getActors().any { it.key == key }
         if (actorExists) {
             LOG.error("Actor with key '$key' already exists.")
             return
         }
         val newActor = BaseActorFactory.newActor(key)
-        container.actors.add(newActor)
+        container.addActor(newActor)
     }
 
     companion object {

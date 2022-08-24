@@ -16,37 +16,39 @@ class ContainerScriptTranspiler {
 
         return ContainerScript(
             scriptContext.head.name,
-            { context -> transpileStatements(context, containerStatements) },
-            { context -> transpileStatements(context, initStatements) }
+            { container -> transpileStatements(container, containerStatements) },
+            { container -> transpileStatements(container, initStatements) }
         )
     }
 
-    private fun transpileStatements(context: Container, statements: List<ScriptStatement>) {
+    private fun transpileStatements(container: Container, statements: List<ScriptStatement>) {
         statements.forEach { statement ->
             if (statement.context == "actors") {
-                val filteredActors = context.actors.tryScriptFilter(statement.filter)
-                if (statement.mutationType == "condition") {
-                    val condition = statement.mutationTarget
-                    when (statement.mutationOperation) {
-                        "add" -> filteredActors.forEach { it.conditions.add(condition) }
-                        "remove" -> filteredActors.forEach { it.conditions.remove(condition) }
+                container.mutateActors { actors ->
+                    val filteredActors = actors.tryScriptFilter(statement.filter)
+                    if (statement.mutationType == "condition") {
+                        val condition = statement.mutationTarget
+                        when (statement.mutationOperation) {
+                            "add" -> filteredActors.forEach { it.conditions.add(condition) }
+                            "remove" -> filteredActors.forEach { it.conditions.remove(condition) }
+                        }
                     }
-                }
-                if (statement.mutationType == "state") {
-                    context.actors.forEach { initStateIfMissing(it, statement.mutationTarget) }
-                    val stateProperty = statement.mutationTarget
-                    val value = statement.mutationOperationArgument.toDouble()
-                    when (statement.mutationOperation) {
-                        "set" -> filteredActors.forEach { it.state[stateProperty] = value }
-                        "plus" -> filteredActors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.plus(value) }
-                        "minus" -> filteredActors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.minus(value) }
+                    if (statement.mutationType == "state") {
+                        filteredActors.forEach { initStateIfMissing(it, statement.mutationTarget) }
+                        val stateProperty = statement.mutationTarget
+                        val value = statement.mutationOperationArgument.toDouble()
+                        when (statement.mutationOperation) {
+                            "set" -> filteredActors.forEach { it.state[stateProperty] = value }
+                            "plus" -> filteredActors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.plus(value) }
+                            "minus" -> filteredActors.forEach { it.state[stateProperty] = it.state[stateProperty]!!.minus(value) }
+                        }
                     }
-                }
-                if (statement.mutationType == "urge") {
-                    when (statement.mutationOperation) {
-                        "plus" -> filteredActors.forEach { increaseUrge(it, statement) }
-                        "minus" -> filteredActors.forEach { decreaseUrge(it, statement) }
-                        "set" -> filteredActors.forEach { setUrge(it, statement) }
+                    if (statement.mutationType == "urge") {
+                        when (statement.mutationOperation) {
+                            "plus" -> filteredActors.forEach { increaseUrge(it, statement) }
+                            "minus" -> filteredActors.forEach { decreaseUrge(it, statement) }
+                            "set" -> filteredActors.forEach { setUrge(it, statement) }
+                        }
                     }
                 }
             }

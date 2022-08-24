@@ -26,17 +26,19 @@ class ContainerRunner(
     fun tick() {
         LOG.trace("Tick container")
         applyContainerScript()
-        val actors = containers.flatMap { it.actors }
-        actors.forEach { actor ->
-            if (actor.activityRunner.isRunning()) {
-                actor.tick()
-                return
-            }
-
-            val activity = activityManager.resolve(actor)
-            if (activity != null) {
-                actor.activityRunner = activity.createRunner()
-                actor.tick()
+        containers.forEach { container ->
+            container.mutateActors { actors ->
+                actors.forEach { actor ->
+                    if (actor.activityRunner.isRunning()) {
+                        actor.tick()
+                    } else {
+                        val activity = activityManager.resolve(actor)
+                        if (activity != null) {
+                            actor.activityRunner = activity.createRunner()
+                            actor.tick()
+                        }
+                    }
+                }
             }
         }
     }

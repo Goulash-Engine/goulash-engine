@@ -27,8 +27,8 @@ internal class ActorServiceTest {
         val container = SimulationHolder.simulation?.getContainers()?.first()
 
         assertThat(container!!).isNotNull()
-        assertThat(container.actors).hasSize(1)
-        assertThat(container.actors[0].key).isEqualTo("test")
+        assertThat(container.getActors()).hasSize(1)
+        assertThat(container.getActors()[0].key).isEqualTo("test")
 
         runner.stop()
     }
@@ -46,8 +46,8 @@ internal class ActorServiceTest {
         val container = SimulationHolder.simulation?.getContainers()?.first()
 
         assertThat(container!!).isNotNull()
-        assertThat(container.actors).hasSize(1)
-        assertThat(container.actors[0].key).isEqualTo("test")
+        assertThat(container.getActors()).hasSize(1)
+        assertThat(container.getActors()[0].key).isEqualTo("test")
 
         runner.stop()
     }
