@@ -14,6 +14,12 @@ class Container(
         actors.add(actor)
     }
 
+    /**
+     * Returns the current state of the actors of this container.
+     * Note that this is a transactionalized state. If the actors are
+     * being mutated by another thread, the state returned by this method
+     * is the previous, not yet mutated state until the running mutation has finished.
+     */
     fun getActors(): List<Actor> = transactionalState ?: actors
 
     /**

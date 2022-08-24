@@ -1,6 +1,6 @@
 package com.goulash.simulation
 
-import com.goulash.core.ActivityManager
+import com.goulash.core.ActivitySelector
 import com.goulash.core.domain.Container
 import com.goulash.script.extension.ActivityExtensions.createRunner
 import com.goulash.script.loader.ScriptLoader
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
  * Responsible for the tick execution of all given containers.
  */
 class ContainerRunner(
-    private val activityManager: ActivityManager = ActivityManager()
+    private val activitySelector: ActivitySelector = ActivitySelector()
 ) {
     private val containers: MutableList<Container> = mutableListOf()
 
@@ -32,9 +32,10 @@ class ContainerRunner(
                     if (actor.activityRunner.isRunning()) {
                         actor.tick()
                     } else {
-                        val activity = activityManager.resolve(actor)
+                        val activity = activitySelector.select(actor)
                         if (activity != null) {
                             actor.activityRunner = activity.createRunner()
+                            activity.init(actor)
                             actor.tick()
                         }
                     }

@@ -2,8 +2,9 @@ package com.goulash.simulation
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.goulash.core.ActivityManager
 import com.goulash.core.ActivityRunner
+import com.goulash.core.ActivitySelector
+import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
 import com.goulash.core.domain.Container
 import com.goulash.factory.BaseActorFactory
@@ -17,8 +18,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 
 internal class ContainerRunnerTest {
-    private val activityManagerMock = mockk<ActivityManager>(relaxed = true)
-    private val containerRunner = ContainerRunner(activityManager = activityManagerMock)
+    private val activitySelectorMock = mockk<ActivitySelector>(relaxed = true)
+    private val containerRunner = ContainerRunner(activitySelector = activitySelectorMock)
 
     @BeforeEach
     fun setup() {
@@ -26,10 +27,27 @@ internal class ContainerRunnerTest {
     }
 
     @Test
+    fun `should call activity init logic once when activity has started`() {
+        val actorMock: Actor = mockk(relaxed = true)
+        val activityMock: Activity = mockk(relaxed = true)
+        every { activitySelectorMock.select(actorMock) } returns activityMock
+        val container = Container(actors = mutableListOf(actorMock))
+
+        containerRunner.register(container)
+        containerRunner.tick()
+
+        verifyOrder {
+            activitySelectorMock.select(actorMock)
+            activityMock.init(actorMock)
+            actorMock.tick()
+        }
+    }
+
+    @Test
     fun `should not resolve an activity if there is one still running`() {
         val actorMock: Actor = mockk(relaxed = true)
         val activityRunnerMock: ActivityRunner = mockk(relaxed = true)
-        every { activityManagerMock.resolve(actorMock) } returns mockk()
+        every { activitySelectorMock.select(actorMock) } returns mockk()
         every { activityRunnerMock.isRunning() } returns true
         every { actorMock.activityRunner } returns activityRunnerMock
         val container = Container(actors = mutableListOf(actorMock))
@@ -41,7 +59,7 @@ internal class ContainerRunnerTest {
             activityRunnerMock.isRunning()
             actorMock.tick()
         }
-        verify(inverse = true) { activityManagerMock.resolve(actorMock) }
+        verify(inverse = true) { activitySelectorMock.select(actorMock) }
     }
 
     @Test
@@ -53,7 +71,7 @@ internal class ContainerRunnerTest {
         containerRunner.tick()
 
         verifyOrder {
-            activityManagerMock.resolve(actorMock)
+            activitySelectorMock.select(actorMock)
             actorMock.tick()
         }
     }
