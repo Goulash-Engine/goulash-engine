@@ -13,24 +13,14 @@ class ActivityRunner {
     private var shouldAbort: Boolean = false
 
     fun `continue`(actor: Actor) {
-        if (containsAbortCondition(actor)) {
-            abort(actor)
-            return
+        // @formatter:off
+        when {
+            containsAbortCondition(actor) -> { abort(actor); return }
+            hasFinished() -> { finish(actor); return }
+            shouldAbort -> { abort(actor); return }
+            hasUnfulfilledRequirement(actor) -> return
         }
-
-        if (hasFinished()) {
-            finish(actor)
-            return
-        }
-
-        if (shouldAbort) {
-            abort(actor)
-            return
-        }
-
-        if (hasUnfulfilledRequirement(actor)) {
-            return
-        }
+        // @formatter:on
 
         shouldAbort = !actor.activity.act(actor)
         countDown()
@@ -43,6 +33,7 @@ class ActivityRunner {
 
     fun start(actor: Actor, newActivity: Activity) {
         actor.activity = newActivity
+
         if (containsAbortCondition(actor)) {
             abort(actor)
             return
