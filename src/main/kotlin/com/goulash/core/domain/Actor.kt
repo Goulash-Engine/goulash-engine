@@ -9,8 +9,8 @@ interface Actor {
     val name: String
     val conditions: MutableSet<String>
     val activities: List<Activity>
+    var activity: String
     val urges: Urges
-    var activity: Activity
     val state: MutableMap<String, Double>
 
     fun copy(): Actor

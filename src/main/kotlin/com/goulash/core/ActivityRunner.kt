@@ -9,9 +9,36 @@ import com.goulash.core.domain.Actor
  * and therefore executes lifecycle logic.
  */
 class ActivityRunner {
-    // TODO: create map to associate activity with actor
+    private val actorActivities: MutableMap<Actor, Activity> = mutableMapOf()
     private val activityDurations: MutableMap<Actor, Double> = mutableMapOf()
     private val activityAbortStates: MutableMap<Actor, Boolean> = mutableMapOf()
+    fun start(actor: Actor, newActivity: Activity) {
+        actorActivities[actor] = newActivity
+        actor.activity = newActivity.activity()
+
+        if (containsAbortCondition(actor)) {
+            abort(actor)
+            return
+        }
+
+        activityDurations[actor] = actorActivities[actor]!!.duration().asDouble()
+        if (hasUnfulfilledRequirement(actor)) {
+            return
+        }
+
+        // skip activity if duration is 0
+        if (activityDurations[actor] == 0.0) {
+            return
+        }
+
+        activityAbortStates[actor] = !actorActivities[actor]!!.act(actor)
+        countDown(actor)
+
+        if (hasEnded(actor)) {
+            finish(actor)
+            return
+        }
+    }
 
     fun `continue`(actor: Actor) {
         // @formatter:off
@@ -23,7 +50,7 @@ class ActivityRunner {
         }
         // @formatter:on
 
-        activityAbortStates[actor] = !actor.activity.act(actor)
+        activityAbortStates[actor] = !actorActivities[actor]!!.act(actor)
         countDown(actor)
 
         if (hasEnded(actor)) {
@@ -32,51 +59,25 @@ class ActivityRunner {
         }
     }
 
-    fun start(actor: Actor, newActivity: Activity) {
-        actor.activity = newActivity
-
-        if (containsAbortCondition(actor)) {
-            abort(actor)
-            return
-        }
-
-        activityDurations[actor] = actor.activity.duration().asDouble()
-        if (hasUnfulfilledRequirement(actor)) {
-            return
-        }
-
-        // skip activity if duration is 0
-        if (activityDurations[actor] == 0.0) {
-            return
-        }
-
-        activityAbortStates[actor] = !actor.activity.act(actor)
-        countDown(actor)
-
-        if (hasEnded(actor)) {
-            finish(actor)
-            return
-        }
-    }
 
     private fun hasUnfulfilledRequirement(actor: Actor): Boolean {
-        return actor.activity.requirements().isNotEmpty()
+        return actorActivities[actor]!!.requirements().isNotEmpty()
     }
 
     private fun finish(actor: Actor) {
         activityDurations[actor] = 0.0
-        actor.activity.onFinish(actor)
-        actor.activity = IdleActivity()
+        actorActivities[actor]!!.onFinish(actor)
+        actorActivities[actor] = IdleActivity()
     }
 
     private fun abort(actor: Actor) {
         activityDurations[actor] = 0.0
-        actor.activity.onAbort(actor)
-        actor.activity = IdleActivity()
+        actorActivities[actor]!!.onAbort(actor)
+        actorActivities[actor] = IdleActivity()
     }
 
     private fun containsAbortCondition(actor: Actor) =
-        actor.conditions.any { actorCondition -> actor.activity.abortConditions().contains(actorCondition) }
+        actor.conditions.any { actorCondition -> actorActivities[actor]!!.abortConditions().contains(actorCondition) }
 
     fun hasEnded(actor: Actor): Boolean {
         if (!activityDurations.containsKey(actor)) {

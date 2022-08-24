@@ -16,8 +16,8 @@ class BaseActor(
     override val conditions: MutableSet<String> = mutableSetOf(),
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
+    override var activity: String = ""
     override var urges: Urges = Urges()
-    override var activity: Activity = IdleActivity()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -37,6 +37,5 @@ class BaseActor(
     override fun copy() = BaseActor(name, id, key, activities.toList(), conditions.toMutableSet(), state.toMutableMap())
         .also {
             it.urges = this.urges.copy()
-            it.activity = this.activity
         }
 }

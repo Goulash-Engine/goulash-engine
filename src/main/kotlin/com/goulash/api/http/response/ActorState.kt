@@ -14,6 +14,6 @@ fun Actor.toResponse() = ActorState(
     key = this.key,
     state = this.state,
     urges = this.urges.getAllUrges().toSortedMap(),
-    activity = this.activity.activity(),
+    activity = this.activity,
     conditions = this.conditions.toList()
 )
