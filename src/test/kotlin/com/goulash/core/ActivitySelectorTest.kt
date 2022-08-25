@@ -15,7 +15,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 
 internal class ActivitySelectorTest {
-    private val activitySelector = ActivitySelector()
 
     @Test
     fun `should not execute a wildcard activity if there is an urge activity present`() {
@@ -27,7 +26,8 @@ internal class ActivitySelectorTest {
         every { urgeActivity.triggerUrges() } returns listOf("eat")
         every { urgeActivity.duration() } returns 10.0.toDuration()
 
-        val actor = BaseActorFactory.testActor(listOf(idleActivity, urgeActivity))
+        val activitySelector = ActivitySelector(listOf(idleActivity, urgeActivity))
+        val actor = BaseActorFactory.testActor()
         actor.urges.increaseUrge("eat", 100.0)
         actor.conditions.add("underfed")
 
@@ -39,6 +39,7 @@ internal class ActivitySelectorTest {
     @Test
     fun `should prioritize an activity depending on it_s priority value`() {
         val prioritizedActivity = mockk<Activity>("prio", relaxed = true)
+
         every { prioritizedActivity.triggerUrges() } returns listOf("sleep")
         every { prioritizedActivity.priority() } returns 1
 
@@ -46,7 +47,8 @@ internal class ActivitySelectorTest {
         every { normalActivity.triggerUrges() } returns listOf("eat")
         every { normalActivity.priority() } returns Int.MAX_VALUE
 
-        val actor = BaseActorFactory.testActor(listOf(prioritizedActivity, normalActivity))
+        val activitySelector = ActivitySelector(listOf(prioritizedActivity, normalActivity))
+        val actor = BaseActorFactory.testActor()
         actor.urges.increaseUrge("eat", 100.0)
         actor.urges.increaseUrge("sleep", 100.0)
 
@@ -67,7 +69,8 @@ internal class ActivitySelectorTest {
         every { normalActivity.triggerUrges() } returns listOf("eat")
         every { normalActivity.duration() } returns 1.0.toDuration()
 
-        val actor = BaseActorFactory.testActor(listOf(prioritizedActivity, normalActivity))
+        val activitySelector = ActivitySelector(listOf(prioritizedActivity, normalActivity))
+        val actor = BaseActorFactory.testActor()
         actor.conditions.add("panic")
         actor.urges.increaseUrge("eat", 100.0)
         actor.urges.increaseUrge("think", 20.0)
@@ -79,10 +82,11 @@ internal class ActivitySelectorTest {
     @Test
     fun `should not run any activity if global blocking condition is met`() {
         val mockedWorkActivity = mockk<Activity>("workMock", relaxed = true)
+        val activitySelector = ActivitySelector(listOf(mockedWorkActivity))
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.duration() } returns 5.0.toDuration()
         every { mockedWorkActivity.abortConditions() } returns listOf("starving")
-        val actor = BaseActorFactory.testActor(listOf(mockedWorkActivity))
+        val actor = BaseActorFactory.testActor()
         actor.urges.increaseUrge("work", 100.0)
         ScriptLoader.globalBlockingConditions = listOf("starving")
         actor.conditions.add(ScriptLoader.globalBlockingConditions!!.first())
@@ -102,7 +106,8 @@ internal class ActivitySelectorTest {
         every { secondaryActivity.triggerUrges() } returns listOf("rest")
         every { secondaryActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
 
-        val actor = BaseActorFactory.testActor(listOf(primaryActivity, secondaryActivity))
+        val activitySelector = ActivitySelector(listOf(primaryActivity, secondaryActivity))
+        val actor = BaseActorFactory.testActor()
 
         actor.urges.increaseUrge("work", 10.0)
         actor.urges.increaseUrge("rest", 9.0)
@@ -118,9 +123,10 @@ internal class ActivitySelectorTest {
     @Test
     fun `should set current activity of a context`() {
         val firstActivity = mockk<Activity>(relaxed = true)
+        val activitySelector = ActivitySelector(listOf(firstActivity))
         every { firstActivity.triggerUrges() } returns listOf("work")
         every { firstActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
-        val actor = BaseActorFactory.testActor(listOf(firstActivity))
+        val actor = BaseActorFactory.testActor()
         actor.urges.increaseUrge("work", 10.0)
 
         val activity = activitySelector.select(actor)
@@ -131,9 +137,10 @@ internal class ActivitySelectorTest {
     @Test
     fun `should return wildcard activity without a matching urge`() {
         val mockedIdleActivity = mockk<Activity>("idle", relaxed = true)
+        val activitySelector = ActivitySelector(listOf(mockedIdleActivity))
         every { mockedIdleActivity.triggerUrges() } returns listOf("*")
         every { mockedIdleActivity.blockerConditions() } returns listOf()
-        val actor = BaseActorFactory.testActor(listOf(mockedIdleActivity))
+        val actor = BaseActorFactory.testActor()
         actor.urges.increaseUrge("work", 100.0)
         every { mockedIdleActivity.act(any()) } returns true
 
@@ -145,9 +152,10 @@ internal class ActivitySelectorTest {
     @Test
     fun `should chose the first of two equally urgent urges`() {
         val mockedWorkActivity = mockk<Activity>(relaxed = true)
+        val activitySelector = ActivitySelector(listOf(mockedWorkActivity))
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
-        val actor = BaseActorFactory.testActor(listOf(mockedWorkActivity))
+        val actor = BaseActorFactory.testActor()
         actor.urges.increaseUrge("work", 10.0)
         actor.urges.increaseUrge("rest", 10.0)
 
@@ -160,9 +168,10 @@ internal class ActivitySelectorTest {
     @Test
     fun `should not return activity if trigger urge is the top urge but blocking condition exists`() {
         val mockedWorkActivity = mockk<Activity>(relaxed = true)
+        val activitySelector = ActivitySelector(listOf(mockedWorkActivity))
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
-        val clan = BaseActorFactory.testActor(listOf(mockedWorkActivity))
+        val clan = BaseActorFactory.testActor()
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)
         clan.conditions.add("sick")
@@ -175,11 +184,12 @@ internal class ActivitySelectorTest {
     @Test
     fun `should return activity if trigger urge is the top urge`() {
         val mockedWorkActivity = mockk<Activity>(relaxed = true)
+        val activitySelector = ActivitySelector(listOf(mockedWorkActivity))
         every { mockedWorkActivity.triggerUrges() } returns listOf("work")
         every { mockedWorkActivity.blockerConditions() } returns listOf("tired", "sick", "exhausted")
         every { mockedWorkActivity.activity() } returns "work"
         every { mockedWorkActivity.duration() } returns 5.0.toDuration()
-        val clan = BaseActorFactory.testActor(listOf(mockedWorkActivity))
+        val clan = BaseActorFactory.testActor()
         every { mockedWorkActivity.act(clan) } returns true
         clan.urges.increaseUrge("work", 10.0)
         clan.urges.increaseUrge("rest", 5.0)

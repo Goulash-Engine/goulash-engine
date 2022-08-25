@@ -12,7 +12,6 @@ class BaseActor(
     override val name: String = ActorNameFactory.randomName(),
     override val id: String = UUID.randomUUID().toString(),
     override val key: String,
-    override val activities: List<Activity> = listOf(),
     override val conditions: MutableSet<String> = mutableSetOf(),
     override val state: MutableMap<String, Double> = mutableMapOf()
 ) : Actor {
@@ -34,8 +33,12 @@ class BaseActor(
         return id.hashCode()
     }
 
-    override fun copy() = BaseActor(name, id, key, activities.toList(), conditions.toMutableSet(), state.toMutableMap())
+    override fun copy() = BaseActor(name, id, key, conditions.toMutableSet(), state.toMutableMap())
         .also {
             it.urges = this.urges.copy()
         }
+
+    override fun toString(): String {
+        return "BaseActor(name='$name', id='$id', key='$key', conditions=$conditions, state=$state, activity='$activity', urges=$urges)"
+    }
 }

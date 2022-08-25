@@ -7,11 +7,13 @@ import com.goulash.script.loader.ScriptLoader
 /**
  * Responsible for choosing the most relevant [Activity] for an actor.
  */
-class ActivitySelector {
+class ActivitySelector(
+    private val activityCatalog: List<Activity> = ScriptLoader.getActivityScripts()
+) {
     fun select(actor: Actor): Activity? {
         if (hasGlobalBlockerCondition(actor)) return null
 
-        val priorityActivity = actor.activities.find { isPrioritizedActivity(it, actor) }
+        val priorityActivity = activityCatalog.find { isPrioritizedActivity(it, actor) }
         if (priorityActivity != null) {
             return priorityActivity
         }
@@ -36,8 +38,8 @@ class ActivitySelector {
     private fun findUrgentActivity(actor: Actor): Activity? {
         val highestUrgeValue = actor.urges.getAllUrges().maxByOrNull { it.value }?.value ?: 0
         val topUrges = actor.urges.getAllUrges().filter { it.value == highestUrgeValue }
-        val urgentActivity = actor.activities.filter { matchesUrge(it, topUrges) }.filterNot { isBlocked(it, actor) }.minByOrNull { it.priority() }
-        val wildcardActivity = actor.activities.filter { it.triggerUrges().contains("*") }.filterNot { isBlocked(it, actor) }.minByOrNull { it.priority() }
+        val urgentActivity = activityCatalog.filter { matchesUrge(it, topUrges) }.filterNot { isBlocked(it, actor) }.minByOrNull { it.priority() }
+        val wildcardActivity = activityCatalog.filter { it.triggerUrges().contains("*") }.filterNot { isBlocked(it, actor) }.minByOrNull { it.priority() }
 
         if (urgentActivity != null) {
             return urgentActivity

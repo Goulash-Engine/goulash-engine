@@ -6,7 +6,6 @@ import com.goulash.factory.BaseActorFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.mockk.verifyAll
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 
