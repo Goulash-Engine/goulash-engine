@@ -14,6 +14,28 @@ internal class ActivityScriptTranspilerTest {
     private val activityScriptTranspiler = ActivityScriptTranspiler()
 
     @Test
+    fun `should transpile requirements configuration`() {
+        val activityScriptContext = ActivityScriptContext(
+            "eating",
+            mapOf(
+                "init" to listOf(
+                    ScriptStatement(
+                        "actor",
+                        "",
+                        "state",
+                        "health",
+                        "set",
+                        "50"
+                    )
+                )
+            ),
+            mapOf("requirements" to listOf("food"))
+        )
+
+        val activityScript = activityScriptTranspiler.transpile(activityScriptContext)
+        assertThat(activityScript.requirements()).contains("food")
+    }
+    @Test
     fun `should transpile init logic for activities`() {
         val activityScriptContext = ActivityScriptContext(
             "eating",

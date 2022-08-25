@@ -18,7 +18,6 @@ class ManualSimulationRunner(
     }
 
     init {
-        ScriptLoader.load()
         SimulationHolder.simulation = this
         containers.forEach(containerRunner::register)
     }

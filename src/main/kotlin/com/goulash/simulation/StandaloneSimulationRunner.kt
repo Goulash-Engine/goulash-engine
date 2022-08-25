@@ -23,7 +23,6 @@ class StandaloneSimulationRunner(
     }
 
     fun run(containers: List<Container>, millisecondsPerTick: Long) {
-        ScriptLoader.load()
         containers.forEach(containerRunner::register)
         running = true
         this.containers = containers

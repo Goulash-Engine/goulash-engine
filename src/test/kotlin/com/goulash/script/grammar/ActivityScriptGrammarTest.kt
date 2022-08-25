@@ -15,6 +15,22 @@ internal class ActivityScriptGrammarTest {
     private val activityGrammar = ActivityScriptGrammar()
 
     @Test
+    fun `should parse requirements config`() {
+        val scriptData = """
+            activity eating {
+                 requirements ["food"]
+                 logic init {
+                      actor::state(health).set(100);
+                  }
+             }
+        """.trimIndent()
+
+        val activityScriptContext = activityGrammar.parseToEnd(scriptData)
+
+        assertThat(activityScriptContext.configurations["requirements"]!!).contains("food")
+    }
+
+    @Test
     fun `should have parse logic init and other logic types`() {
         val scriptData = """
             activity eating {

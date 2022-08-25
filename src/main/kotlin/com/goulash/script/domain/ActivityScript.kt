@@ -18,6 +18,10 @@ class ActivityScript(
         return activity
     }
 
+    override fun requirements(): MutableList<String> {
+        return configurations["requirements"]?.toMutableList() ?: mutableListOf()
+    }
+
     override fun triggerUrges(): List<String> {
         return configurations["trigger_urges"] ?: emptyList()
     }

@@ -17,7 +17,7 @@ class ActivityScriptGrammar : Grammar<ActivityScriptContext>() {
 
     private val activityKeyword by regexToken("^activity\\s+[a-z_]+\\s*")
     private val logicKeyword by regexToken("^logic\\s+[a-z_]+\\s*")
-    private val configKeyword by regexToken("priority(?!_)|duration|trigger_urges|priority_conditions|blocker_conditions|abort_conditions")
+    private val configKeyword by regexToken("priority(?!_)|duration|requirements|trigger_urges|priority_conditions|blocker_conditions|abort_conditions")
     private val openConfig by literalToken("[")
     private val configValue by regexToken("^\"[a-z\\d.]+\"")
     private val closeConfig by literalToken("]")
