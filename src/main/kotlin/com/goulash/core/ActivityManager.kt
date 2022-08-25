@@ -2,7 +2,9 @@ package com.goulash.core
 
 import com.goulash.core.activity.Activity
 import com.goulash.core.domain.Actor
+import org.springframework.stereotype.Service
 
+@Service
 class ActivityManager {
     private val actorActivities: MutableMap<Actor, Activity> = mutableMapOf()
     private val activityDurations: MutableMap<Actor, Double> = mutableMapOf()

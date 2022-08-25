@@ -3,12 +3,15 @@ package com.goulash.simulation
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
+import com.goulash.core.ActivityManager
 import com.goulash.core.domain.Container
 import com.goulash.factory.BaseActorFactory
 import com.goulash.script.loader.ScriptLoader
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import java.io.File
 
 class SimpleSimulationTest {
@@ -21,6 +24,8 @@ class SimpleSimulationTest {
 
         repeat(5) { manualSimulationRunner.tick() }
         assertThat(person.urges.getUrgeOrNull("hunger")).isEqualTo(5.0)
+        repeat(5) { manualSimulationRunner.tick() }
+        assertThat(person.urges.getUrgeOrNull("hunger")).isNull()
     }
 
     @Test
