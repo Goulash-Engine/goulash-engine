@@ -8,9 +8,25 @@ class ActivityManager {
     private val activityDurations: MutableMap<Actor, Double> = mutableMapOf()
     private val activityAbortStates: MutableMap<Actor, Boolean> = mutableMapOf()
 
+    fun clear(actor: Actor) {
+        actorActivities.remove(actor)
+        activityDurations.remove(actor)
+        activityAbortStates.remove(actor)
+    }
+
+    fun act(actor: Actor) {
+        val shouldContinue = getActivity(actor)?.act(actor)
+        if (shouldContinue == false) {
+            abortActivity(actor)
+        }
+        countDown(actor)
+    }
+
     fun setActivity(actor: Actor, activity: Activity) {
+        actor.activity = activity.activity()
         actorActivities[actor] = activity
         activityDurations[actor] = activity.duration().asDouble()
+        activityAbortStates[actor] = false
     }
 
     fun getActivity(actor: Actor): Activity? {
