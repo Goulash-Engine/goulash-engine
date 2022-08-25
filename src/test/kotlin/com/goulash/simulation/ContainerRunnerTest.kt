@@ -31,6 +31,27 @@ internal class ContainerRunnerTest {
     }
 
     @Test
+    fun `should invoke scripted init container logic`(@TempDir tempDir: java.io.File) {
+        val actors: MutableList<Actor> = mutableListOf(BaseActorFactory.testActor())
+        val config = tempDir.resolve("logic.gsh")
+        config.writeText(
+            """ 
+            container myfoo {
+                logic init {
+                    actors::state(health).set(66);
+                }
+            }
+            """.trimIndent()
+        )
+        ScriptLoader.loadContainerScripts(tempDir.path)
+        val container = Container(actors = actors)
+
+        containerRunner.register(container)
+
+        assertThat(actors.first().state["health"]).isEqualTo(66.0)
+    }
+
+    @Test
     fun `should call activity init logic once when activity has started`() {
         val actorMock: Actor = mockk(relaxed = true)
         val activityMock: Activity = mockk(relaxed = true)
@@ -121,7 +142,8 @@ internal class ContainerRunnerTest {
 
         containerRunner.register(container)
         containerRunner.tick()
+        containerRunner.tick()
 
-        assertThat(actors.first().urges.getUrgeOrNull("eat")).isEqualTo(1.0)
+        assertThat(actors.first().urges.getUrgeOrNull("eat")).isEqualTo(2.0)
     }
 }

@@ -3,6 +3,7 @@ package com.goulash.simulation
 import com.goulash.api.http.response.SimulationStatus
 import com.goulash.core.SimulationHolder
 import com.goulash.core.domain.Container
+import com.goulash.script.loader.ScriptLoader
 
 /**
  * The simulation runner for manual tick control.
@@ -17,6 +18,7 @@ class ManualSimulationRunner(
     }
 
     init {
+        ScriptLoader.load()
         SimulationHolder.simulation = this
         containers.forEach(containerRunner::register)
     }

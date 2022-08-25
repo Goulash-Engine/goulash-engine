@@ -22,6 +22,8 @@ class ForestSimulationTest {
         val container = Container(actors = trees)
         val manualSimulationRunner = ManualSimulationRunner(listOf(container))
 
+        assertThat(trees[0].state["hydration"]).isEqualTo(100.0)
+
         repeat(110) { manualSimulationRunner.tick() }
 
         assertThat(trees[0].state["hydration"]).isEqualTo(0.0)

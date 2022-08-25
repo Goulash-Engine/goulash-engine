@@ -47,7 +47,7 @@ class ContainerRunner(
     private fun applyContainerScript() {
         ScriptLoader.containerScripts.forEach { containerScript ->
             containers.forEach { container ->
-                LOG.trace("Initializing container script for $container")
+                LOG.trace("Execute container script for $container")
                 containerScript.process(container)
             }
         }

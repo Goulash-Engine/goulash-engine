@@ -14,12 +14,7 @@ class ContainerHttpApi {
     @GetMapping("root")
     fun getRootContainer(): Container? {
         check(SimulationHolder.simulation?.toStatus()?.status != "running") { "Simulation is not running" }
-        val container = SimulationHolder.simulation?.getContainers()?.find { it.id == Container.ROOT_CONTAINER }
-        if (container == null) {
-            LOG.error("Container is null")
-            return null
-        }
-        return container
+        return SimulationHolder.simulation?.getContainers()?.find { it.id == Container.ROOT_CONTAINER } ?: return null
     }
 
     companion object {

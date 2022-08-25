@@ -28,11 +28,7 @@ class ActorHttpApi(
 
         return when (container) {
             "root" -> {
-                val rootContainer = SimulationHolder.simulation?.getContainers()?.find { it.id == Container.ROOT_CONTAINER }
-                if (rootContainer == null) {
-                    LOG.error("Container is null")
-                    return emptyList<ActorState>()
-                }
+                val rootContainer = SimulationHolder.simulation?.getContainers()?.find { it.id == Container.ROOT_CONTAINER } ?: return emptyList<ActorState>()
                 rootContainer.getActors().map { it.toResponse() }
             }
 
