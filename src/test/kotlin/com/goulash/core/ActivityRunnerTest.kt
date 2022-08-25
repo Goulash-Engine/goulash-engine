@@ -13,6 +13,22 @@ internal class ActivityRunnerTest {
     private val activityRunner = ActivityRunner()
 
     @Test
+    fun `should continue if requirements have been removed`() {
+        val testActor = BaseActorFactory.testActor()
+        val mockedActivity: Activity = mockk(relaxed = true)
+        every { mockedActivity.duration() } returns 3.0.toDuration()
+        every { mockedActivity.requirements() } returns mutableListOf("food")
+        every { mockedActivity.act(testActor) } returns true
+
+        activityRunner.start(testActor, mockedActivity)
+        activityRunner.`continue`(testActor)
+        verify(inverse = true) { mockedActivity.act(testActor) }
+        mockedActivity.requirements().clear()
+        activityRunner.`continue`(testActor)
+        verify { mockedActivity.act(testActor) }
+    }
+
+    @Test
     fun `should only abort for a separate actor`() {
         val testActor = BaseActorFactory.testActor()
         val testActor2 = BaseActorFactory.testActor()
